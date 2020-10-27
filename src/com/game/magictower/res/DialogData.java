@@ -8,7 +8,7 @@ import com.game.magictower.TalkInfo;
 public final class DialogData {
     
     public static final int TK_PLAYER = 0;
-    public static final int TK_NPC = 0;
+    public static final int TK_NPC = 1;
     
     public static HashMap<Integer, ArrayList<TalkInfo>> mMsgsMap = new HashMap<>();
     

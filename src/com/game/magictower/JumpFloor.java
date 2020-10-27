@@ -30,7 +30,7 @@ public class JumpFloor {
             mFloorName[i] = new String[4];
             for (int j = 0; j < 4; j++) {
                 mFloorRect[i][j] = new Rect(TowerDimen.R_JUMP_GRID);
-                mFloorRect[i][j].offset(j * TowerDimen.TOWER_GRID_SIZE * 3 / 2, i * TowerDimen.TOWER_GRID_SIZE);
+                mFloorRect[i][j].offset(j * TowerDimen.R_JUMP_GRID.width(), i * TowerDimen.R_JUMP_GRID.height());
                 mFloorName[i][j] = "第" + (j * 5 + i + 1) + "层";
             }
         }
@@ -46,13 +46,14 @@ public class JumpFloor {
     
     public void draw(GameGraphics graphics, Canvas canvas) {
         graphics.drawBitmap(canvas, mBg, null, TowerDimen.R_JUMP, null);
-        
+        int y;
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
+                y = mFloorRect[i][j].top + GameGraphics.TEXT_SIZE + (mFloorRect[i][j].height() - GameGraphics.TEXT_SIZE) / 2;
                 if ((j * 5 + i) == mSeclet) {
-                    graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, mFloorRect[i][j].top, graphics.textPaint);
+                    graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, y, graphics.textPaint);
                 } else {
-                    graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, mFloorRect[i][j].top, graphics.disableTextPaint);
+                    graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, y, graphics.disableTextPaint);
                 }
             }
         }
@@ -107,5 +108,6 @@ public class JumpFloor {
             }
             break;
         }
+        mSeclet = j * 5 + i;
     }
 }

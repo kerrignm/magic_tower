@@ -52,6 +52,11 @@ public class Forecast {
             mIds = mForecastSet.toArray();
             Monster monster;
             mRects = new Rect[mForecastSet.size()][];
+            mHPs = new String[mForecastSet.size()];
+            mAttacks = new String[mForecastSet.size()];
+            mDefends = new String[mForecastSet.size()];
+            mMoneys = new String[mForecastSet.size()];
+            mLoses = new String[mForecastSet.size()];
             for (int i = 0; i < mForecastSet.size(); i++) {
                 mRects[i] = new Rect[7];
                 monster = MonsterData.monsterMap.get(mIds[i]);
@@ -72,7 +77,7 @@ public class Forecast {
                 mHPs[i] = monster.getHp() + "";
                 mAttacks[i] = monster.getAttack() + "";
                 mDefends[i] = monster.getDefend() + "";
-                mMoneys[i] = monster.getMoney() + " �� " + monster.getExp();
+                mMoneys[i] = monster.getMoney() + " · " + monster.getExp();
                 mLoses[i] = Forecast.forecast(game.player, monster);
             }
         }
@@ -87,12 +92,12 @@ public class Forecast {
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_FORECAST, null);
         
         if (mForecastSet.size() > 0) {
-            graphics.drawTextInCenter(canvas, "名称：", TowerDimen.R_FC_NAME.left, TowerDimen.R_FC_NAME.top, TowerDimen.R_FC_NAME.width(), TowerDimen.R_FC_NAME.height());
-            graphics.drawTextInCenter(canvas, "生命：", TowerDimen.R_FC_HP.left, TowerDimen.R_FC_HP.top, TowerDimen.R_FC_HP.width(), TowerDimen.R_FC_HP.height());
-            graphics.drawTextInCenter(canvas, "攻击：", TowerDimen.R_FC_ATTACK.left, TowerDimen.R_FC_ATTACK.top, TowerDimen.R_FC_ATTACK.width(), TowerDimen.R_FC_ATTACK.height());
-            graphics.drawTextInCenter(canvas, "防御：", TowerDimen.R_FC_DEFEND.left, TowerDimen.R_FC_DEFEND.top, TowerDimen.R_FC_DEFEND.width(), TowerDimen.R_FC_DEFEND.height());
+            graphics.drawTextInCenter(canvas, "名称", TowerDimen.R_FC_NAME.left, TowerDimen.R_FC_NAME.top, TowerDimen.R_FC_NAME.width(), TowerDimen.R_FC_NAME.height());
+            graphics.drawTextInCenter(canvas, "生命", TowerDimen.R_FC_HP.left, TowerDimen.R_FC_HP.top, TowerDimen.R_FC_HP.width(), TowerDimen.R_FC_HP.height());
+            graphics.drawTextInCenter(canvas, "攻击", TowerDimen.R_FC_ATTACK.left, TowerDimen.R_FC_ATTACK.top, TowerDimen.R_FC_ATTACK.width(), TowerDimen.R_FC_ATTACK.height());
+            graphics.drawTextInCenter(canvas, "防御", TowerDimen.R_FC_DEFEND.left, TowerDimen.R_FC_DEFEND.top, TowerDimen.R_FC_DEFEND.width(), TowerDimen.R_FC_DEFEND.height());
             graphics.drawTextInCenter(canvas, "金 · 经：", TowerDimen.R_FC_MONEY.left, TowerDimen.R_FC_MONEY.top, TowerDimen.R_FC_MONEY.width(), TowerDimen.R_FC_MONEY.height());
-            graphics.drawTextInCenter(canvas, "损失：", TowerDimen.R_FC_LOSE.left, TowerDimen.R_FC_LOSE.top, TowerDimen.R_FC_LOSE.width(), TowerDimen.R_FC_LOSE.height());
+            graphics.drawTextInCenter(canvas, "损失", TowerDimen.R_FC_LOSE.left, TowerDimen.R_FC_LOSE.top, TowerDimen.R_FC_LOSE.width(), TowerDimen.R_FC_LOSE.height());
             
             Monster monster;
             for (int i = 0; i < mForecastSet.size(); i++) {

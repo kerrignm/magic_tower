@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,6 +55,7 @@ public class GameActivity extends Activity implements GameScreen {
     private boolean animFlag = true;
     private static boolean showMsgFlag = false;
     private static String msgInfo;
+    private static Rect msgRect;
     
     protected static Intent getIntent(Context context, boolean load){
         Intent intent = new Intent(context, GameActivity.class);
@@ -105,6 +107,7 @@ public class GameActivity extends Activity implements GameScreen {
         forecast = new Forecast(currentGame);
         battle = new Battle(currentGame);
         jumpFloor = new JumpFloor(currentGame);
+        shop = new Shop(currentGame);
         resetGame();
         boolean load = getIntent().getBooleanExtra("load", false);
         if (load) {
@@ -339,8 +342,17 @@ public class GameActivity extends Activity implements GameScreen {
         if (showMsgFlag) {
             graphics.drawBitmap(canvas, assets.bkgBlank, TowerDimen.R_MSG.left, TowerDimen.R_MSG.top,
                         TowerDimen.R_MSG.width(), TowerDimen.R_MSG.height());
-            graphics.drawText(canvas, msgInfo, TowerDimen.R_MSG.left, TowerDimen.R_MSG.top);
+            graphics.drawText(canvas, msgInfo, TowerDimen.R_MSG.left + msgRect.height() / 2,
+                        TowerDimen.R_MSG.top + msgRect.height() + (TowerDimen.R_MSG.height() - msgRect.height()) / 2, graphics.bigTextPaint);
         }
+    }
+    
+    public static void displayMessage(String message) {
+        showMsgFlag = true;
+        msgInfo = message;
+        msgRect = GameGraphics.getInstance().getTextBounds(msgInfo, GameGraphics.getInstance().bigTextPaint);
+        handler.removeMessages(MSG_ID_REMOVE_MSG);
+        handler.sendEmptyMessageDelayed(MSG_ID_REMOVE_MSG, MSG_DELAY_REMOVE_MSG);
     }
     
     public void interaction(int x, int y) {
@@ -589,12 +601,5 @@ public class GameActivity extends Activity implements GameScreen {
                 player.move(x, y);
                 break;
         }
-    }
-    
-    public static void displayMessage(String message) {
-        showMsgFlag = true;
-        msgInfo = message;
-        handler.removeMessages(MSG_ID_REMOVE_MSG);
-        handler.sendEmptyMessageDelayed(MSG_ID_REMOVE_MSG, MSG_DELAY_REMOVE_MSG);
     }
 }

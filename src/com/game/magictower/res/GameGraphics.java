@@ -9,13 +9,16 @@ import android.os.CountDownTimer;
 
 public final class GameGraphics {
     
-    private static final int TEXT_SIZE = TowerDimen.TOWER_GRID_SIZE / 2;
+    public static final int TEXT_SIZE = TowerDimen.TOWER_GRID_SIZE / 2;
+    public static final int BIG_TEXT_SIZE = TEXT_SIZE * 3 / 2;
+    
     private Rect srcRect = new Rect();
     private Rect dstRect = new Rect();
     
     private AutoDecendAlphaPaint alphaPaint;
     public Paint textPaint;
     public Paint disableTextPaint;
+    public Paint bigTextPaint;
     
     private static GameGraphics sInstance;
 
@@ -29,9 +32,11 @@ public final class GameGraphics {
         alphaPaint = new AutoDecendAlphaPaint();
         textPaint = new Paint();
         disableTextPaint = new Paint();
+        bigTextPaint = new Paint();
         initTextPaintEffect(alphaPaint);
         initTextPaintEffect(textPaint);
         initDisableTextPaintEffect(disableTextPaint);
+        initBigTextPaintEffect(bigTextPaint);
         
     }
     
@@ -51,9 +56,23 @@ public final class GameGraphics {
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
+    private void initBigTextPaintEffect(Paint paint){
+        paint.setAntiAlias(true);
+        paint.setARGB(255, 255, 255, 255);
+        paint.setTextSize(BIG_TEXT_SIZE);
+        paint.setStrokeWidth(5);
+        paint.setTypeface(Typeface.DEFAULT_BOLD);
+    }
+    
     public Rect getTextBounds(String text) {
         Rect textBounds = new Rect();
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
+        return textBounds;
+    }
+    
+    public Rect getTextBounds(String text, Paint paint) {
+        Rect textBounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), textBounds);
         return textBounds;
     }
     

@@ -18,9 +18,9 @@ public class Shop {
     private int id = 0;
     private int select = 0;
     
-    public Shop(Game game, Player player) {
+    public Shop(Game game) {
         this.game = game;
-        this.player = player;
+        this.player = game.player;
     }
 
     public void show(int id) {
@@ -28,6 +28,7 @@ public class Shop {
         imgIcon = ShopData.imgIcons[id];
         this.id = id;
         select = 0;
+        game.status = Status.Shopping;
     }
     
     public void selected() {

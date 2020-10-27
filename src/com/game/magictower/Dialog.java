@@ -66,20 +66,17 @@ public class Dialog {
     }
     
     public void draw(GameGraphics graphics, Canvas canvas) {
+        graphics.drawBitmap(canvas, mDlgBg, null, TowerDimen.R_DLG_BG, null);
+        graphics.drawText(canvas, mTkName, TowerDimen.R_DLG_NAME.left, 
+                        TowerDimen.R_DLG_NAME.top + GameGraphics.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - GameGraphics.TEXT_SIZE) / 2);
+        for (int i = 0; i < mMsgs.length; i++) {
+            graphics.drawText(canvas, mMsgs[i], TowerDimen.R_DLG_TEXT.left, 
+                        TowerDimen.R_DLG_TEXT.top + i * TowerDimen.R_DLG_NAME.height() + GameGraphics.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - GameGraphics.TEXT_SIZE) / 2);
+        }
         if (mTalker == DialogData.TK_PLAYER) {
-            graphics.drawBitmap(canvas, mDlgBg, null, TowerDimen.R_DLG_BG_PLR, null);
-            graphics.drawBitmap(canvas, mPlayerIcon, null, TowerDimen.R_DLG_ICON_PLR, null);
-            graphics.drawText(canvas, mTkName, TowerDimen.R_DLG_NAME_PLR.left, TowerDimen.R_DLG_NAME_PLR.top);
-            for (int i = 0; i < mMsgs.length; i++) {
-                graphics.drawText(canvas, mMsgs[i], TowerDimen.R_DLG_TEXT_PLR.left, TowerDimen.R_DLG_TEXT_PLR.top + i * 40);
-            }
+            graphics.drawBitmap(canvas, mPlayerIcon, null, TowerDimen.R_DLG_ICON, null);
         } else {
-            graphics.drawBitmap(canvas, mDlgBg, null, TowerDimen.R_DLG_BG_NPC, null);
-            graphics.drawBitmap(canvas, mNpcIcn, null, TowerDimen.R_DLG_ICON_NPC, null);
-            graphics.drawText(canvas, mTkName, TowerDimen.R_DLG_NAME_NPC.left, TowerDimen.R_DLG_NAME_NPC.top);
-            for (int i = 0; i < mMsgs.length; i++) {
-                graphics.drawText(canvas, mMsgs[i], TowerDimen.R_DLG_TEXT_NPC.left, TowerDimen.R_DLG_TEXT_NPC.top + i * 40);
-            }
+            graphics.drawBitmap(canvas, mNpcIcn, null, TowerDimen.R_DLG_ICON, null);
         }
     }
     

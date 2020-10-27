@@ -92,9 +92,11 @@ public class LoadingActivity extends Activity {
         switch (v.getId()) {
         case R.id.loading_btn_startgame:
             startActivity(GameActivity.getIntent(LoadingActivity.this, false));
+            finish();
             break;
         case R.id.loading_btn_loadgame:
             startActivity(GameActivity.getIntent(LoadingActivity.this, true));
+            finish();
             break;
         default:
             break;

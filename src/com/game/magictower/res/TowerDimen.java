@@ -73,10 +73,10 @@ public class TowerDimen {
     public static Rect R_DLG_NAME_NPC;
     public static Rect R_DLG_TEXT_NPC;
     
-    public static Rect R_DLG_BG_PLR;
-    public static Rect R_DLG_ICON_PLR;
-    public static Rect R_DLG_NAME_PLR;
-    public static Rect R_DLG_TEXT_PLR;
+    public static Rect R_DLG_BG;
+    public static Rect R_DLG_ICON;
+    public static Rect R_DLG_NAME;
+    public static Rect R_DLG_TEXT;
     
     public static Rect R_FORECAST;
     public static Rect R_FC_ICON;
@@ -155,8 +155,7 @@ public class TowerDimen {
         FLOOR_LEFT = (int)(200 * TOWER_SCALE) + TOWER_LEFT;
         FLOOR_TOP = (int)(750 * TOWER_SCALE) + TOWER_TOP;
         
-        R_MSG = RectUtil.createRect((int)(10 * TOWER_SCALE), (int)(270 * TOWER_SCALE), 
-                TOWER_GRID_SIZE * TOWER_COLUMNS - (int)(20 * TOWER_SCALE), (int)(150 * TOWER_SCALE));
+        R_MSG = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 2);
         
         R_SHOP = RectUtil.createRect((int)(550 * TOWER_SCALE), (int)(230 * TOWER_SCALE), (int)(550 * TOWER_SCALE), (int)(250 * TOWER_SCALE));
         R_SHOP_ICON = RectUtil.createRect((int)(20 * TOWER_SCALE) + R_SHOP.left, (int)(20 * TOWER_SCALE) + R_SHOP.top, TOWER_GRID_SIZE, TOWER_GRID_SIZE);
@@ -168,19 +167,19 @@ public class TowerDimen {
         R_DLG_NAME_NPC = new Rect(R_DLG_ICON_NPC.right + 20, R_DLG_ICON_NPC.top, R_DLG_BG_NPC.right - 20, R_DLG_ICON_NPC.top + 40);
         R_DLG_TEXT_NPC = new Rect(R_DLG_NAME_NPC.left, R_DLG_NAME_NPC.bottom, R_DLG_NAME_NPC.right, R_DLG_BG_NPC.bottom - 20);
         
-        R_DLG_BG_PLR = RectUtil.createRect((int)(675 * TOWER_SCALE), (int)(560 * TOWER_SCALE), (int)(540 * TOWER_SCALE), (int)(170 * TOWER_SCALE));
-        R_DLG_ICON_PLR = RectUtil.createRect(R_DLG_BG_PLR.left + 20, R_DLG_BG_PLR.top + 20, TOWER_GRID_SIZE, TOWER_GRID_SIZE);
-        R_DLG_NAME_PLR = new Rect(R_DLG_ICON_PLR.right + 20, R_DLG_ICON_PLR.top, R_DLG_BG_PLR.right - 20, R_DLG_ICON_PLR.top + 40);
-        R_DLG_TEXT_PLR = new Rect(R_DLG_NAME_PLR.left, R_DLG_NAME_PLR.bottom, R_DLG_NAME_PLR.right, R_DLG_BG_PLR.bottom - 20);
+        R_DLG_BG = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 7, R_TOWER.top + TOWER_GRID_SIZE * 6, TOWER_GRID_SIZE * 9, TOWER_GRID_SIZE * 4);
+        R_DLG_ICON = RectUtil.createRect(R_DLG_BG.left + TOWER_GRID_SIZE / 2, R_DLG_BG.top + TOWER_GRID_SIZE / 2, TOWER_GRID_SIZE, TOWER_GRID_SIZE);
+        R_DLG_NAME = new Rect(R_DLG_ICON.right, R_DLG_ICON.top, R_DLG_BG.right - TOWER_GRID_SIZE / 2, R_DLG_ICON.bottom);
+        R_DLG_TEXT = new Rect(R_DLG_ICON.right, R_DLG_NAME.bottom, R_DLG_NAME.right, R_DLG_BG.bottom - TOWER_GRID_SIZE / 2);
         
         R_FORECAST = RectUtil.createRect(TOWER_LEFT + TOWER_GRID_SIZE * 6, TOWER_TOP + TOWER_GRID_SIZE, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 11);
         R_FC_ICON = RectUtil.createRect(R_FORECAST.left, R_FORECAST.top, TOWER_GRID_SIZE, TOWER_GRID_SIZE);
-        R_FC_NAME = RectUtil.createRect(R_FC_ICON.right, R_FC_ICON.top, TOWER_GRID_SIZE * 3 / 2, TOWER_GRID_SIZE);
+        R_FC_NAME = RectUtil.createRect(R_FC_ICON.right, R_FC_ICON.top, TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE);
         R_FC_HP = RectUtil.createRect(R_FC_NAME.right, R_FC_NAME.top, TOWER_GRID_SIZE * 3 / 2, TOWER_GRID_SIZE);
-        R_FC_ATTACK = RectUtil.createRect(R_FC_HP.right, R_FC_HP.top, TOWER_GRID_SIZE * 3 / 2, TOWER_GRID_SIZE);
-        R_FC_DEFEND = RectUtil.createRect(R_FC_ATTACK.right, R_FC_ATTACK.top, TOWER_GRID_SIZE * 3 / 2, TOWER_GRID_SIZE);
+        R_FC_ATTACK = RectUtil.createRect(R_FC_HP.right, R_FC_HP.top, TOWER_GRID_SIZE * 4 / 3, TOWER_GRID_SIZE);
+        R_FC_DEFEND = RectUtil.createRect(R_FC_ATTACK.right, R_FC_ATTACK.top, TOWER_GRID_SIZE * 4 / 3, TOWER_GRID_SIZE);
         R_FC_MONEY = RectUtil.createRect(R_FC_DEFEND.right, R_FC_DEFEND.top, TOWER_GRID_SIZE * 5 / 2, TOWER_GRID_SIZE);
-        R_FC_LOSE = RectUtil.createRect(R_FC_MONEY.right, R_FC_MONEY.top, TOWER_GRID_SIZE * 3 / 2, TOWER_GRID_SIZE);
+        R_FC_LOSE = RectUtil.createRect(R_FC_MONEY.right, R_FC_MONEY.top, TOWER_GRID_SIZE * 4 / 3, TOWER_GRID_SIZE);
         
         R_BATTLE = RectUtil.createRect((int)(27 * TOWER_SCALE), TOWER_GRID_SIZE * 2, (int)(1242 * TOWER_SCALE), (int)(541 * TOWER_SCALE));
         R_BTL_MST_ICON = RectUtil.createRect((int)(100 * TOWER_SCALE), (int)(120 * TOWER_SCALE), TOWER_GRID_SIZE, TOWER_GRID_SIZE);
@@ -191,8 +190,8 @@ public class TowerDimen {
         R_BTL_PLR_ATTACK = RectUtil.createRect((int)(785 * TOWER_SCALE), (int)(157 * TOWER_SCALE) + TOWER_GRID_SIZE * 2, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
         R_BTL_PLR_DEFEND = RectUtil.createRect((int)(785 * TOWER_SCALE), (int)(291 * TOWER_SCALE) + TOWER_GRID_SIZE * 2, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
         
-        R_JUMP = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 3, TOWER_GRID_SIZE * 6, TOWER_GRID_SIZE * 5);
-        R_JUMP_GRID = RectUtil.createRect(R_JUMP.left, R_JUMP.top, TOWER_GRID_SIZE * 3 / 2, TOWER_GRID_SIZE);
+        R_JUMP = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 7, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 9, TOWER_GRID_SIZE * 6);
+        R_JUMP_GRID = RectUtil.createRect(R_JUMP.left + TOWER_GRID_SIZE / 2, R_JUMP.top + TOWER_GRID_SIZE / 2, TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE);
     }
 
 }
