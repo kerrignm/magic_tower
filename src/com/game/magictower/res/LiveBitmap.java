@@ -42,7 +42,7 @@ public final class LiveBitmap {
         LiveBitmap instance = null;
         AssetManager am = context.getAssets();
         try {
-            Bitmap bitmap = BitmapFactory.decodeStream(am.open(assets));
+            Bitmap bitmap = BitmapFactory.decodeStream(am.open("image/" + assets));
             int rawWidth = bitmap.getWidth();
             int rawHeight = bitmap.getHeight();
             if (width != 0 && height != 0) {

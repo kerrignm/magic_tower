@@ -1,7 +1,10 @@
 package com.game.magictower.res;
 
+import java.util.ArrayList;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -19,6 +22,7 @@ public final class GameGraphics {
     public Paint textPaint;
     public Paint disableTextPaint;
     public Paint bigTextPaint;
+    public Paint rectPaint;
     
     private static GameGraphics sInstance;
 
@@ -33,10 +37,12 @@ public final class GameGraphics {
         textPaint = new Paint();
         disableTextPaint = new Paint();
         bigTextPaint = new Paint();
+        rectPaint = new Paint();
         initTextPaintEffect(alphaPaint);
         initTextPaintEffect(textPaint);
         initDisableTextPaintEffect(disableTextPaint);
         initBigTextPaintEffect(bigTextPaint);
+        initRectPaintEffect(rectPaint);
         
     }
     
@@ -50,7 +56,7 @@ public final class GameGraphics {
     
     private void initDisableTextPaintEffect(Paint paint){
         paint.setAntiAlias(true);
-        paint.setARGB(255, 200, 200, 200);
+        paint.setARGB(255, 160, 160, 160);
         paint.setTextSize(TEXT_SIZE);
         paint.setStrokeWidth(5);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
@@ -60,6 +66,14 @@ public final class GameGraphics {
         paint.setAntiAlias(true);
         paint.setARGB(255, 255, 255, 255);
         paint.setTextSize(BIG_TEXT_SIZE);
+        paint.setStrokeWidth(5);
+        paint.setTypeface(Typeface.DEFAULT_BOLD);
+    }
+    
+    private void initRectPaintEffect(Paint paint){
+        paint.setAntiAlias(true);
+        paint.setARGB(255, 0xcc, 0x66, 0x00);
+        paint.setStyle(Style.STROKE);
         paint.setStrokeWidth(5);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -114,7 +128,7 @@ public final class GameGraphics {
     }
     
     public void drawBitmap(Canvas canvas, LiveBitmap bitmap, int x, int y) {
-        canvas.drawBitmap(bitmap.getBitmap(), x, y, null);//����ҪPaint����
+        canvas.drawBitmap(bitmap.getBitmap(), x, y, null);
     }
 
     public void drawBitmap(Canvas canvas, LiveBitmap bitmap, int x, int y, int srcWidth,
@@ -131,6 +145,10 @@ public final class GameGraphics {
         int y = center.y - (int) (bitmap.getRawHeight() / 2 + 0.5f);
         drawBitmap(canvas, bitmap, x, y);
     }
+
+    public void drawRect(Canvas canvas, Rect rect) {
+        canvas.drawRect(rect, rectPaint);
+    }
     
     public void drawNumericText(Canvas canvas, LiveBitmap numbeBitmap, String msg, int x, int y) {
         if (!msg.matches("[0-9 ]*")){
@@ -141,12 +159,12 @@ public final class GameGraphics {
             char character = msg.charAt(i);
 
             if (character == ' ') {
-                x += 20;                        //����
+                x += 20;
                 continue;
             }
 
             int srcX = (character - '0') * 17;
-            int srcWidth = 17;                  //�ֿ�
+            int srcWidth = 17;
                 
             drawBitmap(canvas, numbeBitmap, x, y, srcX, 0, srcWidth, 21);
             x += srcWidth;
@@ -172,10 +190,10 @@ public final class GameGraphics {
             return;
         }
         int textWidth = getTextBounds(msg).width();
-        int textHeight = getTextBounds(msg).height();
+        //int textHeight = getTextBounds(msg).height();
         //LogUtil.d("GameGraphics", "drawTextInCenter() msg=" + msg + ", textWidth=" + textWidth + ", textHeight=" + textHeight);
         x = x + (w - textWidth) / 2;
-        y = y + (h - TEXT_SIZE) / 2 + textHeight;
+        y = y + (h - TEXT_SIZE) / 2 + TEXT_SIZE;
         canvas.drawText(msg, x, y, textPaint);
     }
     
@@ -185,7 +203,7 @@ public final class GameGraphics {
             return;
         }
         canvas.drawText(msg, x, y,
-                getCorrespondingPaint());
+        getCorrespondingPaint());
     }
 
     public Point getCenter(LiveBitmap pixmap, float x, float y)
@@ -193,6 +211,69 @@ public final class GameGraphics {
         int centerX = (int) (x + pixmap.getRawWidth() / 2 + 0.5f);
         int centerY = (int) (y + pixmap.getRawHeight() / 2 + 0.5f);
         return new Point(centerX, centerY);
+    }
+    
+    public ArrayList<String> splitToLines(String str, int width) {
+        ArrayList<String> result = new ArrayList<String>();
+        float[] widths = new float[str.length()];
+        textPaint.getTextWidths(str, widths);
+        String subStr;
+        int index = 0;
+        float lineLen = 0f;
+        for (int i = 0; i < widths.length; ) {
+            if (str.charAt(i) == '\n') {
+                if (index < i) {
+                    subStr = str.substring(index, i);
+                    result.add(subStr);
+                }
+                index = i + 1;
+                lineLen = 0;
+                i += 1;
+            } else if (str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+                float wordLen = 0f;
+                int j = i;
+                while (j < widths.length && str.charAt(j) >= '0' && str.charAt(j) <= '9') {
+                    wordLen += widths[j];
+                    j++;
+                }
+                if ((int)wordLen >= width) {
+                    if (index < i) {
+                        subStr = str.substring(index, i);
+                        result.add(subStr);
+                        subStr = str.substring(i, j);
+                        result.add(subStr);
+                    } else {
+                        subStr = str.substring(i, j);
+                        result.add(subStr);
+                    }
+                    index = j;
+                    lineLen = 0;
+                } else if ((int)(lineLen + wordLen) > width) {
+                    subStr = str.substring(index, i);
+                    result.add(subStr);
+                    index = i;
+                    lineLen = wordLen;
+                } else {
+                    lineLen += wordLen;
+                }
+                i = j;
+            } else {
+                if ((int)(lineLen + widths[i]) > width) {
+                    subStr = str.substring(index, i);
+                    result.add(subStr);
+                    index = i;
+                    lineLen = widths[i];
+                } else {
+                    lineLen += widths[i];
+                }
+                i += 1;
+            }
+        }
+        if (index < widths.length) {
+            subStr = str.substring(index);
+            result.add(subStr);
+        }
+        return result;
     }
     
     protected static final class AutoDecendAlphaPaint extends Paint{

@@ -32,9 +32,30 @@ public class Forecast {
         if (player.getAttack() <= monster.getDefend()) {
             return "???";
         } else if (player.getDefend() >= monster.getAttack()) {
-            return 0 + "";
+            int lose = 0;
+            if (monster.getId() == 50) {
+                lose = player.getHp() / 4;
+            } else if (monster.getId() == 57) {
+                lose = player.getHp() / 3;
+            }
+            return lose + "";
         } else {
-            return ((monster.getHp() / (player.getAttack() - monster.getDefend())) * (monster.getAttack() - player.getDefend())) + "";
+            int palyerAttack = player.getAttack() - monster.getDefend();
+            int monsterHp = monster.getHp();
+            int monsterAttack = monster.getAttack() - player.getDefend();
+            int firstAttack = monsterAttack;
+            int times = 0;
+            if (palyerAttack % monsterHp == 0) {
+                times = palyerAttack / monsterHp;
+            } else {
+                times = palyerAttack / monsterHp + 1;
+            }
+            if (monster.getId() == 50) {
+                firstAttack = player.getHp() / 4;
+            } else if (monster.getId() == 57) {
+                firstAttack = player.getHp() / 3;
+            }
+            return firstAttack + (times - 1) * monsterAttack + "";
         }
     }
     
@@ -90,6 +111,7 @@ public class Forecast {
     
     public void draw(GameGraphics graphics, Canvas canvas) {
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_FORECAST, null);
+        graphics.drawRect(canvas, TowerDimen.R_FORECAST);
         
         if (mForecastSet.size() > 0) {
             graphics.drawTextInCenter(canvas, "名称", TowerDimen.R_FC_NAME.left, TowerDimen.R_FC_NAME.top, TowerDimen.R_FC_NAME.width(), TowerDimen.R_FC_NAME.height());

@@ -9,6 +9,7 @@ public class Game {
         Playing,
         Fighting,
         Shopping,
+        Messaging,
         Dialoguing,
         Looking,
         Jumping;
@@ -18,14 +19,13 @@ public class Game {
     
     public int currentFloor = 0;
     public int maxFloor = 0;
+    public Dialog dialog;
+    public Messag messag;
     
     public boolean isHasCross = false;
     public boolean isHasForecast = false;
     public boolean isHasJump = false;
     public boolean isHasHammer = false;
-    public boolean isHasRedStick = false;
-    public boolean isHasGreenStick = false;
-    public boolean isHasBlueStick = false;
     
     public Player player;
     public NpcInfo npcInfo;
@@ -54,9 +54,6 @@ public class Game {
         isHasForecast = false;
         isHasJump = false;
         isHasHammer = false;
-        isHasRedStick = false;
-        isHasGreenStick = false;
-        isHasBlueStick = false;
         player.reset();
         npcInfo.reset();
         lvMap = ArrayUtil.copy(TowerMap.LvMap);
@@ -77,10 +74,7 @@ public class Game {
         sb.append("isHasCross=" + this.isHasCross + ",");
         sb.append("isHasForecast=" + this.isHasForecast + ",");
         sb.append("isHasJump=" + this.isHasJump + ",");
-        sb.append("isHasHammer=" + this.isHasHammer + ",");
-        sb.append("isHasRedStick=" + this.isHasRedStick + ",");
-        sb.append("isHasGreenStick=" + this.isHasGreenStick + ",");
-        sb.append("isHasBlueStick=" + this.isHasBlueStick);
+        sb.append("isHasHammer=" + this.isHasHammer);
         
         return sb.toString();
     }
@@ -102,12 +96,6 @@ public class Game {
                 this.isHasJump = Boolean.valueOf(items[1]);
             } else if(items[0].equals("isHasHammer")) {
                 this.isHasHammer = Boolean.valueOf(items[1]);
-            } else if(items[0].equals("isHasRedStick")) {
-                this.isHasRedStick = Boolean.valueOf(items[1]);
-            } else if(items[0].equals("isHasGreenStick")) {
-                this.isHasGreenStick = Boolean.valueOf(items[1]);
-            } else if(items[0].equals("isHasBlueStick")) {
-                this.isHasBlueStick = Boolean.valueOf(items[1]);
             }
         }
     }

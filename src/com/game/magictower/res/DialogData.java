@@ -31,11 +31,11 @@ public final class DialogData {
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"我本是这座塔守护者，可不久前，从北方来了一批恶", "魔，他们占领了这座塔，并将我的魔力封在了这个十字"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"架里面，如果你能将它带出塔来，那我的魔力便会慢慢", "地恢复，到那时我便可以把力量借给你去救公主了。"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"要记住，只有用我的魔力才可以打开二十一层的门。"}));
-        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······", "    好吧，我试试看。"}));
+        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······", "好吧，我试试看。"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"刚才我去看过了，你的剑被放在三楼，你的盾在五楼", "上，而那个十字架被放在七楼。要到七楼，你的先取回"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"你的剑和盾。另外在塔里的其他楼层", "上，还有一些存放了好几百年的宝剑和宝物，如果得到"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"它们，对于你对付这里面的怪物将有很大的帮助。"}));
-        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······", "    可是，我怎么进去呢?"}));
+        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······", "可是，我怎么进去呢?"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"我这里有三把钥匙，你先拿去，在塔里面还有很多这", "样的钥匙，你一定要珍惜使用。"}));
         talkList.add(new TalkInfo(TK_NPC, "仙子", new String[]{"勇敢的去吧，勇士！"}));
         mMsgsMap.put(24, talkList);
@@ -65,11 +65,11 @@ public final class DialogData {
         mMsgsMap.put(4, talkList);
         
         talkList = new ArrayList<TalkInfo>();
-        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{""}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"年青人，你终于来了！"}));
-        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"您怎么了？"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"我已经快封不住它了，请你将这个东西交给彩蝶", "仙子，她会告诉你这是什么东西，有什么用的！"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"快去吧，再迟就来不及了！"}));
+        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"您已经得救了！"}));
+        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"哦，我的孩子，真是太感谢你了！", "这个地方又脏又坏，我真的快呆不下去了。"}));
+        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"快走吧，我还的去救被关在这里的公主。"}));
+        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"哦，你是来救公主的，为了表示对你的感谢，", "这个东西就送给你吧，这还是我年青的时候用过的。"}));
+        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"拿着它去解救公主吧。"}));
         mMsgsMap.put(5, talkList);
         
         talkList = new ArrayList<TalkInfo>();
@@ -82,24 +82,24 @@ public final class DialogData {
         
         talkList = new ArrayList<TalkInfo>();
         talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{""}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"啊哈，欢迎你的到来！", "我这里有一件对你来说"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"非常好的宝物，只要你出得起钱，我就卖给你。"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"啊哈，欢迎你的到来！", "我这里有一件对你来说"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"非常好的宝物，只要你出得起钱，我就卖给你。"}));
         talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"什么宝物？要多少钱？"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"是这个游戏里最好的盾牌，防御值可以增加 120 ", "点，而你只要出 500 个金币就可以买下。"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"怎么样？你有 500 个金币吗？"}));
-        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······", "    现在还没有。"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"那等你有了而且想要的时候再来找我吧！"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"是这个游戏里最好的盾牌，防御值可以增加 120 ", "点，而你只要出 500 个金币就可以买下。"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"怎么样？你有 500 个金币吗？"}));
+        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······", "现在还没有。"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"那等你有了而且想要的时候再来找我吧！"}));
         mMsgsMap.put(7, talkList);
         
         talkList = new ArrayList<TalkInfo>();
         talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{""}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"啊哈，欢迎你的到来！", "我这里有一件对你来说"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"非常好的宝物，只要你出得起钱，我就卖给你。"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"啊哈，欢迎你的到来！", "我这里有一件对你来说"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"非常好的宝物，只要你出得起钱，我就卖给你。"}));
         talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"什么宝物？要多少钱？"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"是这个游戏里最好的盾牌，防御值可以增加 120 ", "点，而你只要出 500 个金币就可以买下。"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"怎么样？你有 500 个金币吗？"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"是这个游戏里最好的盾牌，防御值可以增加 120 ", "点，而你只要出 500 个金币就可以买下。"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"怎么样？你有 500 个金币吗？"}));
         talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"我有 500 个金币。"}));
-        talkList.add(new TalkInfo(TK_NPC, "老人", new String[]{"好，成交！"}));
+        talkList.add(new TalkInfo(TK_NPC, "商人", new String[]{"好，成交！"}));
         mMsgsMap.put(8, talkList);
         
         talkList = new ArrayList<TalkInfo>();
@@ -133,7 +133,6 @@ public final class DialogData {
         mMsgsMap.put(19, talkList);
         
         talkList = new ArrayList<TalkInfo>();
-        talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"······"}));
         talkList.add(new TalkInfo(TK_NPC, "恶魔", new String[]{"停止吧！愚蠢的人类！"}));
         talkList.add(new TalkInfo(TK_PLAYER, "勇士", new String[]{"该停止的是你！魔王。快说，公主关在哪里？"}));
         talkList.add(new TalkInfo(TK_NPC, "恶魔", new String[]{"等你打赢我再说吧！"}));

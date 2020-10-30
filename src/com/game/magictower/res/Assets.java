@@ -35,7 +35,7 @@ public final class Assets {
         13,
         14,
         15,
-        //16,
+        16,
         //17,
         //18,
         19,
@@ -99,8 +99,7 @@ public final class Assets {
         //77,
         78,
         //79,
-        80,
-        115
+        80
         
     };
     
@@ -178,8 +177,8 @@ public final class Assets {
     private final void recycleMapBitmap(HashMap<Integer, LiveBitmap> map) {
         for(int key : map.keySet()) {
             recycleBitmap(map.get(key));
-            map.remove(key);
         }
+        map.clear();
     }
     
     private final void recycleBitmap(LiveBitmap bitmap){

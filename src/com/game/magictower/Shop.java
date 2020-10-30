@@ -1,12 +1,15 @@
 package com.game.magictower;
 
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.game.magictower.Game.Status;
+import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.ShopData;
 import com.game.magictower.res.TowerDimen;
+import com.game.magictower.util.RectUtil;
 import com.game.magictower.widget.BitmapButton;
 
 public class Shop {
@@ -17,10 +20,15 @@ public class Shop {
     private Player player;
     private int id = 0;
     private int select = 0;
+    private Rect[] mTExtRect = new Rect[4];
     
     public Shop(Game game) {
         this.game = game;
         this.player = game.player;
+        mTExtRect[0] = TowerDimen.R_SHOP_TEXT;
+        mTExtRect[1] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height());
+        mTExtRect[2] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 2);
+        mTExtRect[3] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 3);
     }
 
     public void show(int id) {
@@ -136,7 +144,7 @@ public class Shop {
                     break;
             }
             break;
-        case 4:     // 0
+        case 4:     // 12 floor
             switch (select) {
                 case 0:
                     if (player.getYkey() > 0) {
@@ -161,15 +169,15 @@ public class Shop {
                     break;
             }
             break;
-        case 5:
+        case 5:     // 13 floor
             switch (select) {
                 case 0:
                     if (player.getExp() >= 270) {
                         player.setLevel(player.getLevel() + 3);
                         player.setExp(player.getExp() - 270);
                         player.setHp(player.getHp() + 3000);
-                        player.setAttack(player.getAttack() + 21);
-                        player.setDefend(player.getDefend() + 21);
+                        player.setAttack(player.getAttack() + 20);
+                        player.setDefend(player.getDefend() + 20);
                     }
                     break;
                 case 1:
@@ -195,15 +203,13 @@ public class Shop {
     public void onBtnKey(int btnId) {
         switch (btnId) {
         case BitmapButton.ID_UP:
-            select--;
-            if (select < 0) {
-                select = 3;
+            if (select > 0) {
+                select--;
             }
             break;
         case BitmapButton.ID_DOWN:
-            select++;
-            if (select > 3) {
-                select = 0;
+            if (select < 3) {
+                select++;
             }
             break;
         case BitmapButton.ID_OK:
@@ -213,12 +219,14 @@ public class Shop {
     }
     
     public void draw(GameGraphics graphics, Canvas canvas) {
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_SHOP, null);
+        graphics.drawRect(canvas, TowerDimen.R_SHOP);
         graphics.drawBitmap(canvas, imgIcon, TowerDimen.R_SHOP_ICON.left, TowerDimen.R_SHOP_ICON.top);
         for (int i = 0; i < 4; i++) {
             if (i == select) {
-                graphics.drawText(canvas, choice[i], TowerDimen.R_SHOP_TEXT.left, TowerDimen.R_SHOP_TEXT.top + i * 30);
+                graphics.drawText(canvas, choice[i], mTExtRect[i].left, mTExtRect[i].top + TowerDimen.TEXT_SIZE + (mTExtRect[i].height() - TowerDimen.TEXT_SIZE) / 2);
             } else {
-                graphics.drawText(canvas, choice[i], TowerDimen.R_SHOP_TEXT.left, TowerDimen.R_SHOP_TEXT.top + i * 30, graphics.disableTextPaint);
+                graphics.drawText(canvas, choice[i], mTExtRect[i].left, mTExtRect[i].top + TowerDimen.TEXT_SIZE + (mTExtRect[i].height() - TowerDimen.TEXT_SIZE) / 2, graphics.disableTextPaint);
             }
         }
     }

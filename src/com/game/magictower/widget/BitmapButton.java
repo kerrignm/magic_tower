@@ -1,7 +1,11 @@
 package com.game.magictower.widget;
 
+import java.lang.ref.WeakReference;
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 
 import com.game.magictower.res.Assets;
@@ -48,11 +52,12 @@ public final class BitmapButton implements BitmapView {
     private final int w;
     private final int h;
     private final String label;
+    private final boolean repeat;
     private final LiveBitmap bkgNormal;
     private final LiveBitmap bkgPressed;
     private boolean isPressed;
     
-    public BitmapButton(GameGraphics graphics, int id, int x, int y, int w, int h, String label) {
+    public BitmapButton(GameGraphics graphics, int id, int x, int y, int w, int h, String label, boolean repeat) {
         this.graphics = graphics;
         this.id = id;
         rect = RectUtil.createRect(x, y, w, h);
@@ -61,26 +66,61 @@ public final class BitmapButton implements BitmapView {
         this.w = w;
         this.h = h;
         this.label = label;
+        this.repeat = repeat;
         this.bkgNormal = Assets.getInstance().bkgBtnNormal;
         this.bkgPressed = Assets.getInstance().bkgBtnPressed;
     }
     
-    public static BitmapButton create(GameGraphics graphics, int id, String label) {
-        return new BitmapButton(graphics, id, BTN_RECTS[id].left, BTN_RECTS[id].top, BTN_RECTS[id].width(), BTN_RECTS[id].height(), label);
+    public static BitmapButton create(GameGraphics graphics, int id, String label, boolean repeat) {
+        return new BitmapButton(graphics, id, BTN_RECTS[id].left, BTN_RECTS[id].top, BTN_RECTS[id].width(), BTN_RECTS[id].height(), label, repeat);
+    }
+    
+    private Handler handler = new LongHandler(new WeakReference<BitmapButton>(this));
+    
+    private static final int MSG_ID_LONG_PRESS = 10;
+    
+    private static final int MSG_DELAY_LONG_PRESS = 300;
+    private static final int MSG_DELAY_REPEAT_PRESS = 100;
+    
+    private static final class LongHandler extends Handler {
+        private WeakReference<BitmapButton> wk;
+
+        public LongHandler(WeakReference<BitmapButton> wk) {
+            super();
+            this.wk = wk;
+        }
+        
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            BitmapButton button = wk.get();
+            if (msg.what == MSG_ID_LONG_PRESS && button != null) {
+                if (button.listener != null) {
+                    button.listener.onClicked(button.getId());
+                }
+                sendEmptyMessageDelayed(MSG_ID_LONG_PRESS, MSG_DELAY_REPEAT_PRESS);
+            }
+        }
     }
     
     public final boolean onTouch(MotionEvent event){
         if (inBounds(event)){
 //          Log.d("BitmapButton", "event in bounds caught:"+event.toString());
-            if (event.getAction()==MotionEvent.ACTION_DOWN){
+            switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
                 isPressed = true;
-            }
-            else if (event.getAction()==MotionEvent.ACTION_UP){
-                isPressed = false;
-                if (listener!=null){
-                    listener.onClicked(this);
-                    return true;
+                if (listener != null) {
+                    listener.onClicked(getId());
+                    if (repeat) {
+                        handler.sendEmptyMessageDelayed(MSG_ID_LONG_PRESS, MSG_DELAY_LONG_PRESS);
+                    }
                 }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                handler.removeMessages(MSG_ID_LONG_PRESS);
+                isPressed = false;
+                break;
             }
         }
         return false;
@@ -106,7 +146,7 @@ public final class BitmapButton implements BitmapView {
     }
     
     public interface onClickListener{
-        void onClicked(BitmapButton btn);
+        void onClicked(int id);
     }
 
     public void setOnClickListener(onClickListener listener) {

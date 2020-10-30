@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
-import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.res.TowerMap;
 import com.game.magictower.widget.BitmapButton;
@@ -16,8 +15,6 @@ public class JumpFloor {
     private Rect[][] mFloorRect;
     private String[][] mFloorName;
     private int mSeclet;
-    
-    private LiveBitmap mBg = Assets.getInstance().bkgBlank;
     
     private Game game;
     
@@ -45,7 +42,8 @@ public class JumpFloor {
     }
     
     public void draw(GameGraphics graphics, Canvas canvas) {
-        graphics.drawBitmap(canvas, mBg, null, TowerDimen.R_JUMP, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_JUMP, null);
+        graphics.drawRect(canvas, TowerDimen.R_JUMP);
         int y;
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
@@ -84,27 +82,23 @@ public class JumpFloor {
         int j = mSeclet / 5;
         switch (btnId) {
         case BitmapButton.ID_DOWN:
-            i++;
-            if (i > 4) {
-                i = 0;
+            if (i < 4) {
+                i++;
             }
             break;
         case BitmapButton.ID_UP:
-            i--;
-            if (i < 0) {
-                i = 4;
+            if (i > 0) {
+                i--;
             }
             break;
         case BitmapButton.ID_LEFT:
-            j--;
-            if (j < 0) {
-                j = 3;
+            if (j > 0) {
+                j--;
             }
             break;
         case BitmapButton.ID_RIGHT:
-            j++;
-            if (j > 3) {
-                j = 0;
+            if (j < 3) {
+                j++;
             }
             break;
         }

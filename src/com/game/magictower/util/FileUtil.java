@@ -26,14 +26,16 @@ public class FileUtil {
         return null;
     }
     
-    public static void write(Context context, String fileName, String str){
-        if(str == null) return;
+    public static boolean write(Context context, String fileName, String str){
+        if(str == null) return false;
         try {
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fos.write(str.getBytes());
             fos.close();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 }
