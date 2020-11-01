@@ -3,18 +3,18 @@ package com.game.magictower.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
+import com.game.magictower.util.LogUtil;
 
 public class GameView extends SurfaceView implements RedrawableView,
         SurfaceHolder.Callback {
 
-    private static final String LOG_TAG = "GameView";
+    private static final String TAG = "MagicTower:GameView";
     
     private SurfaceHolder holder;
     private GameGraphics graphics;
@@ -38,7 +38,7 @@ public class GameView extends SurfaceView implements RedrawableView,
         try {
             canvas = holder.lockCanvas();
             if (canvas==null){
-                Log.w(LOG_TAG, "cancel drawing on null canvas.");
+                LogUtil.w(TAG, "cancel drawing on null canvas.");
                 return ;
             }
             canvas.drawColor(Color.BLACK);
@@ -62,7 +62,7 @@ public class GameView extends SurfaceView implements RedrawableView,
     
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(LOG_TAG, "surfaceCreated.");
+        LogUtil.d(TAG, "surfaceCreated.");
         this.holder = getHolder();
         renderThread = new RenderThread();
         renderThread.start();
@@ -70,7 +70,7 @@ public class GameView extends SurfaceView implements RedrawableView,
     
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(LOG_TAG, "surfaceDestroyed.");
+        LogUtil.d(TAG, "surfaceDestroyed.");
         if (renderThread != null && renderThread.isAlive()) {
             try {
                 renderThread.stopThread();
@@ -107,7 +107,7 @@ public class GameView extends SurfaceView implements RedrawableView,
                         sleep(freeTime);
                     }
                 } catch (Exception e) {
-                    Log.w(LOG_TAG, "exception while rendering:" + e.getMessage());
+                    LogUtil.w(TAG, "exception while rendering:" + e.getMessage());
                 }
             }
         };

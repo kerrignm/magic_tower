@@ -2,6 +2,7 @@ package com.game.magictower;
 
 import java.lang.ref.WeakReference;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
@@ -13,7 +14,9 @@ import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.MonsterData;
 import com.game.magictower.res.TowerDimen;
 
-public class Battle {
+public class SceneBattle {
+    
+    private Context mContext;
     
     private Game game;
     private Monster mMonster;
@@ -33,23 +36,23 @@ public class Battle {
     
     private boolean mMagicAttack;
     
-    private Handler handler = new FightHandler(new WeakReference<Battle>(this));
+    private Handler handler = new FightHandler(new WeakReference<SceneBattle>(this));
     
     private static final int MSG_ID_FIGHT = 1;
     
     private static final int MSG_DELAY_REMOVE_MSG = 300;
     
     private static final class FightHandler extends Handler {
-        private WeakReference<Battle> wk;
+        private WeakReference<SceneBattle> wk;
 
-        public FightHandler(WeakReference<Battle> wk) {
+        public FightHandler(WeakReference<SceneBattle> wk) {
             super();
             this.wk = wk;
         }
         
         @Override
         public void handleMessage(Message msg) {
-            Battle battle = wk.get();
+            SceneBattle battle = wk.get();
             if (msg.what == MSG_ID_FIGHT && battle != null) {
                 battle.attack();
                 battle.getHpInfo();
@@ -57,15 +60,17 @@ public class Battle {
                     battle.game.player.setExp(battle.game.player.getExp() + battle.mMonster.getExp());
                     battle.game.player.setMoney(battle.game.player.getMoney() + battle.mMonster.getMoney());
                     if ((battle.game.currentFloor == 19) && (battle.mMonster.getId() == 59)) {
-                        battle.game.dialog.show(28, 59);
+                        battle.game.dialog.show(13, 59);
                     } else if ((battle.game.currentFloor == 16) && (battle.mMonster.getId() == 53)) {
-                        battle.game.dialog.show(23, 59);
+                        battle.game.dialog.show(10, 59);
+                    } else if ((battle.game.currentFloor == 21) && (battle.mMonster.getId() == 59)) {
+                        battle.game.dialog.show(14, 59);
                     } else {
-                        battle.game.messag.show("获得金币数" + battle.mMonster.getExp() + " 经验值 " + battle.mMonster.getMoney() + " ！", Messag.MODE_MSG);
-                        battle.game.lvMap[battle.game.currentFloor][battle.mY][battle.mX] = 0;
-                        battle.game.player.move(battle.mX, battle.mY);
-                        battle.game.status = Status.Playing;
+                        battle.game.message.show(battle.mContext.getResources().getString(R.string.get_money)
+                                    + battle.mMonster.getExp() + battle.mContext.getResources().getString(R.string.get_exp)
+                                    + battle.mMonster.getMoney() + battle.mContext.getResources().getString(R.string.exclamatory_mark));
                     }
+                    battle.game.lvMap[battle.game.currentFloor][battle.mY][battle.mX] = 0;
                 } else {
                     sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_REMOVE_MSG);
                 }
@@ -74,12 +79,12 @@ public class Battle {
         }
     };
     
-    public Battle(Game game) {
+    public SceneBattle(Context context, Game game) {
+        mContext = context;
         this.game = game;
     }
 
     public void show(int id, int x, int y) {
-        mPlayerRound = false;
         mMonster = MonsterData.monsterMap.get(id);
         mMstIcon = Assets.getInstance().animMap0.get(id);
         mX = x;
@@ -91,6 +96,7 @@ public class Battle {
         mMstDefend = mDefend + "";
         mPlrAttack = game.player.getAttack() + "";
         mPlrDefend = game.player.getDefend() + "";
+        mPlayerRound = true;
         mMagicAttack = false;
         getHpInfo();
         game.status = Status.Fighting;
@@ -108,6 +114,13 @@ public class Battle {
                 mHp = mHp - game.player.getAttack() + mDefend;
                 if (mHp <= 0) {
                     mHp = 0;
+                    if (!mMagicAttack && (mMonster.getId() == 50)) {
+                        mMagicAttack = true;
+                        game.player.setHp(game.player.getHp() - game.player.getHp() / 4);
+                    } else if (!mMagicAttack && (mMonster.getId() == 57)) {
+                        mMagicAttack = true;
+                        game.player.setHp(game.player.getHp() - game.player.getHp() / 3);
+                    }
                 }
             }
         } else {

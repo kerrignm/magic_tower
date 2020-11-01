@@ -18,6 +18,8 @@ public class TowerDimen {
     public static int TOWER_LEFT;
     
     public static int TEXT_SIZE;
+    public static int BIG_TEXT_SIZE;
+    
     
     public static Rect R_TOWER;
     public static Rect R_BTN_U;
@@ -57,6 +59,12 @@ public class TowerDimen {
     public static int FLOOR_TOP;
     
     public static Rect R_MSG;
+    public static Rect R_ALERT;
+    public static Rect R_ALERT_TITLE;
+    public static Rect R_ALERT_INFO;
+    public static Rect R_AUTO_SCROLL;
+    public static Rect R_AUTO_SCROLL_TITLE;
+    public static Rect R_AUTO_SCROLL_INFO;
     
     public static Rect R_SHOP;
     public static Rect R_SHOP_ICON;
@@ -99,18 +107,19 @@ public class TowerDimen {
         R_TOWER = RectUtil.createRect(TOWER_LEFT, TOWER_TOP, TOWER_GRID_SIZE * TOWER_COLUMNS, TOWER_GRID_SIZE * TOWER_ROWS);
         
         TEXT_SIZE = TOWER_GRID_SIZE / 2;
+        BIG_TEXT_SIZE = TEXT_SIZE * 3 / 2;
 
         int btn_margin = 15;
         int btn_size = (TOWER_LEFT - btn_margin * 3) / 3;
         int btn_real_size = btn_size + btn_margin;
         int btn_large_size = (TOWER_LEFT - btn_margin * 3) / 2;
 
-        R_BTN_U = RectUtil.createRect(TOWER_LEFT - btn_real_size * 2, height - btn_real_size * 3, btn_size, btn_size);
+        R_BTN_U = RectUtil.createRect(TOWER_LEFT - btn_real_size * 2, height - btn_real_size * 3 - btn_size / 2, btn_size, btn_size);
         R_BTN_L = RectUtil.createRect(R_BTN_U, -btn_real_size, btn_real_size);
         R_BTN_R = RectUtil.createRect(R_BTN_U, btn_real_size, btn_real_size);
         R_BTN_D = RectUtil.createRect(R_BTN_U, 0, btn_real_size * 2);
         
-        R_BTN_Q = RectUtil.createRect(R_TOWER.right + btn_margin, height - btn_real_size * 4, btn_large_size, btn_size);
+        R_BTN_Q = RectUtil.createRect(R_TOWER.right + btn_margin, height - btn_real_size * 4 - btn_size / 2, btn_large_size, btn_size);
         R_BTN_N = RectUtil.createRect(R_BTN_Q, btn_large_size + btn_margin, 0);
         R_BTN_S = RectUtil.createRect(R_BTN_Q, 0, btn_real_size);
         R_BTN_A = RectUtil.createRect(R_BTN_N, 0, btn_real_size);
@@ -141,7 +150,13 @@ public class TowerDimen {
         FLOOR_LEFT = (int)(200 * TOWER_SCALE) + TOWER_LEFT;
         FLOOR_TOP = (int)(750 * TOWER_SCALE) + TOWER_TOP;
         
-        R_MSG = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 2);
+        R_MSG = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 3, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 2);
+        R_ALERT = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 3, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 4);
+        R_ALERT_TITLE = new Rect(R_ALERT.left + TOWER_GRID_SIZE / 2, R_ALERT.top + TOWER_GRID_SIZE / 2, R_ALERT.right - TOWER_GRID_SIZE / 2, R_ALERT.top + TOWER_GRID_SIZE * 3 / 2);
+        R_ALERT_INFO = new Rect(R_ALERT_TITLE.left, R_ALERT_TITLE.bottom, R_ALERT_TITLE.right, R_ALERT_TITLE.bottom + TOWER_GRID_SIZE * 2);
+        R_AUTO_SCROLL = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 7);
+        R_AUTO_SCROLL_TITLE = new Rect(R_AUTO_SCROLL.left + TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.top + TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.right - TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.top + TOWER_GRID_SIZE * 3 / 2);
+        R_AUTO_SCROLL_INFO = new Rect(R_AUTO_SCROLL_TITLE.left, R_AUTO_SCROLL_TITLE.bottom, R_AUTO_SCROLL_TITLE.right, R_AUTO_SCROLL_TITLE.bottom + TOWER_GRID_SIZE * 5);
         
         R_SHOP = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 7, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 9, TOWER_GRID_SIZE * 5);
         R_SHOP_ICON = RectUtil.createRect(R_SHOP.left + TOWER_GRID_SIZE / 2, R_SHOP.top + TOWER_GRID_SIZE / 2, TOWER_GRID_SIZE, TOWER_GRID_SIZE);

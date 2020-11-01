@@ -1,5 +1,6 @@
 package com.game.magictower;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -10,7 +11,9 @@ import com.game.magictower.res.TowerDimen;
 import com.game.magictower.res.TowerMap;
 import com.game.magictower.widget.BitmapButton;
 
-public class JumpFloor {
+public class SceneJump {
+    
+    private Context mContext;
 
     private Rect[][] mFloorRect;
     private String[][] mFloorName;
@@ -18,8 +21,14 @@ public class JumpFloor {
     
     private Game game;
     
-    public JumpFloor(Game game) {
+    private String mOrdinal;
+    private String mFloor;
+    
+    public SceneJump(Context context, Game game) {
+        mContext = context;
         this.game = game;
+        mOrdinal = mContext.getResources().getString(R.string.jump_ordinal);
+        mFloor = mContext.getResources().getString(R.string.jump_floor);
         mFloorRect = new Rect[5][];
         mFloorName = new String[5][];
         for(int i = 0; i < 5; i++) {
@@ -28,7 +37,7 @@ public class JumpFloor {
             for (int j = 0; j < 4; j++) {
                 mFloorRect[i][j] = new Rect(TowerDimen.R_JUMP_GRID);
                 mFloorRect[i][j].offset(j * TowerDimen.R_JUMP_GRID.width(), i * TowerDimen.R_JUMP_GRID.height());
-                mFloorName[i][j] = "第" + (j * 5 + i + 1) + "层";
+                mFloorName[i][j] = mOrdinal + (j * 5 + i + 1) + mFloor;
             }
         }
     }
@@ -47,7 +56,7 @@ public class JumpFloor {
         int y;
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                y = mFloorRect[i][j].top + GameGraphics.TEXT_SIZE + (mFloorRect[i][j].height() - GameGraphics.TEXT_SIZE) / 2;
+                y = mFloorRect[i][j].top + TowerDimen.TEXT_SIZE + (mFloorRect[i][j].height() - TowerDimen.TEXT_SIZE) / 2;
                 if ((j * 5 + i) == mSeclet) {
                     graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, y, graphics.textPaint);
                 } else {

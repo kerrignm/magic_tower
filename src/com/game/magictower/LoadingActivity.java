@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -16,10 +15,11 @@ import android.widget.ToggleButton;
 
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.Assets.LoadingProgressListener;
+import com.game.magictower.util.LogUtil;
 
 public class LoadingActivity extends Activity {
 
-    protected static final String LOG_TAG = "LoadingActivity";
+    protected static final String TAG = "MagicTower:LoadingActivity";
 
     private ProgressBar progressBar;
     
@@ -45,7 +45,7 @@ public class LoadingActivity extends Activity {
         };
         
         protected void onPostExecute(Void result) {
-            Log.d(LOG_TAG, "loading completed.");
+            LogUtil.d(TAG, "loading completed.");
             progressBar.setVisibility(View.INVISIBLE);
             findViewById(R.id.loading_ll_btns).setVisibility(View.VISIBLE);
         };

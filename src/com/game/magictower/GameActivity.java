@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
@@ -25,6 +24,7 @@ import com.game.magictower.res.MonsterData;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.res.TowerMap;
 import com.game.magictower.util.FileUtil;
+import com.game.magictower.util.LogUtil;
 import com.game.magictower.widget.BitmapButton;
 import com.game.magictower.widget.BitmapButton.onClickListener;
 import com.game.magictower.widget.GameScreen;
@@ -32,23 +32,22 @@ import com.game.magictower.widget.GameView;
 
 public class GameActivity extends Activity implements GameScreen {
     
-    private static final String LOG_TAG = "GameActivity";
+    private static final String TAG = "MagicTower:GameActivity";
     
-    private GameGraphics graphics;
-    private GameView gameView;
-    
-    private GlobalSoundPool soundPool;
     private Assets assets;
+    private GameGraphics graphics;
+    private GlobalSoundPool soundPool;
     
     private Game currentGame;
     private Player player;
     private HashMap<Integer, LiveBitmap> imageMap;
-    private Dialog dialog;
-    private Forecast forecast;
-    private Battle battle;
-    private JumpFloor jumpFloor;
-    private Shop shop;
-    private Messag messag;
+    
+    private SceneDialog dialog;
+    private SceneForecast forecast;
+    private SceneBattle battle;
+    private SceneJump jumpFloor;
+    private SceneShop shop;
+    private SceneMessage message;
     
     private boolean animFlag = true;
     
@@ -74,27 +73,26 @@ public class GameActivity extends Activity implements GameScreen {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.d(TAG, "onCreate()");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         graphics = GameGraphics.getInstance();
-        gameView = new GameView(this, graphics, this);
-        setContentView(gameView);
-        createButtons();
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         soundPool = GlobalSoundPool.getInstance(this);
         assets = Assets.getInstance();
+        setContentView(new GameView(this, graphics, this));
+        createButtons();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         currentGame = Game.getInstance();
         player = currentGame.player;
-        messag = new Messag(currentGame);
-        dialog = new Dialog(currentGame);
-        forecast = new Forecast(currentGame);
-        battle = new Battle(currentGame);
-        jumpFloor = new JumpFloor(currentGame);
-        shop = new Shop(currentGame);
+        message = new SceneMessage(this, currentGame);
+        dialog = new SceneDialog(this, currentGame);
+        forecast = new SceneForecast(this, currentGame);
+        battle = new SceneBattle(this, currentGame);
+        jumpFloor = new SceneJump(this, currentGame);
+        shop = new SceneShop(this, currentGame);
         currentGame.dialog = dialog;
-        currentGame.messag = messag;
+        currentGame.message = message;
         resetGame();
-        boolean load = getIntent().getBooleanExtra("load", false);
-        if (load) {
+        if (getIntent().getBooleanExtra("load", false)) {
             loadGame();
         }
         imageMap = assets.animMap0;
@@ -102,8 +100,21 @@ public class GameActivity extends Activity implements GameScreen {
     }
     
     @Override
+    protected void onPause() {
+        super.onPause();
+        LogUtil.d(TAG, "onPause()");
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtil.d(TAG, "onResume()");
+    }
+    
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        LogUtil.d(TAG, "onDestroy()");
         timer.cancel();
     }
     
@@ -147,13 +158,13 @@ public class GameActivity extends Activity implements GameScreen {
             resetGame();
             return false;
         }
-        currentGame.player.fromString(str);
+        currentGame.npcInfo.fromString(str);
         str = FileUtil.read(this, "tower");
         if (str == null) {
             resetGame();
             return false;
         }
-        currentGame.player.fromString(str);
+        currentGame.mapFromString(str);
         return true;
     }
     
@@ -187,7 +198,7 @@ public class GameActivity extends Activity implements GameScreen {
                 shop.onBtnKey(id);
                 break;
             case Messaging:
-                messag.onBtnKey(id);
+                message.onBtnKey(id);
                 break;
             case Dialoguing:
                 dialog.onBtnKey(id);
@@ -240,20 +251,20 @@ public class GameActivity extends Activity implements GameScreen {
                 break;
             case BitmapButton.ID_NEW:
                 resetGame();
-                messag.show("重新开始", Messag.MODE_MSG);
+                message.show(R.string.msg_restart);
                 break;
             case BitmapButton.ID_SAVE:
                 if (saveGame()) {
-                    messag.show("数据保存成功！", Messag.MODE_MSG);
+                    message.show(R.string.save_succeed);
                 } else {
-                    messag.show("数据保存失败！", Messag.MODE_MSG);
+                    message.show(R.string.save_failed);
                 }
                 break;
             case BitmapButton.ID_READ:
                 if (loadGame()) {
-                    messag.show("数据读取成功！", Messag.MODE_MSG);
+                    message.show(R.string.read_succeed);
                 } else {
-                    messag.show("数据读取失败！", Messag.MODE_MSG);
+                    message.show(R.string.read_failed);
                 }
                 break;
             case BitmapButton.ID_LOOK:
@@ -267,12 +278,6 @@ public class GameActivity extends Activity implements GameScreen {
                 }
                 break;
             case BitmapButton.ID_OK:
-                //for test
-                currentGame.currentFloor++;
-                if (currentGame.currentFloor > 21) {
-                    currentGame.currentFloor = 0;
-                }
-                currentGame.player.move(TowerMap.initPos[currentGame.currentFloor][0], TowerMap.initPos[currentGame.currentFloor][1]);
                 break;
             }
         }
@@ -304,7 +309,7 @@ public class GameActivity extends Activity implements GameScreen {
     @Override
     public void updateUI(GameGraphics graphics, Canvas canvas) {
         if (currentGame==null){
-            Log.w(LOG_TAG, "updateUI called before game instance created.");
+            LogUtil.w(TAG, "updateUI called before game instance created.");
             return ;
         }
         drawActiveButtons(graphics, canvas);
@@ -321,7 +326,7 @@ public class GameActivity extends Activity implements GameScreen {
             shop.draw(graphics, canvas);
             break;
         case Messaging:
-            messag.draw(graphics, canvas);
+            message.draw(graphics, canvas);
             break;
         case Dialoguing:
             dialog.draw(graphics, canvas);
@@ -377,68 +382,59 @@ public class GameActivity extends Activity implements GameScreen {
                 if (player.getYkey() > 0) {
                     currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
                     player.setYkey(player.getYkey() - 1);
-                    player.move(x, y);
                 }
                 break;
             case 3:     // blue door
                 if (player.getBkey() > 0) {
                     currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
                     player.setBkey(player.getBkey() - 1);
-                    player.move(x, y);
                 }
                 break;
             case 4:     // red door
                 if (player.getRkey() > 0) {
                     currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
                     player.setRkey(player.getRkey() - 1);
-                    player.move(x, y);
                 }
                 break;
             case 5:     // stone
                 break;
             case 6:     // yellow hey
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setYkey(player.getYkey() + 1);
-                messag.show("得到一把 黄钥匙 ！", Messag.MODE_MSG);
+                message.show(R.string.get_yellow_key);
                 break;
             case 7:     // blue key
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setBkey(player.getBkey() + 1);
-                messag.show("得到一把 蓝钥匙 ！", Messag.MODE_MSG);
+                message.show(R.string.get_bule_key);
                 break;
             case 8:     // red key
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setRkey(player.getRkey() + 1);
-                messag.show("得到一把 红钥匙 ！", Messag.MODE_MSG);
+                message.show(R.string.get_red_key);
                 break;
             case 9:     // sapphire
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setDefend(player.getDefend() + 3);
-                messag.show("得到一个蓝宝石 防御力加 3 ！", Messag.MODE_MSG);
+                message.show(R.string.get_sapphire);
                 break;
             case 10:    // ruby
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setAttack(player.getAttack() + 3);
-                messag.show("得到一个红宝石 攻击力加 3 ！", Messag.MODE_MSG);
+                message.show(R.string.get_ruby);
                 break;
             case 11:    // red potion
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setHp(player.getHp() + 200);
-                messag.show("得到一个小血瓶 生命加 200 ！", Messag.MODE_MSG);
+                message.show(R.string.get_red_potion);
                 break;
             case 12:    // blue potion
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setHp(player.getHp() + 500);
-                messag.show("得到一个大血瓶 生命加 500 ！", Messag.MODE_MSG);
+                message.show(R.string.get_blue_potion);
                 break;
             case 13:    // upstairs
+                message.show(R.string.msg_upstairs);
                 currentGame.currentFloor++;
                 currentGame.maxFloor = Math.max(currentGame.maxFloor, currentGame.currentFloor);
                 player.move(TowerMap.initPos[currentGame.currentFloor][0], TowerMap.initPos[currentGame.currentFloor][1]);
@@ -447,6 +443,7 @@ public class GameActivity extends Activity implements GameScreen {
                 }
                 break;
             case 14:    // downstairs
+                message.show(R.string.msg_downstairs);
                 currentGame.currentFloor--;
                 player.move(TowerMap.finPos[currentGame.currentFloor][0], TowerMap.finPos[currentGame.currentFloor][1]);
                 break;
@@ -454,7 +451,6 @@ public class GameActivity extends Activity implements GameScreen {
                 break;
             case 16:   // accessible guardrail
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 break;
             case 19:    // sea of fire
                 break;
@@ -462,15 +458,15 @@ public class GameActivity extends Activity implements GameScreen {
                 break;
             case 22:    // shop
                 if (currentGame.currentFloor == 3) {
-                    shop.show(0);
+                    shop.show(0, id);
                 } else if (currentGame.currentFloor == 11) {
-                    shop.show(3);
+                    shop.show(3, id);
                 }
                 break;
             case 24:    // fairy
                 switch (currentGame.npcInfo.mFairyStatus) {
                 case NpcInfo.FAIRY_STATUS_WAIT_PLAYER:
-                    dialog.show(24, id);
+                    dialog.show(0, id);
                     break;
                 case NpcInfo.FAIRY_STATUS_WAIT_CROSS:
                     if (currentGame.isHasCross) {
@@ -482,109 +478,98 @@ public class GameActivity extends Activity implements GameScreen {
             case 25:    // thief
                 switch (currentGame.npcInfo.mThiefStatus) {
                 case NpcInfo.THIEF_STATUS_WAIT_PLAYER:
-                    dialog.show(12, id);
+                    dialog.show(8, id);
                     break;
                 case NpcInfo.THIEF_STATUS_WAIT_HAMMER:
-                    dialog.show(26, id);
+                    dialog.show(11, id);
                     break;
                 }
                 break;
             case 26:    // old man
                 if (currentGame.currentFloor == 2) {
-                    dialog.show(5, id);
+                    dialog.show(4, id);
                 } else if (currentGame.currentFloor == 5) {
-                    shop.show(1);
+                    shop.show(1, id);
                 } else if (currentGame.currentFloor == 13) {
-                    shop.show(5);
+                    shop.show(5, id);
                 } else if (currentGame.currentFloor == 15) {
                     if (player.getExp() >= 500) {
-                        dialog.show(4, id);
-                    } else {
                         dialog.show(3, id);
+                    } else {
+                        dialog.show(2, id);
                     }
                 }
                 break;
             case 27:    // businessman
                 if (currentGame.currentFloor == 2) {
-                    dialog.show(6, id);
+                    dialog.show(5, id);
                 } else if (currentGame.currentFloor == 5) {
-                    shop.show(2);
+                    shop.show(2, id);
                 } else if (currentGame.currentFloor == 12) {
-                    shop.show(4);
+                    shop.show(4, id);
                 } else if (currentGame.currentFloor == 15) {
                     if (player.getMoney() >= 500) {
-                        dialog.show(8, id);
-                    } else {
                         dialog.show(7, id);
+                    } else {
+                        dialog.show(6, id);
                     }
                 }
                 break;
             case 28:    // princess
-                dialog.show(19, id);
-                //currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                //player.move(x, y);
+                dialog.show(9, id);
                 break;
             case 30:    // little flying feather
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setLevel(player.getLevel() + 1);
                 player.setHp(player.getHp() + 1000);
                 player.setAttack(player.getAttack() + 7);
                 player.setDefend(player.getDefend() + 7);
-                messag.show("得到 小飞羽 等级提升一级 ！", Messag.MODE_MSG);
+                message.show(R.string.get_little_fly);
                 break;
             case 31:    // big flying feather
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setLevel(player.getLevel() + 3);
                 player.setHp(player.getHp() + 3000);
-                player.setAttack(player.getAttack() + 21);
-                player.setDefend(player.getDefend() + 21);
-                messag.show("得到 大飞羽 等级提升三级 ！", Messag.MODE_MSG);
+                player.setAttack(player.getAttack() + 20);
+                player.setDefend(player.getDefend() + 20);
+                message.show(R.string.get_big_fly);
                 break;
             case 32:    // cross
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 currentGame.isHasCross = true;
-                messag.show("【幸运十字架】 把它交给序章中的仙子，可以将自身的所有能力提升一些（攻击、防御和生命值）。", Messag.MODE_ALERT);
+                message.show(R.string.treasure_cross, R.string.treasure_cross_info, SceneMessage.MODE_ALERT);
                 break;
             case 33:    // holy water bottle
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setHp(player.getHp() * 2);
-                messag.show("【圣水瓶】 它可以将你的体质增加一倍（生命值加倍）。", Messag.MODE_ALERT);
+                message.show(R.string.treasure_holy_water, R.string.treasure_holy_water_info, SceneMessage.MODE_ALERT);
                 break;
             case 34:    // emblem of light
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 currentGame.isHasForecast = true;
-                messag.show("【圣光徽】 按 L 键使用 查看怪物的基本情况。", Messag.MODE_ALERT);
+                message.show(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info, SceneMessage.MODE_ALERT);
                 break;
             case 35:    // compass of wind
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 currentGame.isHasJump = true;
-                messag.show("【风之罗盘】 按 J 键使用 在已经走过的楼层间进行跳跃。", Messag.MODE_ALERT);
+                message.show(R.string.treasure_compass, R.string.treasure_compass_info, SceneMessage.MODE_ALERT);
                 break;
             case 36:    // key box
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setYkey(player.getYkey() + 1);
                 player.setBkey(player.getBkey() + 1);
                 player.setRkey(player.getRkey() + 1);
-                messag.show("得到 钥匙盒 各种钥匙数加 1 ！", Messag.MODE_MSG);
+                message.show(R.string.get_key_box);
                 break;
             case 38:    // hammer
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 currentGame.isHasHammer = true;
-                messag.show("【星光神榔】 把它交给第四层的小偷，小偷便会用它打开第十八层的隐藏地面（你就可以救出公主了）。", Messag.MODE_ALERT);
+                message.show(R.string.treasure_hammer, R.string.treasure_hammer_info, SceneMessage.MODE_ALERT);
                 break;
             case 39:    // gold nugget
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setMoney(player.getMoney() + 300);
-                messag.show("得到 金块 金币数加 300 ！", Messag.MODE_MSG);
+                message.show(R.string.get_gold_block);
                 break;
             case 40:    // monster
             case 41:    // monster
@@ -617,8 +602,8 @@ public class GameActivity extends Activity implements GameScreen {
             case 68:    // monster
             case 69:    // monster
             case 70:    // monster
-                if (Forecast.forecast(player, MonsterData.monsterMap.get(id)).equals("???")
-                        || Integer.parseInt(Forecast.forecast(player, MonsterData.monsterMap.get(id))) >= player.getHp()) {
+                if (SceneForecast.forecast(player, MonsterData.monsterMap.get(id)).equals("???")
+                        || Integer.parseInt(SceneForecast.forecast(player, MonsterData.monsterMap.get(id))) >= player.getHp()) {
                     return;
                 } else {
                     battle.show(id, x, y);
@@ -626,44 +611,37 @@ public class GameActivity extends Activity implements GameScreen {
                 break;
             case 71:    // iron sword
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setAttack(player.getAttack() + 10);
-                messag.show("得到 铁剑 攻击加 10 ！", Messag.MODE_MSG);
+                message.show(R.string.get_iron_shield);
                 break;
             case 73:    // steel sword
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setAttack(player.getAttack() + 70);
-                messag.show("得到 钢剑 攻击加 70 ！", Messag.MODE_MSG);
+                message.show(R.string.get_steel_sword);
                 break;
             case 75:    // sword of light
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setAttack(player.getAttack() + 150);
-                messag.show("得到 星光神剑 攻击加 150 ！", Messag.MODE_MSG);
+                message.show(R.string.get_light_sword);
                 break;
             case 76:    // iron shield
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setDefend(player.getDefend() + 10);
-                messag.show("得到 铁盾 防御加 10 ！", Messag.MODE_MSG);
+                message.show(R.string.get_iron_shield);
                 break;
             case 78:    // gold shield
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setDefend(player.getDefend() + 85);
-                messag.show("得到 黄金盾 防御加 85 ！", Messag.MODE_MSG);
+                message.show(R.string.get_gold_shield);
                 break;
             case 80:    // light shield
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
                 player.setDefend(player.getDefend() + 190);
-                messag.show("得到 星光神盾 防御加 190 ！", Messag.MODE_MSG);
+                message.show(R.string.get_light_shield);
                 break;
             case 101:
                 currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.move(x, y);
-                dialog.show(27, 59);
+                dialog.show(12, 59);
                 break;
         }
     }

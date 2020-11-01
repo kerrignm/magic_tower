@@ -12,7 +12,6 @@ import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.util.LogUtil;
 import com.game.magictower.util.RectUtil;
 
 public final class BitmapButton implements BitmapView {
@@ -79,7 +78,7 @@ public final class BitmapButton implements BitmapView {
     
     private static final int MSG_ID_LONG_PRESS = 10;
     
-    private static final int MSG_DELAY_LONG_PRESS = 300;
+    private static final int MSG_DELAY_LONG_PRESS = 500;
     private static final int MSG_DELAY_REPEAT_PRESS = 100;
     
     private static final class LongHandler extends Handler {
@@ -94,7 +93,7 @@ public final class BitmapButton implements BitmapView {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             BitmapButton button = wk.get();
-            if (msg.what == MSG_ID_LONG_PRESS && button != null) {
+            if (msg.what == MSG_ID_LONG_PRESS && button != null && button.isPressed) {
                 if (button.listener != null) {
                     button.listener.onClicked(button.getId());
                 }
@@ -105,7 +104,6 @@ public final class BitmapButton implements BitmapView {
     
     public final boolean onTouch(MotionEvent event){
         if (inBounds(event)){
-//          Log.d("BitmapButton", "event in bounds caught:"+event.toString());
             switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 isPressed = true;
@@ -117,6 +115,7 @@ public final class BitmapButton implements BitmapView {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
             case MotionEvent.ACTION_CANCEL:
                 handler.removeMessages(MSG_ID_LONG_PRESS);
                 isPressed = false;
@@ -135,9 +134,6 @@ public final class BitmapButton implements BitmapView {
     
     private boolean inBounds(MotionEvent event){
         boolean result = rect.contains((int)event.getX(), (int)event.getY());
-        if (result) {
-            LogUtil.d("MagicTower:BitmapButton", "inBounds() id=" + id + ", rect=" + rect.toString() + ", x=" + x + ", y=" + y);
-        }
         return result;
     }
     

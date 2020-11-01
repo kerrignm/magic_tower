@@ -15,12 +15,13 @@ public class Game {
         Jumping;
     }
     
+    public SceneDialog dialog;
+    public SceneMessage message;
+    
     public Status status;
     
     public int currentFloor = 0;
     public int maxFloor = 0;
-    public Dialog dialog;
-    public Messag messag;
     
     public boolean isHasCross = false;
     public boolean isHasForecast = false;
@@ -64,6 +65,8 @@ public class Game {
         maxFloor = 20;
         isHasJump = true;
         isHasForecast = true;
+        //player.setAttack(1000);
+        //player.setDefend(1000);
     }
     
     public String toString() {

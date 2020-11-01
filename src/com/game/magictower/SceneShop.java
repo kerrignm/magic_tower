@@ -1,5 +1,6 @@
 package com.game.magictower;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -7,12 +8,22 @@ import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.LiveBitmap;
-import com.game.magictower.res.ShopData;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.RectUtil;
 import com.game.magictower.widget.BitmapButton;
 
-public class Shop {
+public class SceneShop {
+    
+    private static final int[] sChoices = {
+        R.array.shop_0,
+        R.array.shop_1,
+        R.array.shop_2,
+        R.array.shop_3,
+        R.array.shop_4,
+        R.array.shop_5
+    };
+    
+    private Context mContext;
 
     private String[] choice;
     private LiveBitmap imgIcon;
@@ -22,7 +33,8 @@ public class Shop {
     private int select = 0;
     private Rect[] mTExtRect = new Rect[4];
     
-    public Shop(Game game) {
+    public SceneShop(Context context, Game game) {
+        mContext = context;
         this.game = game;
         this.player = game.player;
         mTExtRect[0] = TowerDimen.R_SHOP_TEXT;
@@ -31,10 +43,10 @@ public class Shop {
         mTExtRect[3] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 3);
     }
 
-    public void show(int id) {
-        choice = ShopData.choices[id];
-        imgIcon = ShopData.imgIcons[id];
-        this.id = id;
+    public void show(int shopId, int npcId) {
+        choice = mContext.getResources().getStringArray(sChoices[shopId]);
+        imgIcon = Assets.getInstance().animMap0.get(npcId);
+        this.id = shopId;
         select = 0;
         game.status = Status.Shopping;
     }

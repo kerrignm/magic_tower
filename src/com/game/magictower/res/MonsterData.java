@@ -35,7 +35,7 @@ public class MonsterData {
         monsterMap.put(63, new Monster(63, 125, 50, 25, 10, 7, "初级法师"));
         monsterMap.put(64, new Monster(64, 100, 200, 110, 30, 25, "高级法师"));
         monsterMap.put(65, new Monster(65, 500, 115, 65, 15, 15, "石头怪人"));
-        monsterMap.put(66, new Monster(66, 900, 450, 330, 50, 50, "兽面战士"));
+        monsterMap.put(66, new Monster(66, 900, 450, 330, 50, 50, "兽面武士"));
         monsterMap.put(67, new Monster(67, 1200, 620, 520, 65, 75, "双手剑士"));
         monsterMap.put(68, new Monster(68, 1250, 500, 400, 55, 55, "冥卫兵"));
         monsterMap.put(69, new Monster(69, 1500, 560, 460, 60, 60, "高级卫兵"));

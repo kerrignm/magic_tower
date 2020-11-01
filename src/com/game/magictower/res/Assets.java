@@ -11,7 +11,7 @@ import com.game.magictower.util.LogUtil;
 
 public final class Assets {
     
-    private static final String LOG_TAG = "Assets";
+    private static final String TAG = "MagicTower:Assets";
 
     private static final int PLAYER_LEFT = -1;
     private static final int PLAYER_DOWN = -2;
@@ -150,9 +150,9 @@ public final class Assets {
     
     public static synchronized void loadAssets(Context context, LoadingProgressListener listener){
         if (sInstance != null) {
-            LogUtil.e(LOG_TAG, "Assets resources have been already loaded.Force reloading...");
+            LogUtil.e(TAG, "Assets resources have been already loaded.Force reloading...");
             sInstance.recycleOldBitmap();
-            LogUtil.d(LOG_TAG, "old resources cleared.");
+            LogUtil.d(TAG, "old resources cleared.");
             sInstance = null;
         }
         if (context == null || listener == null) {
@@ -187,7 +187,7 @@ public final class Assets {
                 bitmap.getBitmap().recycle();
             }
         } catch (Exception e) {
-            LogUtil.w(LOG_TAG, "exception while recycling bitmap");
+            LogUtil.w(TAG, "exception while recycling bitmap");
             e.printStackTrace();
         }
     }
@@ -226,7 +226,7 @@ public final class Assets {
         WindowManager wm = ((Activity) context).getWindowManager();
         Point point = new Point();
         wm.getDefaultDisplay().getSize(point);
-        LogUtil.d(LOG_TAG, "window point:" + point.toString());
+        LogUtil.d(TAG, "window point:" + point.toString());
         
         TowerDimen.init(point.x, point.y);
         

@@ -2,6 +2,7 @@ package com.game.magictower;
 
 import java.util.HashSet;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -12,7 +13,9 @@ import com.game.magictower.res.MonsterData;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BitmapButton;
 
-public class Forecast {
+public class SceneForecast {
+    
+    private Context mContext;
     
     private Game game;
     private HashSet<Integer> mForecastSet = new HashSet<>();
@@ -24,8 +27,22 @@ public class Forecast {
     private String[] mLoses;
     private Rect[][] mRects;
     
-    public Forecast(Game game) {
+    private String mName;
+    private String mHP;
+    private String mAttack;
+    private String mDefend;
+    private String mMoney;
+    private String mLose;
+    
+    public SceneForecast(Context context, Game game) {
+        mContext = context;
         this.game = game;
+        mName = mContext.getResources().getString(R.string.monster_name);
+        mHP = mContext.getResources().getString(R.string.monster_hp);
+        mAttack = mContext.getResources().getString(R.string.monster_attack);
+        mDefend = mContext.getResources().getString(R.string.monster_defend);
+        mMoney = mContext.getResources().getString(R.string.monster_money);
+        mLose = mContext.getResources().getString(R.string.monster_lose);
     }
     
     public static String forecast(Player player, Monster monster) {
@@ -45,10 +62,10 @@ public class Forecast {
             int monsterAttack = monster.getAttack() - player.getDefend();
             int firstAttack = monsterAttack;
             int times = 0;
-            if (palyerAttack % monsterHp == 0) {
-                times = palyerAttack / monsterHp;
+            if (monsterHp % palyerAttack == 0) {
+                times = monsterHp / palyerAttack;
             } else {
-                times = palyerAttack / monsterHp + 1;
+                times = monsterHp / palyerAttack + 1;
             }
             if (monster.getId() == 50) {
                 firstAttack = player.getHp() / 4;
@@ -99,7 +116,7 @@ public class Forecast {
                 mAttacks[i] = monster.getAttack() + "";
                 mDefends[i] = monster.getDefend() + "";
                 mMoneys[i] = monster.getMoney() + " · " + monster.getExp();
-                mLoses[i] = Forecast.forecast(game.player, monster);
+                mLoses[i] = SceneForecast.forecast(game.player, monster);
             }
         }
 }
@@ -114,12 +131,12 @@ public class Forecast {
         graphics.drawRect(canvas, TowerDimen.R_FORECAST);
         
         if (mForecastSet.size() > 0) {
-            graphics.drawTextInCenter(canvas, "名称", TowerDimen.R_FC_NAME.left, TowerDimen.R_FC_NAME.top, TowerDimen.R_FC_NAME.width(), TowerDimen.R_FC_NAME.height());
-            graphics.drawTextInCenter(canvas, "生命", TowerDimen.R_FC_HP.left, TowerDimen.R_FC_HP.top, TowerDimen.R_FC_HP.width(), TowerDimen.R_FC_HP.height());
-            graphics.drawTextInCenter(canvas, "攻击", TowerDimen.R_FC_ATTACK.left, TowerDimen.R_FC_ATTACK.top, TowerDimen.R_FC_ATTACK.width(), TowerDimen.R_FC_ATTACK.height());
-            graphics.drawTextInCenter(canvas, "防御", TowerDimen.R_FC_DEFEND.left, TowerDimen.R_FC_DEFEND.top, TowerDimen.R_FC_DEFEND.width(), TowerDimen.R_FC_DEFEND.height());
-            graphics.drawTextInCenter(canvas, "金 · 经：", TowerDimen.R_FC_MONEY.left, TowerDimen.R_FC_MONEY.top, TowerDimen.R_FC_MONEY.width(), TowerDimen.R_FC_MONEY.height());
-            graphics.drawTextInCenter(canvas, "损失", TowerDimen.R_FC_LOSE.left, TowerDimen.R_FC_LOSE.top, TowerDimen.R_FC_LOSE.width(), TowerDimen.R_FC_LOSE.height());
+            graphics.drawTextInCenter(canvas, mName, TowerDimen.R_FC_NAME.left, TowerDimen.R_FC_NAME.top, TowerDimen.R_FC_NAME.width(), TowerDimen.R_FC_NAME.height());
+            graphics.drawTextInCenter(canvas, mHP, TowerDimen.R_FC_HP.left, TowerDimen.R_FC_HP.top, TowerDimen.R_FC_HP.width(), TowerDimen.R_FC_HP.height());
+            graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_FC_ATTACK.left, TowerDimen.R_FC_ATTACK.top, TowerDimen.R_FC_ATTACK.width(), TowerDimen.R_FC_ATTACK.height());
+            graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_FC_DEFEND.left, TowerDimen.R_FC_DEFEND.top, TowerDimen.R_FC_DEFEND.width(), TowerDimen.R_FC_DEFEND.height());
+            graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_FC_MONEY.left, TowerDimen.R_FC_MONEY.top, TowerDimen.R_FC_MONEY.width(), TowerDimen.R_FC_MONEY.height());
+            graphics.drawTextInCenter(canvas, mLose, TowerDimen.R_FC_LOSE.left, TowerDimen.R_FC_LOSE.top, TowerDimen.R_FC_LOSE.width(), TowerDimen.R_FC_LOSE.height());
             
             Monster monster;
             for (int i = 0; i < mForecastSet.size(); i++) {

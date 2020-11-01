@@ -12,9 +12,6 @@ import android.os.CountDownTimer;
 
 public final class GameGraphics {
     
-    public static final int TEXT_SIZE = TowerDimen.TOWER_GRID_SIZE / 2;
-    public static final int BIG_TEXT_SIZE = TEXT_SIZE * 3 / 2;
-    
     private Rect srcRect = new Rect();
     private Rect dstRect = new Rect();
     
@@ -49,7 +46,7 @@ public final class GameGraphics {
     private void initTextPaintEffect(Paint paint){
         paint.setAntiAlias(true);
         paint.setARGB(255, 255, 255, 255);
-        paint.setTextSize(TEXT_SIZE);
+        paint.setTextSize(TowerDimen.TEXT_SIZE);
         paint.setStrokeWidth(5);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -57,7 +54,7 @@ public final class GameGraphics {
     private void initDisableTextPaintEffect(Paint paint){
         paint.setAntiAlias(true);
         paint.setARGB(255, 160, 160, 160);
-        paint.setTextSize(TEXT_SIZE);
+        paint.setTextSize(TowerDimen.TEXT_SIZE);
         paint.setStrokeWidth(5);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -65,7 +62,7 @@ public final class GameGraphics {
     private void initBigTextPaintEffect(Paint paint){
         paint.setAntiAlias(true);
         paint.setARGB(255, 255, 255, 255);
-        paint.setTextSize(BIG_TEXT_SIZE);
+        paint.setTextSize(TowerDimen.BIG_TEXT_SIZE);
         paint.setStrokeWidth(5);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
@@ -76,12 +73,6 @@ public final class GameGraphics {
         paint.setStyle(Style.STROKE);
         paint.setStrokeWidth(5);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
-    }
-    
-    public Rect getTextBounds(String text) {
-        Rect textBounds = new Rect();
-        textPaint.getTextBounds(text, 0, text.length(), textBounds);
-        return textBounds;
     }
     
     public Rect getTextBounds(String text, Paint paint) {
@@ -186,15 +177,17 @@ public final class GameGraphics {
     }
     
     public void drawTextInCenter(Canvas canvas, String msg, int x, int y, int w, int h) {
+        drawTextInCenter(canvas, msg, x, y, w, h, textPaint);
+    }
+    
+    public void drawTextInCenter(Canvas canvas, String msg, int x, int y, int w, int h, Paint paint) {
         if (canvas == null || msg == null) {
             return;
         }
-        int textWidth = getTextBounds(msg).width();
-        //int textHeight = getTextBounds(msg).height();
-        //LogUtil.d("GameGraphics", "drawTextInCenter() msg=" + msg + ", textWidth=" + textWidth + ", textHeight=" + textHeight);
+        int textWidth = getTextBounds(msg, paint).width();
         x = x + (w - textWidth) / 2;
-        y = y + (h - TEXT_SIZE) / 2 + TEXT_SIZE;
-        canvas.drawText(msg, x, y, textPaint);
+        y = y + (h - (int)paint.getTextSize()) / 2 + (int)paint.getTextSize();
+        canvas.drawText(msg, x, y, paint);
     }
     
     public void drawTextUsingAlpha(Canvas canvas, String msg,
@@ -214,9 +207,13 @@ public final class GameGraphics {
     }
     
     public ArrayList<String> splitToLines(String str, int width) {
+        return splitToLines(str, width, textPaint);
+    }
+    
+    public ArrayList<String> splitToLines(String str, int width, Paint paint) {
         ArrayList<String> result = new ArrayList<String>();
         float[] widths = new float[str.length()];
-        textPaint.getTextWidths(str, widths);
+        paint.getTextWidths(str, widths);
         String subStr;
         int index = 0;
         float lineLen = 0f;
