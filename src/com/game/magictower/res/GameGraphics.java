@@ -132,8 +132,8 @@ public final class GameGraphics {
     }
 
     public void drawBitmapInParentCenter(Canvas canvas, LiveBitmap bitmap, Point center) {
-        int x = center.x - (int) (bitmap.getRawWidth() / 2 + 0.5f);
-        int y = center.y - (int) (bitmap.getRawHeight() / 2 + 0.5f);
+        int x = center.x - (int) (bitmap.getWidth() / 2 + 0.5f);
+        int y = center.y - (int) (bitmap.getHeight() / 2 + 0.5f);
         drawBitmap(canvas, bitmap, x, y);
     }
 
@@ -176,8 +176,16 @@ public final class GameGraphics {
         canvas.drawText(msg, x, y, paint);
     }
     
+    public void drawTextInCenter(Canvas canvas, String msg, Rect rect) {
+        drawTextInCenter(canvas, msg, rect.left, rect.top, rect.width(), rect.height());
+    }
+    
     public void drawTextInCenter(Canvas canvas, String msg, int x, int y, int w, int h) {
         drawTextInCenter(canvas, msg, x, y, w, h, textPaint);
+    }
+    
+    public void drawTextInCenter(Canvas canvas, String msg, Rect rect, Paint paint) {
+        drawTextInCenter(canvas, msg, rect.left, rect.top, rect.width(), rect.height(), paint);
     }
     
     public void drawTextInCenter(Canvas canvas, String msg, int x, int y, int w, int h, Paint paint) {

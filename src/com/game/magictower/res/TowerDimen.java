@@ -35,35 +35,24 @@ public class TowerDimen {
     public static Rect R_BTN_J;
     public static Rect R_BTN_OK;
     
-    public static int LEVEL_LEFT;
-    public static int LEVEL_TOP;
-    public static int HP_LEFT;
-    public static int HP_TOP;
-    public static int ATTACK_LEFT;
-    public static int ATTACK_TOP;
-    public static int DEFEND_LEFT;
-    public static int DEFEND_TOP;
-    public static int MONEY_LEFT;
-    public static int MONEY_TOP;
-    public static int EXP_LEFT;
-    public static int EXP_TOP;
+    public static Rect R_PLR_LEVEL;
+    public static Rect R_PLR_HP;
+    public static Rect R_PLR_ATTACK;
+    public static Rect R_PLR_DEFEND;
+    public static Rect R_PLR_MONEY;
+    public static Rect R_PLR_EXP;
 
-    public static int YKEY_LEFT;
-    public static int YKEY_TOP;
-    public static int BKEY_LEFT;
-    public static int BKEY_TOP;
-    public static int RKEY_LEFT;
-    public static int RKEY_TOP;
+    public static Rect R_YKEY;
+    public static Rect R_BKEY;
+    public static Rect R_RKEY;
 
-    public static int FLOOR_LEFT;
-    public static int FLOOR_TOP;
+    public static Rect R_FLOOR;
     
     public static Rect R_MSG;
     public static Rect R_ALERT;
     public static Rect R_ALERT_TITLE;
     public static Rect R_ALERT_INFO;
     public static Rect R_AUTO_SCROLL;
-    public static Rect R_AUTO_SCROLL_TITLE;
     public static Rect R_AUTO_SCROLL_INFO;
     
     public static Rect R_SHOP;
@@ -114,7 +103,7 @@ public class TowerDimen {
         int btn_real_size = btn_size + btn_margin;
         int btn_large_size = (TOWER_LEFT - btn_margin * 3) / 2;
 
-        R_BTN_U = RectUtil.createRect(TOWER_LEFT - btn_real_size * 2, height - btn_real_size * 3 - btn_size / 2, btn_size, btn_size);
+        R_BTN_U = RectUtil.createRect(TOWER_LEFT - btn_real_size * 2, height - btn_real_size * 3 - btn_size, btn_size, btn_size);
         R_BTN_L = RectUtil.createRect(R_BTN_U, -btn_real_size, btn_real_size);
         R_BTN_R = RectUtil.createRect(R_BTN_U, btn_real_size, btn_real_size);
         R_BTN_D = RectUtil.createRect(R_BTN_U, 0, btn_real_size * 2);
@@ -127,36 +116,25 @@ public class TowerDimen {
         R_BTN_J = RectUtil.createRect(R_BTN_A, 0, btn_real_size);
         R_BTN_OK = RectUtil.createRect(R_TOWER.right + (TOWER_LEFT - btn_large_size) / 2, R_BTN_K.top + btn_real_size, btn_large_size, btn_size);
         
-        LEVEL_LEFT = (int)(230 * TOWER_SCALE) + TOWER_LEFT;
-        LEVEL_TOP = (int)(150 * TOWER_SCALE) + TOWER_TOP;
-        HP_LEFT = (int)(220 * TOWER_SCALE) + TOWER_LEFT;
-        HP_TOP = (int)(215 * TOWER_SCALE) + TOWER_TOP;
-        ATTACK_LEFT = (int)(220 * TOWER_SCALE) + TOWER_LEFT;
-        ATTACK_TOP = (int)(270 * TOWER_SCALE) + TOWER_TOP;
-        DEFEND_LEFT = (int)(220 * TOWER_SCALE) + TOWER_LEFT;
-        DEFEND_TOP = (int)(325 * TOWER_SCALE) + TOWER_TOP;
-        MONEY_LEFT = (int)(220 * TOWER_SCALE) + TOWER_LEFT;
-        MONEY_TOP = (int)(385 * TOWER_SCALE) + TOWER_TOP;
-        EXP_LEFT = (int)(220 * TOWER_SCALE) + TOWER_LEFT;
-        EXP_TOP = (int)(440 * TOWER_SCALE) + TOWER_TOP;
+        R_PLR_LEVEL = RectUtil.createRect(TOWER_LEFT + (int)(182 * TOWER_SCALE), TOWER_TOP + (int)(118 * TOWER_SCALE), (int)(108 * TOWER_SCALE), TEXT_SIZE);
+        R_PLR_HP = RectUtil.createRect(TOWER_LEFT + (int)(170 * TOWER_SCALE), TOWER_TOP + (int)(183 * TOWER_SCALE), (int)(175 * TOWER_SCALE), TEXT_SIZE);
+        R_PLR_ATTACK = RectUtil.createRect(TOWER_LEFT + (int)(170 * TOWER_SCALE), TOWER_TOP + (int)(239 * TOWER_SCALE), (int)(175 * TOWER_SCALE), TEXT_SIZE);
+        R_PLR_DEFEND = RectUtil.createRect(TOWER_LEFT + (int)(170 * TOWER_SCALE), TOWER_TOP + (int)(295 * TOWER_SCALE), (int)(175 * TOWER_SCALE), TEXT_SIZE);
+        R_PLR_MONEY = RectUtil.createRect(TOWER_LEFT + (int)(170 * TOWER_SCALE), TOWER_TOP + (int)(351 * TOWER_SCALE), (int)(175 * TOWER_SCALE), TEXT_SIZE);
+        R_PLR_EXP = RectUtil.createRect(TOWER_LEFT + (int)(170 * TOWER_SCALE), TOWER_TOP + (int)(407 * TOWER_SCALE), (int)(175 * TOWER_SCALE), TEXT_SIZE);
 
-        YKEY_LEFT = (int)(240 * TOWER_SCALE) + TOWER_LEFT;
-        YKEY_TOP = (int)(530 * TOWER_SCALE) + TOWER_TOP;
-        BKEY_LEFT = (int)(240 * TOWER_SCALE) + TOWER_LEFT;
-        BKEY_TOP = (int)(605 * TOWER_SCALE) + TOWER_TOP;
-        RKEY_LEFT = (int)(240 * TOWER_SCALE) + TOWER_LEFT;
-        RKEY_TOP = (int)(680 * TOWER_SCALE) + TOWER_TOP;
+        R_YKEY = RectUtil.createRect(TOWER_LEFT + (int)(175 * TOWER_SCALE), TOWER_TOP + (int)(499 * TOWER_SCALE), (int)(120 * TOWER_SCALE), TEXT_SIZE);
+        R_BKEY = RectUtil.createRect(TOWER_LEFT + (int)(175 * TOWER_SCALE), TOWER_TOP + (int)(574 * TOWER_SCALE), (int)(120 * TOWER_SCALE), TEXT_SIZE);
+        R_RKEY = RectUtil.createRect(TOWER_LEFT + (int)(175 * TOWER_SCALE), TOWER_TOP + (int)(647 * TOWER_SCALE), (int)(120 * TOWER_SCALE), TEXT_SIZE);
 
-        FLOOR_LEFT = (int)(200 * TOWER_SCALE) + TOWER_LEFT;
-        FLOOR_TOP = (int)(750 * TOWER_SCALE) + TOWER_TOP;
+        R_FLOOR = RectUtil.createRect(TOWER_LEFT + (int)(175 * TOWER_SCALE), TOWER_TOP + (int)(721 * TOWER_SCALE), (int)(70 * TOWER_SCALE), TEXT_SIZE);
         
         R_MSG = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 3, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 2);
         R_ALERT = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 3, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 4);
         R_ALERT_TITLE = new Rect(R_ALERT.left + TOWER_GRID_SIZE / 2, R_ALERT.top + TOWER_GRID_SIZE / 2, R_ALERT.right - TOWER_GRID_SIZE / 2, R_ALERT.top + TOWER_GRID_SIZE * 3 / 2);
         R_ALERT_INFO = new Rect(R_ALERT_TITLE.left, R_ALERT_TITLE.bottom, R_ALERT_TITLE.right, R_ALERT_TITLE.bottom + TOWER_GRID_SIZE * 2);
-        R_AUTO_SCROLL = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 7);
-        R_AUTO_SCROLL_TITLE = new Rect(R_AUTO_SCROLL.left + TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.top + TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.right - TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.top + TOWER_GRID_SIZE * 3 / 2);
-        R_AUTO_SCROLL_INFO = new Rect(R_AUTO_SCROLL_TITLE.left, R_AUTO_SCROLL_TITLE.bottom, R_AUTO_SCROLL_TITLE.right, R_AUTO_SCROLL_TITLE.bottom + TOWER_GRID_SIZE * 5);
+        R_AUTO_SCROLL = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 6, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 9);
+        R_AUTO_SCROLL_INFO = new Rect(R_AUTO_SCROLL.left + TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.top + TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.right - TOWER_GRID_SIZE / 2, R_AUTO_SCROLL.bottom - TOWER_GRID_SIZE / 2);
         
         R_SHOP = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 7, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 9, TOWER_GRID_SIZE * 5);
         R_SHOP_ICON = RectUtil.createRect(R_SHOP.left + TOWER_GRID_SIZE / 2, R_SHOP.top + TOWER_GRID_SIZE / 2, TOWER_GRID_SIZE, TOWER_GRID_SIZE);
@@ -182,12 +160,12 @@ public class TowerDimen {
         int bat_pad_y = TOWER_GRID_SIZE * 2;
         R_BATTLE = RectUtil.createRect(R_TOWER.left + bat_pad_x, R_TOWER.top + bat_pad_y, bat_width, bat_height);
         R_BTL_MST_ICON = RectUtil.createRect((int)(26 * TOWER_SCALE) + R_BATTLE.left, (int)(68 * TOWER_SCALE) + R_BATTLE.top, TOWER_GRID_SIZE * 3, TOWER_GRID_SIZE * 3);
-        R_BTL_MST_HP = RectUtil.createRect((int)(400 * TOWER_SCALE) + R_BATTLE.left, (int)(68 * TOWER_SCALE) + R_BATTLE.top, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
-        R_BTL_MST_ATTACK = RectUtil.createRect((int)(400 * TOWER_SCALE) + R_BATTLE.left, (int)(194 * TOWER_SCALE) + R_BATTLE.top, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
-        R_BTL_MST_DEFEND = RectUtil.createRect((int)(400 * TOWER_SCALE) + R_BATTLE.left, (int)(324 * TOWER_SCALE) + R_BATTLE.top, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
-        R_BTL_PLR_HP = RectUtil.createRect((int)(785 * TOWER_SCALE) + R_BATTLE.left, (int)(68 * TOWER_SCALE) + R_BATTLE.top, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
-        R_BTL_PLR_ATTACK = RectUtil.createRect((int)(785 * TOWER_SCALE) + R_BATTLE.left, (int)(194 * TOWER_SCALE) + R_BATTLE.top, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
-        R_BTL_PLR_DEFEND = RectUtil.createRect((int)(785 * TOWER_SCALE) + R_BATTLE.left, (int)(324 * TOWER_SCALE) + R_BATTLE.top, (int)(300 * TOWER_SCALE), (int)(300 * TOWER_SCALE));
+        R_BTL_MST_HP = RectUtil.createRect((int)(400 * TOWER_SCALE) + R_BATTLE.left, (int)(68 * TOWER_SCALE) + R_BATTLE.top, (int)(120 * TOWER_SCALE), TEXT_SIZE);
+        R_BTL_MST_ATTACK = RectUtil.createRect((int)(400 * TOWER_SCALE) + R_BATTLE.left, (int)(194 * TOWER_SCALE) + R_BATTLE.top, (int)(120), TEXT_SIZE);
+        R_BTL_MST_DEFEND = RectUtil.createRect((int)(400 * TOWER_SCALE) + R_BATTLE.left, (int)(324 * TOWER_SCALE) + R_BATTLE.top, (int)(120 * TOWER_SCALE), TEXT_SIZE);
+        R_BTL_PLR_HP = RectUtil.createRect((int)(725 * TOWER_SCALE) + R_BATTLE.left, (int)(68 * TOWER_SCALE) + R_BATTLE.top, (int)(120 * TOWER_SCALE), TEXT_SIZE);
+        R_BTL_PLR_ATTACK = RectUtil.createRect((int)(725 * TOWER_SCALE) + R_BATTLE.left, (int)(194 * TOWER_SCALE) + R_BATTLE.top, (int)(120 * TOWER_SCALE), TEXT_SIZE);
+        R_BTL_PLR_DEFEND = RectUtil.createRect((int)(725 * TOWER_SCALE) + R_BATTLE.left, (int)(324 * TOWER_SCALE) + R_BATTLE.top, (int)(120 * TOWER_SCALE), TEXT_SIZE);
         
         R_JUMP = RectUtil.createRect(R_TOWER.left + TOWER_GRID_SIZE * 7, R_TOWER.top + TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE * 9, TOWER_GRID_SIZE * 6);
         R_JUMP_GRID = RectUtil.createRect(R_JUMP.left + TOWER_GRID_SIZE / 2, R_JUMP.top + TOWER_GRID_SIZE / 2, TOWER_GRID_SIZE * 2, TOWER_GRID_SIZE);

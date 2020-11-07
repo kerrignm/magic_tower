@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_name">MagicTower</string>
     <string name="loading_voice_enable">音效：打开</string>
@@ -7,4 +8,64 @@
     <string name="loading_start_game">新的开始</string>
     <string name="loading_load_game">旧的回忆</string>
     
+    <string name="btn_quit">Quit</string>
+    <string name="btn_new">Reset</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_load">Load</string>
+    <string name="btn_look">Look</string>
+    <string name="btn_jump">Jump</string>
+    <string name="btn_ok">OK</string>
+    
+    <string name="msg_restart">重新开始</string>
+    <string name="save_succeed">数据保存成功！</string>
+    <string name="save_failed">数据保存失败！</string>
+    <string name="read_succeed">数据读取成功！</string>
+    <string name="read_failed">数据读取失败！</string>
+    
+    <string name="msg_upstairs">上楼······</string>
+    <string name="msg_downstairs">下楼······</string>
+    
+    <string name="get_money_exp">获得金币数<xliff:g id="2">%d</xliff:g> 经验值<xliff:g id="3">%d</xliff:g> ！</string>
+    
+    <string name="exclamatory_colon">： </string>
+    
+    <string name="monster_name">名称</string>
+    <string name="monster_hp">生命 </string>
+    <string name="monster_attack">攻击 </string>
+    <string name="monster_defend">防御 </string>
+    <string name="monster_money">金 · 经 </string>
+    <string name="monster_lose">损失 </string>
+    
+    <string name="jump_ordinal_floor">第<xliff:g id="1">%d</xliff:g>层</string>
+    
+    	<string name="get_yellow_key">得到一把 黄钥匙 ！</string>
+	<string name="get_bule_key">得到一把 蓝钥匙 ！</string>
+	<string name="get_red_key">得到一把 红钥匙 ！</string>
+	<string name="get_sapphire">得到一个蓝宝石 防御力加 3 ！</string>
+	<string name="get_ruby">得到一个红宝石 攻击力加 3 ！</string>
+	<string name="get_red_potion">得到一个小血瓶 生命加 200 ！</string>
+	<string name="get_blue_potion">得到一个大血瓶 生命加 500 ！</string>
+	<string name="get_little_fly">得到 小飞羽 等级提升一级 ！</string>
+	<string name="get_big_fly">得到 大飞羽 等级提升三级 ！</string>
+	<string name="get_key_box">得到 钥匙盒 各种钥匙数加 1 ！</string>
+	<string name="get_gold_block">得到 金块 金币数加 300 ！</string>
+	<string name="get_iron_sword">得到 铁剑 攻击加 10 ！</string>
+	<string name="get_steel_sword">得到 钢剑 攻击加 70 ！</string>
+	<string name="get_light_sword">得到 星光神剑 攻击加 150 ！</string>
+	<string name="get_iron_shield">得到 铁盾 防御加 10 ！</string>
+    <string name="get_steel_shield">得到 钢盾 防御加 30 ！</string>
+    <string name="get_gold_shield">得到 黄金盾 防御加 85 ！</string>
+    <string name="get_light_shield">得到 星光神盾 防御加 190 ！</string>
+    
+    <string name="treasure_cross">【幸运十字架】</string>
+    <string name="treasure_cross_info">把它交给序章中的仙子，可以将自身的所有能力提升一些（攻击、防御和生命值）。</string>
+    <string name="treasure_holy_water">【圣水瓶】</string>
+    <string name="treasure_holy_water_info">它可以将你的体质增加一倍（生命值加倍）。</string>
+    <string name="treasure_emblem_light">【圣光徽】</string>
+    <string name="treasure_emblem_light_info">按 Look 键使用 ，查看怪物的基本情况。</string>
+    <string name="treasure_compass">【风之罗盘】</string>
+    <string name="treasure_compass_info">按 Jump 键使用， 在已经走过的楼层间进行跳跃。</string>
+    <string name="treasure_hammer">【星光神榔】</string>
+    <string name="treasure_hammer_info">把它交给第四层的小偷，小偷便会用它打开第十八层的隐藏地面（你就可以救出公主了）。</string>
+    	
 </resources>

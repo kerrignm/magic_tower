@@ -6,34 +6,18 @@ import android.content.Context;
 import android.graphics.Canvas;
 
 import com.game.magictower.Game.Status;
+import com.game.magictower.model.NpcInfo;
+import com.game.magictower.model.TalkInfo;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
+import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.widget.BitmapButton;
+import com.game.magictower.widget.TextButton;
 
 public class SceneDialog {
     
     private static final int TK_PLAYER = 0;
-    private static final int TK_NPC = 1;
-    
-    private static final int[] sDialogs = {
-        R.array.dialog_0,
-        R.array.dialog_1,
-        R.array.dialog_2,
-        R.array.dialog_3,
-        R.array.dialog_4,
-        R.array.dialog_5,
-        R.array.dialog_6,
-        R.array.dialog_7,
-        R.array.dialog_8,
-        R.array.dialog_9,
-        R.array.dialog_10,
-        R.array.dialog_11,
-        R.array.dialog_12,
-        R.array.dialog_13,
-        R.array.dialog_14
-    };
     
     private Context mContext;
     
@@ -66,26 +50,22 @@ public class SceneDialog {
     }
     
     private void prepareTalkInfo(int dialogId) {
-        String[] dialogInfos = mContext.getResources().getStringArray(sDialogs[dialogId]);
-        String hero = mContext.getResources().getString(R.string.hero);
-        String[] dialogInfo = null;
         int talker = TK_PLAYER;
         String tkName = null;
         ArrayList<String> msgs = null;
-        mTalkList = new ArrayList<TalkInfo>();
         TalkInfo talkInfo = null;
-        for (int i = 0; i < dialogInfos.length; i++) {
-            dialogInfo = dialogInfos[i].split(":");
-            tkName = dialogInfo[0];
-            if (hero.equals(tkName)) {
-                talker = TK_PLAYER;
-            } else {
-                talker = TK_NPC;
-            }
+        ArrayList<TalkInfo> talkList = game.dialogs.get(dialogId);
+        mTalkList = new ArrayList<TalkInfo>();
+        for (int i = 0; i < talkList.size(); i++) {
+            talkInfo = talkList.get(i);
+            tkName = talkInfo.mTkName;
+            talker = talkInfo.mTalker;
+            msgs = new ArrayList<String>();
             tkName += mContext.getResources().getString(R.string.exclamatory_colon);
-            msgs = GameGraphics.getInstance().splitToLines(dialogInfo[1], TowerDimen.R_DLG_TEXT.width());
-            talkInfo = new TalkInfo(talker, tkName, msgs);
-            mTalkList.add(talkInfo);
+            for (int k = 0; k < talkInfo.mMsgs.size(); k++) {
+                msgs.addAll(GameGraphics.getInstance().splitToLines(talkInfo.mMsgs.get(k), TowerDimen.R_DLG_TEXT.width()));
+            }
+            mTalkList.add(new TalkInfo(talker, tkName, msgs));
         }
     }
     
@@ -135,7 +115,7 @@ public class SceneDialog {
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case BitmapButton.ID_OK:
+        case TextButton.ID_OK:
             if (!getTalkInfo()) {
                 talkOver();
             }
@@ -147,17 +127,19 @@ public class SceneDialog {
         boolean changeStatus = true;
         switch(mDialogId) {
         case 0:
-            game.lvMap[game.currentFloor][8][5] = 0;
-            game.lvMap[game.currentFloor][8][4] = 24;
+            game.lvMap[game.npcInfo.curFloor][8][5] = 0;
+            game.lvMap[game.npcInfo.curFloor][8][4] = 24;
             game.player.setYkey(game.player.getYkey() + 1);
             game.player.setBkey(game.player.getBkey() + 1);
             game.player.setRkey(game.player.getRkey() + 1);
             game.npcInfo.mFairyStatus = NpcInfo.FAIRY_STATUS_WAIT_CROSS;
             break;
         case 1:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
             game.player.setHp(game.player.getHp() * 4 / 3);
             game.player.setAttack(game.player.getAttack() * 4 / 3);
             game.player.setDefend(game.player.getDefend() * 4 / 3);
+            game.lvMap[20][7][5] = 13;
             game.npcInfo.mFairyStatus = NpcInfo.FAIRY_STATUS_OVER;
             break;
         case 2:
@@ -165,6 +147,7 @@ public class SceneDialog {
         case 3:
             game.player.setAttack(game.player.getAttack() + 120);
             game.player.setExp(game.player.getExp() - 500);
+            game.lvMap[15][3][4] = 0;
             break;
         case 4:
             game.message.show(R.string.get_steel_sword);
@@ -183,15 +166,22 @@ public class SceneDialog {
         case 7:
             game.player.setDefend(game.player.getDefend() + 120);
             game.player.setMoney(game.player.getMoney() - 500);
+            game.lvMap[15][3][6] = 0;
             break;
         case 8:
+            game.lvMap[2][6][1] = 0;
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_PICKAXE));
             game.npcInfo.mThiefStatus = NpcInfo.THIEF_STATUS_WAIT_HAMMER;
             break;
         case 9:
+            game.lvMap[18][10][10] = 13;
+            game.npcInfo.mPrincessStatus = NpcInfo.PRINCESS_STATUS_OVER;
             break;
         case 10:
             break;
         case 11:
+            game.lvMap[18][8][5] = 0;
+            game.lvMap[18][9][5] = 0;
             game.lvMap[4][0][5] = 0;
             game.npcInfo.mThiefStatus = NpcInfo.THIEF_STATUS_OVER;
             break;
@@ -200,23 +190,12 @@ public class SceneDialog {
         case 13:
             break;
         case 14:
+            game.message.show(2, null, null, SceneMessage.MODE_AUTO_SCROLL);
+            changeStatus = false;
             break;
         }
         if (changeStatus) {
             game.status = Status.Playing;
-        }
-    }
-    
-    private static class TalkInfo {
-        
-        public int mTalker;
-        public String mTkName;
-        public ArrayList<String> mMsgs;
-        
-        public TalkInfo(int talker, String tkName, ArrayList<String> msgs) {
-            mTalker = talker;
-            mTkName = tkName;
-            mMsgs = msgs;
         }
     }
 

@@ -8,8 +8,7 @@ import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.res.TowerMap;
-import com.game.magictower.widget.BitmapButton;
+import com.game.magictower.widget.TextButton;
 
 public class SceneJump {
     
@@ -21,14 +20,9 @@ public class SceneJump {
     
     private Game game;
     
-    private String mOrdinal;
-    private String mFloor;
-    
     public SceneJump(Context context, Game game) {
         mContext = context;
         this.game = game;
-        mOrdinal = mContext.getResources().getString(R.string.jump_ordinal);
-        mFloor = mContext.getResources().getString(R.string.jump_floor);
         mFloorRect = new Rect[5][];
         mFloorName = new String[5][];
         for(int i = 0; i < 5; i++) {
@@ -37,17 +31,17 @@ public class SceneJump {
             for (int j = 0; j < 4; j++) {
                 mFloorRect[i][j] = new Rect(TowerDimen.R_JUMP_GRID);
                 mFloorRect[i][j].offset(j * TowerDimen.R_JUMP_GRID.width(), i * TowerDimen.R_JUMP_GRID.height());
-                mFloorName[i][j] = mOrdinal + (j * 5 + i + 1) + mFloor;
+                mFloorName[i][j] = String.format(mContext.getResources().getString(R.string.jump_ordinal_floor), (j * 5 + i + 1));
             }
         }
     }
     
     public void show() {
         game.status = Status.Jumping;
-        mSeclet = game.currentFloor - 1;
+        mSeclet = 0;/*game.npcInfo.curFloor - 1;
         if (mSeclet < 0) {
             mSeclet = 0;
-        }
+        }*/
     }
     
     public void draw(GameGraphics graphics, Canvas canvas) {
@@ -68,19 +62,19 @@ public class SceneJump {
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case BitmapButton.ID_OK:
-            if (mSeclet + 1 > game.maxFloor) {
-                game.currentFloor = game.maxFloor;
+        case TextButton.ID_OK:
+            if (mSeclet + 1 > game.npcInfo.maxFloor) {
+                game.npcInfo.curFloor = game.npcInfo.maxFloor;
             } else {
-                game.currentFloor = mSeclet + 1;
+                game.npcInfo.curFloor = mSeclet + 1;
             }
-            game.player.move(TowerMap.initPos[game.currentFloor][0], TowerMap.initPos[game.currentFloor][1]);
+            game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
             game.status = Status.Playing;
             break;
-        case BitmapButton.ID_DOWN:
-        case BitmapButton.ID_UP:
-        case BitmapButton.ID_LEFT:
-        case BitmapButton.ID_RIGHT:
+        case TextButton.ID_DOWN:
+        case TextButton.ID_UP:
+        case TextButton.ID_LEFT:
+        case TextButton.ID_RIGHT:
             moveSelect(btnId);
             break;
         }
@@ -90,22 +84,22 @@ public class SceneJump {
         int i = mSeclet % 5;
         int j = mSeclet / 5;
         switch (btnId) {
-        case BitmapButton.ID_DOWN:
+        case TextButton.ID_DOWN:
             if (i < 4) {
                 i++;
             }
             break;
-        case BitmapButton.ID_UP:
+        case TextButton.ID_UP:
             if (i > 0) {
                 i--;
             }
             break;
-        case BitmapButton.ID_LEFT:
+        case TextButton.ID_LEFT:
             if (j > 0) {
                 j--;
             }
             break;
-        case BitmapButton.ID_RIGHT:
+        case TextButton.ID_RIGHT:
             if (j < 3) {
                 j++;
             }

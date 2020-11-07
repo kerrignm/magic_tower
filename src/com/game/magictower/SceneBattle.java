@@ -8,10 +8,11 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.game.magictower.Game.Status;
+import com.game.magictower.model.Monster;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
+import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
-import com.game.magictower.res.MonsterData;
 import com.game.magictower.res.TowerDimen;
 
 public class SceneBattle {
@@ -57,20 +58,24 @@ public class SceneBattle {
                 battle.attack();
                 battle.getHpInfo();
                 if (battle.mHp <= 0) {
-                    battle.game.player.setExp(battle.game.player.getExp() + battle.mMonster.getExp());
                     battle.game.player.setMoney(battle.game.player.getMoney() + battle.mMonster.getMoney());
-                    if ((battle.game.currentFloor == 19) && (battle.mMonster.getId() == 59)) {
+                    battle.game.player.setExp(battle.game.player.getExp() + battle.mMonster.getExp());
+                    if ((battle.game.npcInfo.curFloor == 19) && (battle.mMonster.getId() == 59)) {
                         battle.game.dialog.show(13, 59);
-                    } else if ((battle.game.currentFloor == 16) && (battle.mMonster.getId() == 53)) {
-                        battle.game.dialog.show(10, 59);
-                    } else if ((battle.game.currentFloor == 21) && (battle.mMonster.getId() == 59)) {
+                    } else if ((battle.game.npcInfo.curFloor == 21) && (battle.mMonster.getId() == 59)) {
                         battle.game.dialog.show(14, 59);
                     } else {
-                        battle.game.message.show(battle.mContext.getResources().getString(R.string.get_money)
-                                    + battle.mMonster.getExp() + battle.mContext.getResources().getString(R.string.get_exp)
-                                    + battle.mMonster.getMoney() + battle.mContext.getResources().getString(R.string.exclamatory_mark));
+                        battle.game.message.show(String.format(battle.mContext.getResources().getString(R.string.get_money_exp),
+                                battle.mMonster.getMoney(), battle.mMonster.getExp()));
                     }
-                    battle.game.lvMap[battle.game.currentFloor][battle.mY][battle.mX] = 0;
+                    battle.game.lvMap[battle.game.npcInfo.curFloor][battle.mY][battle.mX] = 0;
+                    if ((battle.game.npcInfo.curFloor == 16) && (battle.mMonster.getId() == 53)) {
+                        battle.game.npcInfo.isMonsterStonger = true;
+                        battle.game.monsterStonger();
+                    } else if ((battle.game.npcInfo.curFloor == 19) && (battle.mMonster.getId() == 59)) {
+                        battle.game.npcInfo.isMonsterStongest = true;
+                        battle.game.monsterStronest();
+                    }
                 } else {
                     sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_REMOVE_MSG);
                 }
@@ -85,7 +90,7 @@ public class SceneBattle {
     }
 
     public void show(int id, int x, int y) {
-        mMonster = MonsterData.monsterMap.get(id);
+        mMonster = game.monsters.get(id);
         mMstIcon = Assets.getInstance().animMap0.get(id);
         mX = x;
         mY = y;
@@ -134,17 +139,18 @@ public class SceneBattle {
                 game.player.setHp(game.player.getHp() - mAttack + game.player.getDefend());
             }
         }
+        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ATTACK));
         mPlayerRound = !mPlayerRound;
     }
     
     public void draw(GameGraphics graphics, Canvas canvas) {
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBattle, null, TowerDimen.R_BATTLE, null);
         graphics.drawBitmap(canvas, mMstIcon, null, TowerDimen.R_BTL_MST_ICON, null);
-        graphics.drawText(canvas, mMstHp, TowerDimen.R_BTL_MST_HP.left, TowerDimen.R_BTL_MST_HP.top + TowerDimen.TEXT_SIZE);
-        graphics.drawText(canvas, mMstAttack, TowerDimen.R_BTL_MST_ATTACK.left, TowerDimen.R_BTL_MST_ATTACK.top + TowerDimen.TEXT_SIZE);
-        graphics.drawText(canvas, mMstDefend, TowerDimen.R_BTL_MST_DEFEND.left, TowerDimen.R_BTL_MST_DEFEND.top + TowerDimen.TEXT_SIZE);
-        graphics.drawText(canvas, mPlrHp, TowerDimen.R_BTL_PLR_HP.left, TowerDimen.R_BTL_PLR_HP.top + TowerDimen.TEXT_SIZE);
-        graphics.drawText(canvas, mPlrAttack, TowerDimen.R_BTL_PLR_ATTACK.left, TowerDimen.R_BTL_PLR_ATTACK.top + TowerDimen.TEXT_SIZE);
-        graphics.drawText(canvas, mPlrDefend, TowerDimen.R_BTL_PLR_DEFEND.left, TowerDimen.R_BTL_PLR_DEFEND.top + TowerDimen.TEXT_SIZE);
+        graphics.drawTextInCenter(canvas, mMstHp, TowerDimen.R_BTL_MST_HP);
+        graphics.drawTextInCenter(canvas, mMstAttack, TowerDimen.R_BTL_MST_ATTACK);
+        graphics.drawTextInCenter(canvas, mMstDefend, TowerDimen.R_BTL_MST_DEFEND);
+        graphics.drawTextInCenter(canvas, mPlrHp, TowerDimen.R_BTL_PLR_HP);
+        graphics.drawTextInCenter(canvas, mPlrAttack, TowerDimen.R_BTL_PLR_ATTACK);
+        graphics.drawTextInCenter(canvas, mPlrDefend, TowerDimen.R_BTL_PLR_DEFEND);
     }
 }

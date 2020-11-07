@@ -2,12 +2,13 @@ package com.game.magictower.res;
 
 import java.io.IOException;
 
-import com.game.magictower.util.BitmapUtil;
-
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
+
+import com.game.magictower.util.BitmapUtil;
 
 public final class LiveBitmap {
     
@@ -53,6 +54,30 @@ public final class LiveBitmap {
             e.printStackTrace();
         }
         return instance;
+    }
+    
+    public static final LiveBitmap creatBitmap(Bitmap bitmap, float scaleX, float scaleY) {
+        int rawWidth = bitmap.getWidth();
+        int rawHeight = bitmap.getHeight();
+        bitmap = BitmapUtil.scaleBitmap(bitmap, TowerDimen.TOWER_SCALE, TowerDimen.TOWER_SCALE);
+        return new LiveBitmap(bitmap, rawWidth, rawHeight);
+    }
+    
+    public static final LiveBitmap creatBitmap(int width, int height, float[] pointArray) {
+        Path path = new Path();
+        for (int i = 0; i < pointArray.length / 2; i++) {
+            if (i == 0) {
+                path.moveTo(width * pointArray[i * 2], height * pointArray[i * 2 + 1]);
+            } else {
+                path.lineTo(width * pointArray[i * 2], height * pointArray[i * 2 + 1]);
+            }
+        }
+        path.close();
+        Bitmap bitmap = BitmapUtil.creatBitmap(width, height, path);
+        int rawWidth = bitmap.getWidth();
+        int rawHeight = bitmap.getHeight();
+        bitmap = BitmapUtil.scaleBitmap(bitmap, 1.0f, 1.0f);
+        return new LiveBitmap(bitmap, rawWidth, rawHeight);
     }
 
     public Bitmap getBitmap() {

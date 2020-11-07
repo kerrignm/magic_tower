@@ -67,7 +67,12 @@ public class LoadingActivity extends Activity {
             }
         });
         Settings.setVoiceEnabled(tgb.isChecked());
-        handler.sendEmptyMessageDelayed(LoadHandler.MSG_START_LOADING, 1000);   //Splash show time
+        if (Assets.getInstance() == null) {
+            handler.sendEmptyMessageDelayed(LoadHandler.MSG_START_LOADING, 500);   //Splash show time
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
+            findViewById(R.id.loading_ll_btns).setVisibility(View.VISIBLE);
+        }
     }
     
     private static final class LoadHandler extends Handler{

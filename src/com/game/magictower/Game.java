@@ -1,7 +1,20 @@
 package com.game.magictower;
 
-import com.game.magictower.res.TowerMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.content.Context;
+import android.content.Intent;
+
+import com.game.magictower.model.Monster;
+import com.game.magictower.model.NpcInfo;
+import com.game.magictower.model.Player;
+import com.game.magictower.model.TalkInfo;
+import com.game.magictower.model.Tower;
 import com.game.magictower.util.ArrayUtil;
+import com.game.magictower.util.FileUtil;
+import com.game.magictower.util.JsonUtil;
+import com.google.gson.reflect.TypeToken;
 
 public class Game {
     
@@ -15,101 +28,118 @@ public class Game {
         Jumping;
     }
     
+    private Context mContext;
+    
     public SceneDialog dialog;
     public SceneMessage message;
     
     public Status status;
     
-    public int currentFloor = 0;
-    public int maxFloor = 0;
-    
-    public boolean isHasCross = false;
-    public boolean isHasForecast = false;
-    public boolean isHasJump = false;
-    public boolean isHasHammer = false;
-    
     public Player player;
     public NpcInfo npcInfo;
+    public Tower tower;
     public int[][][] lvMap;
+    public HashMap<Integer, ArrayList<String>> storys;
+    public HashMap<Integer, ArrayList<String>> shops;
+    public HashMap<Integer, ArrayList<TalkInfo>> dialogs;
+    public HashMap<Integer, Monster> monsters;
     
     private static Game sInstance;
     
-    private Game(){
+    private Game(Context context) {
+        mContext = context;
         player = new Player();
         npcInfo = new NpcInfo();
-        newGame();
+        tower = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "tower.json"), Tower.class);
+        storys = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "story.json"), new TypeToken<HashMap<Integer, ArrayList<String>>>(){}.getType());
+        shops = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "shop.json"), new TypeToken<HashMap<Integer, ArrayList<String>>>(){}.getType());
+        dialogs = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "dialog.json"), new TypeToken<HashMap<Integer, ArrayList<TalkInfo>>>(){}.getType());
+    }
+    
+    public static final void init(Context context) {
+        if (sInstance == null) {
+            sInstance = new Game(context);
+        }
     }
     
     public static final Game getInstance() {
-        if (sInstance == null) {
-            sInstance = new Game();
-        }
         return sInstance;
     }
     
     public void newGame() {
         status = Status.Playing;
-        currentFloor = 0;
-        maxFloor = 0;
-        isHasCross = false;
-        isHasForecast = false;
-        isHasJump = false;
-        isHasHammer = false;
         player.reset();
         npcInfo.reset();
-        lvMap = ArrayUtil.copy(TowerMap.LvMap);
+        lvMap = ArrayUtil.copy(tower.LvMap);
+        resetMonster();
         test();
     }
     
-    private void test() {
-        maxFloor = 20;
-        isHasJump = true;
-        isHasForecast = true;
-        //player.setAttack(1000);
-        //player.setDefend(1000);
+    public boolean loadGame() {
+        String playerStr = FileUtil.readInternal(mContext, "player.json");
+        String npcStr = FileUtil.readInternal(mContext, "npc.json");
+        String towerStr = FileUtil.readInternal(mContext, "tower.json");
+        if ((playerStr == null) || (npcStr == null) || (towerStr == null)) {
+            newGame();
+            return false;
+        } else {
+            player = JsonUtil.fromJson(playerStr, Player.class);
+            npcInfo = JsonUtil.fromJson(npcStr, NpcInfo.class);
+            lvMap = JsonUtil.fromJson(towerStr, int[][][].class);
+            resetMonster();
+            return true;
+        }
     }
     
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        
-        sb.append("currentFloor=" + this.currentFloor + ",");
-        sb.append("maxFloor=" + this.maxFloor + ",");
-        sb.append("isHasCross=" + this.isHasCross + ",");
-        sb.append("isHasForecast=" + this.isHasForecast + ",");
-        sb.append("isHasJump=" + this.isHasJump + ",");
-        sb.append("isHasHammer=" + this.isHasHammer);
-        
-        return sb.toString();
+    public boolean saveGame() {
+        if (!FileUtil.writeInternal(mContext, "player.json", JsonUtil.toJson(player))) {
+            return false;
+        }
+        if (!FileUtil.writeInternal(mContext, "npc.json", JsonUtil.toJson(npcInfo))) {
+            return false;
+        }
+        if (!FileUtil.writeInternal(mContext, "tower.json", JsonUtil.toJson(lvMap))) {
+            return false;
+        }
+        return true;
     }
     
-    public void fromString(String str) {
-        String[] strs = str.split(",");
-        String[] items;
-        for (int i = 0; i < strs.length; i++) {
-            items = strs[i].split("=");
-            if (items[0].equals("currentFloor")) {
-                this.currentFloor = Integer.valueOf(items[1]);
-            } else if(items[0].equals("maxFloor")) {
-                this.maxFloor = Integer.valueOf(items[1]);
-            } else if(items[0].equals("isHasCross")) {
-                this.isHasCross = Boolean.valueOf(items[1]);
-            } else if(items[0].equals("isHasForecast")) {
-                this.isHasForecast = Boolean.valueOf(items[1]);
-            } else if(items[0].equals("isHasJump")) {
-                this.isHasJump = Boolean.valueOf(items[1]);
-            } else if(items[0].equals("isHasHammer")) {
-                this.isHasHammer = Boolean.valueOf(items[1]);
+    public void monsterStonger() {
+        if (npcInfo.isMonsterStonger) {
+            for(int key : monsters.keySet()) {
+                monsters.get(key).setStronger();
             }
         }
     }
     
-    public String mapToString() {
-        StringBuilder sb = new StringBuilder();
-        ArrayUtil.array2Str3(lvMap, sb);
-        return sb.toString();
+    public void monsterStronest() {
+        if (npcInfo.isMonsterStongest) {
+            for(int key : monsters.keySet()) {
+                monsters.get(key).setStrongest();
+            }
+        }
     }
     
-    public void mapFromString(String str) {
-        lvMap = ArrayUtil.str2Array3(str);
+    public void gameOver() {
+        mContext.startActivity(new Intent(mContext, LoadingActivity.class));
+        newGame();
+    }
+    
+    private void resetMonster() {
+        monsters = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "monster.json"), new TypeToken<HashMap<Integer, Monster>>(){}.getType());
+        monsterStonger();
+        monsterStronest();
+    }
+    
+    private void test() {
+        npcInfo.maxFloor = 20;
+        npcInfo.isHasJump = true;
+        npcInfo.isHasForecast = true;
+        player.setYkey(20);
+        player.setBkey(20);
+        player.setRkey(20);
+        player.setAttack(3000);
+        player.setDefend(3000);
+        player.setHp(80000);
     }
 }

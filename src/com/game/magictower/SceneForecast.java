@@ -7,11 +7,12 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 import com.game.magictower.Game.Status;
+import com.game.magictower.model.Monster;
+import com.game.magictower.model.Player;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
-import com.game.magictower.res.MonsterData;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.widget.BitmapButton;
+import com.game.magictower.widget.TextButton;
 
 public class SceneForecast {
     
@@ -78,9 +79,9 @@ public class SceneForecast {
     
     private void getForecastInfo() {
         mForecastSet.clear();
-        for (int x = 0; x < game.lvMap[game.currentFloor].length; x++) {
-            for (int y = 0; y < game.lvMap[game.currentFloor][x].length; y++) {
-                int id = game.lvMap[game.currentFloor][x][y];
+        for (int x = 0; x < game.lvMap[game.npcInfo.curFloor].length; x++) {
+            for (int y = 0; y < game.lvMap[game.npcInfo.curFloor][x].length; y++) {
+                int id = game.lvMap[game.npcInfo.curFloor][x][y];
                 if ((id >= 40 && id <= 70) && !mForecastSet.contains(id)) {
                     mForecastSet.add(id);
                 }
@@ -97,7 +98,7 @@ public class SceneForecast {
             mLoses = new String[mForecastSet.size()];
             for (int i = 0; i < mForecastSet.size(); i++) {
                 mRects[i] = new Rect[7];
-                monster = MonsterData.monsterMap.get(mIds[i]);
+                monster = game.monsters.get(mIds[i]);
                 mRects[i][0] = new Rect(TowerDimen.R_FC_ICON);
                 mRects[i][0].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
                 mRects[i][1] = new Rect(TowerDimen.R_FC_NAME);
@@ -131,30 +132,30 @@ public class SceneForecast {
         graphics.drawRect(canvas, TowerDimen.R_FORECAST);
         
         if (mForecastSet.size() > 0) {
-            graphics.drawTextInCenter(canvas, mName, TowerDimen.R_FC_NAME.left, TowerDimen.R_FC_NAME.top, TowerDimen.R_FC_NAME.width(), TowerDimen.R_FC_NAME.height());
-            graphics.drawTextInCenter(canvas, mHP, TowerDimen.R_FC_HP.left, TowerDimen.R_FC_HP.top, TowerDimen.R_FC_HP.width(), TowerDimen.R_FC_HP.height());
-            graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_FC_ATTACK.left, TowerDimen.R_FC_ATTACK.top, TowerDimen.R_FC_ATTACK.width(), TowerDimen.R_FC_ATTACK.height());
-            graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_FC_DEFEND.left, TowerDimen.R_FC_DEFEND.top, TowerDimen.R_FC_DEFEND.width(), TowerDimen.R_FC_DEFEND.height());
-            graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_FC_MONEY.left, TowerDimen.R_FC_MONEY.top, TowerDimen.R_FC_MONEY.width(), TowerDimen.R_FC_MONEY.height());
-            graphics.drawTextInCenter(canvas, mLose, TowerDimen.R_FC_LOSE.left, TowerDimen.R_FC_LOSE.top, TowerDimen.R_FC_LOSE.width(), TowerDimen.R_FC_LOSE.height());
+            graphics.drawTextInCenter(canvas, mName, TowerDimen.R_FC_NAME);
+            graphics.drawTextInCenter(canvas, mHP, TowerDimen.R_FC_HP);
+            graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_FC_ATTACK);
+            graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_FC_DEFEND);
+            graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_FC_MONEY);
+            graphics.drawTextInCenter(canvas, mLose, TowerDimen.R_FC_LOSE);
             
             Monster monster;
             for (int i = 0; i < mForecastSet.size(); i++) {
-                monster = MonsterData.monsterMap.get(mIds[i]);
+                monster = game.monsters.get(mIds[i]);
                 graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(mIds[i]), null, mRects[i][0], null);
-                graphics.drawTextInCenter(canvas, monster.getName(), mRects[i][1].left, mRects[i][1].top, mRects[i][1].width(), mRects[i][1].height());
-                graphics.drawTextInCenter(canvas, mHPs[i], mRects[i][2].left, mRects[i][2].top, mRects[i][2].width(), mRects[i][2].height());
-                graphics.drawTextInCenter(canvas, mAttacks[i], mRects[i][3].left, mRects[i][3].top, mRects[i][3].width(), mRects[i][3].height());
-                graphics.drawTextInCenter(canvas, mDefends[i], mRects[i][4].left, mRects[i][4].top, mRects[i][4].width(), mRects[i][4].height());
-                graphics.drawTextInCenter(canvas, mMoneys[i], mRects[i][5].left, mRects[i][5].top, mRects[i][5].width(), mRects[i][5].height());
-                graphics.drawTextInCenter(canvas, mLoses[i], mRects[i][6].left, mRects[i][6].top, mRects[i][6].width(), mRects[i][6].height());
+                graphics.drawTextInCenter(canvas, monster.getName(), mRects[i][1]);
+                graphics.drawTextInCenter(canvas, mHPs[i], mRects[i][2]);
+                graphics.drawTextInCenter(canvas, mAttacks[i], mRects[i][3]);
+                graphics.drawTextInCenter(canvas, mDefends[i], mRects[i][4]);
+                graphics.drawTextInCenter(canvas, mMoneys[i], mRects[i][5]);
+                graphics.drawTextInCenter(canvas, mLoses[i], mRects[i][6]);
             }
         }
     }
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case BitmapButton.ID_LOOK:
+        case TextButton.ID_LOOK:
             game.status = Status.Playing;
             break;
         }

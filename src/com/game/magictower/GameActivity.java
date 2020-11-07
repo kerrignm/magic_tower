@@ -16,19 +16,19 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.game.magictower.Game.Status;
+import com.game.magictower.model.NpcInfo;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
-import com.game.magictower.res.MonsterData;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.res.TowerMap;
-import com.game.magictower.util.FileUtil;
 import com.game.magictower.util.LogUtil;
+import com.game.magictower.widget.BaseButton;
+import com.game.magictower.widget.BaseButton.onClickListener;
 import com.game.magictower.widget.BitmapButton;
-import com.game.magictower.widget.BitmapButton.onClickListener;
 import com.game.magictower.widget.GameScreen;
 import com.game.magictower.widget.GameView;
+import com.game.magictower.widget.TextButton;
 
 public class GameActivity extends Activity implements GameScreen {
     
@@ -36,10 +36,8 @@ public class GameActivity extends Activity implements GameScreen {
     
     private Assets assets;
     private GameGraphics graphics;
-    private GlobalSoundPool soundPool;
     
     private Game currentGame;
-    private Player player;
     private HashMap<Integer, LiveBitmap> imageMap;
     
     private SceneDialog dialog;
@@ -76,13 +74,12 @@ public class GameActivity extends Activity implements GameScreen {
         LogUtil.d(TAG, "onCreate()");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         graphics = GameGraphics.getInstance();
-        soundPool = GlobalSoundPool.getInstance(this);
         assets = Assets.getInstance();
         setContentView(new GameView(this, graphics, this));
         createButtons();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        Game.init(this);
         currentGame = Game.getInstance();
-        player = currentGame.player;
         message = new SceneMessage(this, currentGame);
         dialog = new SceneDialog(this, currentGame);
         forecast = new SceneForecast(this, currentGame);
@@ -91,9 +88,11 @@ public class GameActivity extends Activity implements GameScreen {
         shop = new SceneShop(this, currentGame);
         currentGame.dialog = dialog;
         currentGame.message = message;
-        resetGame();
+        currentGame.newGame();
         if (getIntent().getBooleanExtra("load", false)) {
-            loadGame();
+            currentGame.loadGame();
+        } else {
+            message.show(1, null, null, SceneMessage.MODE_AUTO_SCROLL);
         }
         imageMap = assets.animMap0;
         timer.schedule(timerTask, 1000, 500);
@@ -120,7 +119,7 @@ public class GameActivity extends Activity implements GameScreen {
     
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        for (BitmapButton button: activeButtons){
+        for (BaseButton button: activeButtons){
             if (button.onTouch(ev)){
                 break;
             }
@@ -136,55 +135,7 @@ public class GameActivity extends Activity implements GameScreen {
         return false;
     }
     
-    private void resetGame() {
-        currentGame.newGame();
-    }
-    
-    private boolean loadGame() {
-        String str = FileUtil.read(this, "game");
-        if (str == null) {
-            resetGame();
-            return false;
-        }
-        currentGame.fromString(str);
-        str = FileUtil.read(this, "player");
-        if (str == null) {
-            resetGame();
-            return false;
-        }
-        currentGame.player.fromString(str);
-        str = FileUtil.read(this, "npc");
-        if (str == null) {
-            resetGame();
-            return false;
-        }
-        currentGame.npcInfo.fromString(str);
-        str = FileUtil.read(this, "tower");
-        if (str == null) {
-            resetGame();
-            return false;
-        }
-        currentGame.mapFromString(str);
-        return true;
-    }
-    
-    private boolean saveGame() {
-        if (!FileUtil.write(this, "game", currentGame.toString())) {
-            return false;
-        }
-        if (!FileUtil.write(this, "player", currentGame.player.toString())) {
-            return false;
-        }
-        if (!FileUtil.write(this, "npc", currentGame.npcInfo.toString())) {
-            return false;
-        }
-        if (!FileUtil.write(this, "tower", currentGame.mapToString())) {
-            return false;
-        }
-        return true;
-    }
-    
-    private ArrayList<BitmapButton> activeButtons = new ArrayList<BitmapButton>();
+    private ArrayList<BaseButton> activeButtons = new ArrayList<BaseButton>();
     private onClickListener btnClickListener = new onClickListener() {
         @Override
         public void onClicked(int id) {
@@ -214,101 +165,101 @@ public class GameActivity extends Activity implements GameScreen {
         
         private void playBtnKey(int btnId){
             switch (btnId) {
-            case BitmapButton.ID_UP:
+            case TextButton.ID_UP:
                 if (currentGame.status == Status.Playing) {
-                    if (player.getPosY() - 1 < 11 && player.getPosY() - 1 >= 0) {
-                        player.setToward(3);
-                        interaction(player.getPosX(), player.getPosY() - 1);
+                    if (currentGame.player.getPosY() - 1 < 11 && currentGame.player.getPosY() - 1 >= 0) {
+                        currentGame.player.setToward(3);
+                        interaction(currentGame.player.getPosX(), currentGame.player.getPosY() - 1);
                     }
                 }
                 break;
-            case BitmapButton.ID_LEFT:
+            case TextButton.ID_LEFT:
                 if (currentGame.status == Status.Playing) {
-                    if (player.getPosX() - 1 < 11 && player.getPosX() - 1 >= 0) {
-                        player.setToward(0);
-                        interaction(player.getPosX() - 1, player.getPosY());
+                    if (currentGame.player.getPosX() - 1 < 11 && currentGame.player.getPosX() - 1 >= 0) {
+                        currentGame.player.setToward(0);
+                        interaction(currentGame.player.getPosX() - 1, currentGame.player.getPosY());
                     }
                 }
                 break;
-            case BitmapButton.ID_RIGHT:
+            case TextButton.ID_RIGHT:
                 if (currentGame.status == Status.Playing) {
-                    if (player.getPosX() + 1 < 11 && player.getPosX() + 1 >= 0) {
-                        player.setToward(2);
-                        interaction(player.getPosX() + 1, player.getPosY());
+                    if (currentGame.player.getPosX() + 1 < 11 && currentGame.player.getPosX() + 1 >= 0) {
+                        currentGame.player.setToward(2);
+                        interaction(currentGame.player.getPosX() + 1, currentGame.player.getPosY());
                     }
                 }
                 break;
-            case BitmapButton.ID_DOWN:
+            case TextButton.ID_DOWN:
                 if (currentGame.status == Status.Playing) {
-                    if (player.getPosY() + 1 < 11 && player.getPosY() + 1 >= 0) {
-                        player.setToward(1);
-                        interaction(player.getPosX(), player.getPosY() + 1);
+                    if (currentGame.player.getPosY() + 1 < 11 && currentGame.player.getPosY() + 1 >= 0) {
+                        currentGame.player.setToward(1);
+                        interaction(currentGame.player.getPosX(), currentGame.player.getPosY() + 1);
                     }
                 }
                 break;
-            case BitmapButton.ID_QUIT:
+            case TextButton.ID_QUIT:
                 finish();
                 break;
-            case BitmapButton.ID_NEW:
-                resetGame();
+            case TextButton.ID_NEW:
+                currentGame.newGame();
                 message.show(R.string.msg_restart);
                 break;
-            case BitmapButton.ID_SAVE:
-                if (saveGame()) {
+            case TextButton.ID_SAVE:
+                if (currentGame.saveGame()) {
                     message.show(R.string.save_succeed);
                 } else {
                     message.show(R.string.save_failed);
                 }
                 break;
-            case BitmapButton.ID_READ:
-                if (loadGame()) {
+            case TextButton.ID_READ:
+                if (currentGame.loadGame()) {
                     message.show(R.string.read_succeed);
                 } else {
                     message.show(R.string.read_failed);
                 }
                 break;
-            case BitmapButton.ID_LOOK:
-                if (currentGame.isHasForecast) {
+            case TextButton.ID_LOOK:
+                if (currentGame.npcInfo.isHasForecast) {
                     forecast.show();
                 }
                 break;
-            case BitmapButton.ID_JUMP:
-                if (currentGame.isHasJump) {
+            case TextButton.ID_JUMP:
+                if (currentGame.npcInfo.isHasJump) {
                     jumpFloor.show();
                 }
                 break;
-            case BitmapButton.ID_OK:
+            case TextButton.ID_OK:
                 break;
             }
         }
     };
     
     private void createButtons() {
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_UP, "▲", true));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_LEFT, "◀", true));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_RIGHT, "▶", true));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_DOWN, "▼", true));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_QUIT, "Quit", false));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_NEW, "Restart", false));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_SAVE, "Save", false));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_READ, "Read", false));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_LOOK, "Look", false));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_JUMP, "Jump", false));
-        activeButtons.add(BitmapButton.create(graphics, BitmapButton.ID_OK, "OK", false));
-        for (BitmapButton button: activeButtons){
+        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_UP, assets.upBtn, true));
+        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_LEFT, assets.leftBtn, true));
+        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_RIGHT, assets.rightBtn, true));
+        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_DOWN, assets.downBtn, true));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_QUIT, getResources().getString(R.string.btn_quit), false));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_NEW, getResources().getString(R.string.btn_new), false));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_SAVE, getResources().getString(R.string.btn_save), false));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_READ, getResources().getString(R.string.btn_load), false));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_LOOK, getResources().getString(R.string.btn_look), false));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_JUMP, getResources().getString(R.string.btn_jump), false));
+        activeButtons.add(TextButton.create(graphics, BaseButton.ID_OK, getResources().getString(R.string.btn_ok), false));
+        for (BaseButton button: activeButtons){
             button.setOnClickListener(btnClickListener);
         }
     }
     
     private void drawActiveButtons(GameGraphics graphics, Canvas canvas){
-        for (BitmapButton button: activeButtons){
+        for (BaseButton button: activeButtons){
             button.onPaint(canvas);
         }
     }
     
     @Override
     public void updateUI(GameGraphics graphics, Canvas canvas) {
-        if (currentGame==null){
+        if (currentGame == null) {
             LogUtil.w(TAG, "updateUI called before game instance created.");
             return ;
         }
@@ -341,24 +292,24 @@ public class GameActivity extends Activity implements GameScreen {
      }
     
     private void drawInfoPanel(GameGraphics graphics, Canvas canvas) {
-        graphics.drawText(canvas, player.getLevel() + "", TowerDimen.LEVEL_LEFT, TowerDimen.LEVEL_TOP);
-        graphics.drawText(canvas, player.getHp() + "", TowerDimen.HP_LEFT, TowerDimen.HP_TOP);
-        graphics.drawText(canvas, player.getAttack() + "", TowerDimen.ATTACK_LEFT, TowerDimen.ATTACK_TOP);
-        graphics.drawText(canvas, player.getDefend() + "", TowerDimen.DEFEND_LEFT, TowerDimen.DEFEND_TOP);
-        graphics.drawText(canvas, player.getMoney() + "", TowerDimen.MONEY_LEFT, TowerDimen.MONEY_TOP);
-        graphics.drawText(canvas, player.getExp() + "", TowerDimen.EXP_LEFT, TowerDimen.EXP_TOP);
+        graphics.drawTextInCenter(canvas, currentGame.player.getLevel() + "", TowerDimen.R_PLR_LEVEL);
+        graphics.drawTextInCenter(canvas, currentGame.player.getHp() + "", TowerDimen.R_PLR_HP);
+        graphics.drawTextInCenter(canvas, currentGame.player.getAttack() + "", TowerDimen.R_PLR_ATTACK);
+        graphics.drawTextInCenter(canvas, currentGame.player.getDefend() + "", TowerDimen.R_PLR_DEFEND);
+        graphics.drawTextInCenter(canvas, currentGame.player.getMoney() + "", TowerDimen.R_PLR_MONEY);
+        graphics.drawTextInCenter(canvas, currentGame.player.getExp() + "", TowerDimen.R_PLR_EXP);
 
-        graphics.drawText(canvas, player.getYkey() + "", TowerDimen.YKEY_LEFT, TowerDimen.YKEY_TOP);
-        graphics.drawText(canvas, player.getBkey() + "", TowerDimen.BKEY_LEFT, TowerDimen.BKEY_TOP);
-        graphics.drawText(canvas, player.getRkey() + "", TowerDimen.RKEY_LEFT, TowerDimen.RKEY_TOP);
+        graphics.drawTextInCenter(canvas, currentGame.player.getYkey() + "", TowerDimen.R_YKEY);
+        graphics.drawTextInCenter(canvas, currentGame.player.getBkey() + "", TowerDimen.R_BKEY);
+        graphics.drawTextInCenter(canvas, currentGame.player.getRkey() + "", TowerDimen.R_RKEY);
         
-        graphics.drawText(canvas, currentGame.currentFloor + "", TowerDimen.FLOOR_LEFT, TowerDimen.FLOOR_TOP);
+        graphics.drawTextInCenter(canvas, currentGame.npcInfo.curFloor + "", TowerDimen.R_FLOOR);
     }
     
     private void drawTower(GameGraphics graphics, Canvas canvas) {
         for (int x = 0; x < 11; x++) {
             for (int y = 0; y < 11; y++) {
-                int id = currentGame.lvMap[currentGame.currentFloor][x][y];
+                int id = currentGame.lvMap[currentGame.npcInfo.curFloor][x][y];
                 if (id >= 100) {
                     id = 0;   //monitor items invisible, draw ground
                 }
@@ -367,99 +318,106 @@ public class GameActivity extends Activity implements GameScreen {
             }
         }
 
-        graphics.drawBitmap(canvas, player.getImage(), TowerDimen.TOWER_LEFT + (player.getPosX() + 6) * TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_TOP + (player.getPosY() + 1) * TowerDimen.TOWER_GRID_SIZE);
+        graphics.drawBitmap(canvas, currentGame.player.getImage(), TowerDimen.TOWER_LEFT + (currentGame.player.getPosX() + 6) * TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_TOP + (currentGame.player.getPosY() + 1) * TowerDimen.TOWER_GRID_SIZE);
     }
     
     public void interaction(int x, int y) {
-        int id = currentGame.lvMap[currentGame.currentFloor][y][x];
+        int id = currentGame.lvMap[currentGame.npcInfo.curFloor][y][x];
         switch (id) {
-            case 0:     // player move
-                player.move(x, y);
+            case 0:     // currentGame.player move
+                currentGame.player.move(x, y);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_STEP));
                 break;
             case 1:     // brick wall
                 break;
             case 2:     // yellow door
-                if (player.getYkey() > 0) {
-                    currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                    player.setYkey(player.getYkey() - 1);
+                if (currentGame.player.getYkey() > 0) {
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                    currentGame.player.setYkey(currentGame.player.getYkey() - 1);
                 }
                 break;
             case 3:     // blue door
-                if (player.getBkey() > 0) {
-                    currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                    player.setBkey(player.getBkey() - 1);
+                if (currentGame.player.getBkey() > 0) {
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                    currentGame.player.setBkey(currentGame.player.getBkey() - 1);
                 }
                 break;
             case 4:     // red door
-                if (player.getRkey() > 0) {
-                    currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                    player.setRkey(player.getRkey() - 1);
+                if (currentGame.player.getRkey() > 0) {
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                    currentGame.player.setRkey(currentGame.player.getRkey() - 1);
                 }
                 break;
             case 5:     // stone
                 break;
             case 6:     // yellow hey
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setYkey(player.getYkey() + 1);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setYkey(currentGame.player.getYkey() + 1);
                 message.show(R.string.get_yellow_key);
                 break;
             case 7:     // blue key
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setBkey(player.getBkey() + 1);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setBkey(currentGame.player.getBkey() + 1);
                 message.show(R.string.get_bule_key);
                 break;
             case 8:     // red key
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setRkey(player.getRkey() + 1);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setRkey(currentGame.player.getRkey() + 1);
                 message.show(R.string.get_red_key);
                 break;
             case 9:     // sapphire
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setDefend(player.getDefend() + 3);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setDefend(currentGame.player.getDefend() + 3);
                 message.show(R.string.get_sapphire);
                 break;
             case 10:    // ruby
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setAttack(player.getAttack() + 3);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setAttack(currentGame.player.getAttack() + 3);
                 message.show(R.string.get_ruby);
                 break;
             case 11:    // red potion
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setHp(player.getHp() + 200);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setHp(currentGame.player.getHp() + 200);
                 message.show(R.string.get_red_potion);
                 break;
             case 12:    // blue potion
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setHp(player.getHp() + 500);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setHp(currentGame.player.getHp() + 500);
                 message.show(R.string.get_blue_potion);
                 break;
             case 13:    // upstairs
                 message.show(R.string.msg_upstairs);
-                currentGame.currentFloor++;
-                currentGame.maxFloor = Math.max(currentGame.maxFloor, currentGame.currentFloor);
-                player.move(TowerMap.initPos[currentGame.currentFloor][0], TowerMap.initPos[currentGame.currentFloor][1]);
-                if (currentGame.currentFloor == 21) {
-                    currentGame.isHasJump = false;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                currentGame.npcInfo.curFloor++;
+                currentGame.npcInfo.maxFloor = Math.max(currentGame.npcInfo.maxFloor, currentGame.npcInfo.curFloor);
+                currentGame.player.move(currentGame.tower.initPos[currentGame.npcInfo.curFloor][0], currentGame.tower.initPos[currentGame.npcInfo.curFloor][1]);
+                if (currentGame.npcInfo.curFloor == 21) {
+                    currentGame.npcInfo.isHasJump = false;
                 }
                 break;
             case 14:    // downstairs
                 message.show(R.string.msg_downstairs);
-                currentGame.currentFloor--;
-                player.move(TowerMap.finPos[currentGame.currentFloor][0], TowerMap.finPos[currentGame.currentFloor][1]);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                currentGame.npcInfo.curFloor--;
+                currentGame.player.move(currentGame.tower.finPos[currentGame.npcInfo.curFloor][0], currentGame.tower.finPos[currentGame.npcInfo.curFloor][1]);
                 break;
             case 15:    // barrier not accessible
                 break;
             case 16:   // accessible guardrail
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DOOR));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 break;
             case 19:    // sea of fire
                 break;
             case 20:    // starry sky
                 break;
             case 22:    // shop
-                if (currentGame.currentFloor == 3) {
+                if (currentGame.npcInfo.curFloor == 3) {
                     shop.show(0, id);
-                } else if (currentGame.currentFloor == 11) {
+                } else if (currentGame.npcInfo.curFloor == 11) {
                     shop.show(3, id);
                 }
                 break;
@@ -469,7 +427,7 @@ public class GameActivity extends Activity implements GameScreen {
                     dialog.show(0, id);
                     break;
                 case NpcInfo.FAIRY_STATUS_WAIT_CROSS:
-                    if (currentGame.isHasCross) {
+                    if (currentGame.npcInfo.isHasCross) {
                         dialog.show(1, id);
                     }
                     break;
@@ -486,14 +444,14 @@ public class GameActivity extends Activity implements GameScreen {
                 }
                 break;
             case 26:    // old man
-                if (currentGame.currentFloor == 2) {
+                if (currentGame.npcInfo.curFloor == 2) {
                     dialog.show(4, id);
-                } else if (currentGame.currentFloor == 5) {
+                } else if (currentGame.npcInfo.curFloor == 5) {
                     shop.show(1, id);
-                } else if (currentGame.currentFloor == 13) {
+                } else if (currentGame.npcInfo.curFloor == 13) {
                     shop.show(5, id);
-                } else if (currentGame.currentFloor == 15) {
-                    if (player.getExp() >= 500) {
+                } else if (currentGame.npcInfo.curFloor == 15) {
+                    if (currentGame.player.getExp() >= 500) {
                         dialog.show(3, id);
                     } else {
                         dialog.show(2, id);
@@ -501,14 +459,14 @@ public class GameActivity extends Activity implements GameScreen {
                 }
                 break;
             case 27:    // businessman
-                if (currentGame.currentFloor == 2) {
+                if (currentGame.npcInfo.curFloor == 2) {
                     dialog.show(5, id);
-                } else if (currentGame.currentFloor == 5) {
+                } else if (currentGame.npcInfo.curFloor == 5) {
                     shop.show(2, id);
-                } else if (currentGame.currentFloor == 12) {
+                } else if (currentGame.npcInfo.curFloor == 12) {
                     shop.show(4, id);
-                } else if (currentGame.currentFloor == 15) {
-                    if (player.getMoney() >= 500) {
+                } else if (currentGame.npcInfo.curFloor == 15) {
+                    if (currentGame.player.getMoney() >= 500) {
                         dialog.show(7, id);
                     } else {
                         dialog.show(6, id);
@@ -516,59 +474,62 @@ public class GameActivity extends Activity implements GameScreen {
                 }
                 break;
             case 28:    // princess
-                dialog.show(9, id);
+                if (currentGame.npcInfo.mPrincessStatus == NpcInfo.PRINCESS_STATUS_WAIT_PLAYER) {
+                    dialog.show(9, id);
+                }
                 break;
             case 30:    // little flying feather
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setLevel(player.getLevel() + 1);
-                player.setHp(player.getHp() + 1000);
-                player.setAttack(player.getAttack() + 7);
-                player.setDefend(player.getDefend() + 7);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setLevel(currentGame.player.getLevel() + 1);
+                currentGame.player.setHp(currentGame.player.getHp() + 1000);
+                currentGame.player.setAttack(currentGame.player.getAttack() + 10);
+                currentGame.player.setDefend(currentGame.player.getDefend() + 10);
                 message.show(R.string.get_little_fly);
                 break;
             case 31:    // big flying feather
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setLevel(player.getLevel() + 3);
-                player.setHp(player.getHp() + 3000);
-                player.setAttack(player.getAttack() + 20);
-                player.setDefend(player.getDefend() + 20);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setLevel(currentGame.player.getLevel() + 3);
+                currentGame.player.setHp(currentGame.player.getHp() + 3000);
+                currentGame.player.setAttack(currentGame.player.getAttack() + 20);
+                currentGame.player.setDefend(currentGame.player.getDefend() + 20);
                 message.show(R.string.get_big_fly);
                 break;
             case 32:    // cross
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                currentGame.isHasCross = true;
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.npcInfo.isHasCross = true;
                 message.show(R.string.treasure_cross, R.string.treasure_cross_info, SceneMessage.MODE_ALERT);
                 break;
             case 33:    // holy water bottle
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setHp(player.getHp() * 2);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 message.show(R.string.treasure_holy_water, R.string.treasure_holy_water_info, SceneMessage.MODE_ALERT);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_STEP));
+                currentGame.player.setHp(currentGame.player.getHp() * 2);
                 break;
             case 34:    // emblem of light
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                currentGame.isHasForecast = true;
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.npcInfo.isHasForecast = true;
                 message.show(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info, SceneMessage.MODE_ALERT);
                 break;
             case 35:    // compass of wind
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                currentGame.isHasJump = true;
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.npcInfo.isHasJump = true;
                 message.show(R.string.treasure_compass, R.string.treasure_compass_info, SceneMessage.MODE_ALERT);
                 break;
             case 36:    // key box
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setYkey(player.getYkey() + 1);
-                player.setBkey(player.getBkey() + 1);
-                player.setRkey(player.getRkey() + 1);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setYkey(currentGame.player.getYkey() + 1);
+                currentGame.player.setBkey(currentGame.player.getBkey() + 1);
+                currentGame.player.setRkey(currentGame.player.getRkey() + 1);
                 message.show(R.string.get_key_box);
                 break;
             case 38:    // hammer
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                currentGame.isHasHammer = true;
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.npcInfo.isHasHammer = true;
                 message.show(R.string.treasure_hammer, R.string.treasure_hammer_info, SceneMessage.MODE_ALERT);
                 break;
             case 39:    // gold nugget
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setMoney(player.getMoney() + 300);
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setMoney(currentGame.player.getMoney() + 300);
                 message.show(R.string.get_gold_block);
                 break;
             case 40:    // monster
@@ -602,45 +563,55 @@ public class GameActivity extends Activity implements GameScreen {
             case 68:    // monster
             case 69:    // monster
             case 70:    // monster
-                if (SceneForecast.forecast(player, MonsterData.monsterMap.get(id)).equals("???")
-                        || Integer.parseInt(SceneForecast.forecast(player, MonsterData.monsterMap.get(id))) >= player.getHp()) {
+                if (SceneForecast.forecast(currentGame.player, currentGame.monsters.get(id)).equals("???")
+                        || Integer.parseInt(SceneForecast.forecast(currentGame.player, currentGame.monsters.get(id))) >= currentGame.player.getHp()) {
                     return;
                 } else {
                     battle.show(id, x, y);
                 }
                 break;
             case 71:    // iron sword
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setAttack(player.getAttack() + 10);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setAttack(currentGame.player.getAttack() + 10);
                 message.show(R.string.get_iron_shield);
                 break;
             case 73:    // steel sword
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setAttack(player.getAttack() + 70);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setAttack(currentGame.player.getAttack() + 70);
                 message.show(R.string.get_steel_sword);
                 break;
             case 75:    // sword of light
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setAttack(player.getAttack() + 150);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setAttack(currentGame.player.getAttack() + 150);
                 message.show(R.string.get_light_sword);
                 break;
             case 76:    // iron shield
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setDefend(player.getDefend() + 10);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setDefend(currentGame.player.getDefend() + 10);
                 message.show(R.string.get_iron_shield);
                 break;
             case 78:    // gold shield
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setDefend(player.getDefend() + 85);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setDefend(currentGame.player.getDefend() + 85);
                 message.show(R.string.get_gold_shield);
                 break;
             case 80:    // light shield
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
-                player.setDefend(player.getDefend() + 190);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                currentGame.player.setDefend(currentGame.player.getDefend() + 190);
                 message.show(R.string.get_light_shield);
                 break;
             case 101:
-                currentGame.lvMap[currentGame.currentFloor][y][x] = 0;
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
+                dialog.show(10, 59);
+                break;
+            case 102:
+                currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 dialog.show(12, 59);
                 break;
         }

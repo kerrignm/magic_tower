@@ -1,18 +1,22 @@
 package com.game.magictower.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import android.content.Context;
 
 public class FileUtil {
     
-    public static final int BUF_SIZE = 4 * 1024;
+    private static final int BUF_SIZE = 8 * 1024;
     
-    public static String read(Context context, String fileName) {
+    private static byte[] buffer = new byte[BUF_SIZE];
+    
+    public static String readInternal(Context context, String fileName) {
         try {
             FileInputStream fis = context.openFileInput(fileName);
-            byte[] buffer = new byte[BUF_SIZE];
             int hasRead = 0;
             StringBuilder sb = new StringBuilder();
             while ((hasRead = fis.read(buffer)) != -1) {
@@ -26,16 +30,74 @@ public class FileUtil {
         return null;
     }
     
-    public static boolean write(Context context, String fileName, String str){
-        if(str == null) return false;
+    public static String readExternal(Context context, String fileName) {
+        fileName = context.getExternalFilesDir(null).getPath() + File.separator + fileName;
+        try {
+            FileInputStream fis = new FileInputStream(fileName);
+            int hasRead = 0;
+            StringBuilder sb = new StringBuilder();
+            while ((hasRead = fis.read(buffer)) != -1) {
+                sb.append(new String(buffer, 0, hasRead));
+            }
+            fis.close();
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+        return null;
+    }
+    
+    public static boolean writeInternal(Context context, String fileName, String content){
+        if(content == null) return false;
         try {
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            fos.write(str.getBytes());
+            fos.write(content.getBytes());
             fos.close();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public static boolean writeExternal(Context context, String fileName, String content){
+        if(content == null) return false;
+        fileName = context.getExternalFilesDir(null).getPath() + File.separator + fileName;
+        try {
+            FileOutputStream fos = new FileOutputStream(fileName);
+            fos.write(content.getBytes());
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static String loadAssets(Context context, String name) {
+        InputStream is = null;
+        StringBuilder sb = null;
+        int byteCount = 0;
+        try {
+            is = context.getAssets().open(name);
+            sb = new StringBuilder();
+            while ((byteCount = is.read(buffer)) != -1) {
+                sb.append(new String(buffer, 0, byteCount));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (sb != null) {
+            return sb.toString();
+        }
+        return null;
     }
 }

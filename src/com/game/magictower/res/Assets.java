@@ -103,18 +103,54 @@ public final class Assets {
         
     };
     
-    private String[] soundstrs = {
-        "bgm.mp3",
-        "attack.ogg",
-        "bomb.ogg",
-        "centerFly.ogg",
+    public static final int SND_ID_ATTACK = 0;
+    public static final int SND_ID_DOOR = 1;
+    public static final int SND_ID_FAIRY = 2;
+    public static final int SND_ID_FLOOR = 3;
+    public static final int SND_ID_ITEM = 4;
+    public static final int SND_ID_LEVEL = 5;
+    public static final int SND_ID_PICKAXE = 6;
+    public static final int SND_ID_STEP = 7;
+    public static final int SND_ID_WATER = 8;
+    
+    private static final String[] soundstrs = {
+        "attack.wav",
         "door.ogg",
-        "equip.ogg",
+        "fariy.wav",
         "floor.ogg",
         "item.ogg",
-        "jump.ogg",
+        "level.wav",
         "pickaxe.ogg",
-        "zone.ogg"
+        "step.wav",
+        "water.wav"
+    };
+    
+    private static float[] leftPath = {
+        0.2f, 0.5f,
+        0.8f, 0.2f,
+        0.7f, 0.5f,
+        0.8f, 0.8f
+    };
+    
+    private static float[] upPath = {
+        0.2f, 0.8f,
+        0.5f, 0.2f,
+        0.8f, 0.8f,
+        0.5f, 0.7f
+    };
+    
+    private static float[] rightPath = {
+        0.2f, 0.2f,
+        0.8f, 0.5f,
+        0.2f, 0.8f,
+        0.3f, 0.5f
+    };
+    
+    private static float[] downPath = {
+        0.2f, 0.2f,
+        0.5f, 0.3f,
+        0.8f, 0.2f,
+        0.5f, 0.8f
     };
     
     private static Assets sInstance;
@@ -125,71 +161,28 @@ public final class Assets {
     public LiveBitmap bkgBtnNormal;
     public LiveBitmap bkgBtnPressed;
     
+    public LiveBitmap leftBtn;
+    public LiveBitmap upBtn;
+    public LiveBitmap rightBtn;
+    public LiveBitmap downBtn;
+    
     public HashMap<Integer, LiveBitmap> playerMap = new HashMap<>();
     public HashMap<Integer, LiveBitmap> animMap0 = new HashMap<>();
     public HashMap<Integer, LiveBitmap> animMap1 = new HashMap<>();
     
-    public int soundTypeBackground;
-    public int soundTypeAttack;
-    public int soundTypeBomb;
-    public int soundTypeCenterFly;
-    public int soundTypeDoor;
-    public int soundTypeEquip;
-    public int soundTypeFloor;
-    public int soundTypeItem;
-    public int soundTypeJump;
-    public int soundTypePickaxe;
-    public int soundTypeZone;
+    private int[] soundIds = new int [soundstrs.length];
     
     public static final Assets getInstance(){
-        if (sInstance == null) {
-            throw new RuntimeException("you must call load() method before getInstance()!");
-        }
         return sInstance;
     }
     
     public static synchronized void loadAssets(Context context, LoadingProgressListener listener){
-        if (sInstance != null) {
-            LogUtil.e(TAG, "Assets resources have been already loaded.Force reloading...");
-            sInstance.recycleOldBitmap();
-            LogUtil.d(TAG, "old resources cleared.");
-            sInstance = null;
-        }
-        if (context == null || listener == null) {
-            throw new NullPointerException("params cannot be null.");
-        }
         sInstance = new Assets();
         sInstance.load(context, listener);
     }
     
-    private final synchronized void recycleOldBitmap() {
-        recycleBitmap(bkgGame);
-        recycleBitmap(bkgBlank);
-        recycleBitmap(bkgBattle);
-        recycleBitmap(bkgBtnNormal);
-        recycleBitmap(bkgBtnPressed);
-        
-        recycleMapBitmap(playerMap);
-        recycleMapBitmap(animMap0);
-        recycleMapBitmap(animMap1);
-    }
-    
-    private final void recycleMapBitmap(HashMap<Integer, LiveBitmap> map) {
-        for(int key : map.keySet()) {
-            recycleBitmap(map.get(key));
-        }
-        map.clear();
-    }
-    
-    private final void recycleBitmap(LiveBitmap bitmap){
-        try {
-            if (bitmap!=null){
-                bitmap.getBitmap().recycle();
-            }
-        } catch (Exception e) {
-            LogUtil.w(TAG, "exception while recycling bitmap");
-            e.printStackTrace();
-        }
+    public int getSoundId(int id) {
+        return soundIds[id];
     }
     
     private final void load(Context context, LoadingProgressListener listener){
@@ -207,10 +200,10 @@ public final class Assets {
     
     private final int loadSound(final int hasCompleted, final int total,
             Context context, LoadingProgressListener listener) {
-        GlobalSoundPool sp = GlobalSoundPool.getInstance(context);
+        GlobalSoundPool sp = GlobalSoundPool.getInstance();
         int completed = hasCompleted;
         for (int i = 0; i < soundstrs.length; i++) {
-            soundTypeBackground = sp.loadSound(context, soundstrs[i]);
+            soundIds[i] = sp.loadSound(context, soundstrs[i]);
             notifyProgressChanged(++completed, total, listener);
         }
         return completed;
@@ -242,6 +235,11 @@ public final class Assets {
         notifyProgressChanged(++completed, total, listener);
         bkgBtnPressed = LiveBitmap.loadBitmap(context, "bkg_btn_pressed.png");
         notifyProgressChanged(++completed, total, listener);
+        
+        leftBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_L.width(),TowerDimen.R_BTN_L.height(), leftPath);
+        upBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_U.width(),TowerDimen.R_BTN_U.height(), upPath);
+        rightBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_R.width(),TowerDimen.R_BTN_R.height(), rightPath);
+        downBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_D.width(),TowerDimen.R_BTN_D.height(), downPath);
        
         playerMap.clear();
         playerMap.put(PLAYER_LEFT, LiveBitmap.loadBitmap(context, "left.png"));

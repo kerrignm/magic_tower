@@ -7,8 +7,12 @@ import java.io.IOException;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Build;
 
 public final class BitmapUtil {
@@ -44,12 +48,28 @@ public final class BitmapUtil {
         if (scalew <=0 || scaleh <=0 ){
             throw new IllegalArgumentException("scale rate must be positive!");
         }
+        if (MathUtil.equals(scalew, 1.0f) && MathUtil.equals(scaleh, 1.0f)) {
+            return bitmap;
+        }
         Matrix matrix = new Matrix();
         matrix.postScale(scalew, scaleh);
         Bitmap newbmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight(), matrix, true);
         bitmap.recycle();
         return newbmp;
+    }
+    
+    public static Bitmap creatBitmap(int width, int height, Path path) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas();
+        canvas.setBitmap(bitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawColor(0);
+        canvas.drawPath(path, paint);
+        return bitmap;
     }
     
     public static void saveBitmapToFile(String path, Bitmap bitmap) {

@@ -15,14 +15,14 @@ public final class GlobalSoundPool {
     private static GlobalSoundPool sInstance;
     private SoundPool soundPool;
     
-    private GlobalSoundPool(Context context){
+    private GlobalSoundPool(){
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
     }
     
-    public static GlobalSoundPool getInstance(Context context) {
+    public static GlobalSoundPool getInstance() {
         if (sInstance == null) {
             synchronized (GlobalSoundPool.class) {
-                sInstance = new GlobalSoundPool(context);
+                sInstance = new GlobalSoundPool();
             }
         }
         return sInstance;
