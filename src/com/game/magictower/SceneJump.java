@@ -8,7 +8,7 @@ import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.widget.TextButton;
+import com.game.magictower.widget.BaseButton;
 
 public class SceneJump {
     
@@ -62,7 +62,7 @@ public class SceneJump {
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case TextButton.ID_OK:
+        case BaseButton.ID_OK:
             if (mSeclet + 1 > game.npcInfo.maxFloor) {
                 game.npcInfo.curFloor = game.npcInfo.maxFloor;
             } else {
@@ -71,10 +71,10 @@ public class SceneJump {
             game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
             game.status = Status.Playing;
             break;
-        case TextButton.ID_DOWN:
-        case TextButton.ID_UP:
-        case TextButton.ID_LEFT:
-        case TextButton.ID_RIGHT:
+        case BaseButton.ID_DOWN:
+        case BaseButton.ID_UP:
+        case BaseButton.ID_LEFT:
+        case BaseButton.ID_RIGHT:
             moveSelect(btnId);
             break;
         }
@@ -84,22 +84,22 @@ public class SceneJump {
         int i = mSeclet % 5;
         int j = mSeclet / 5;
         switch (btnId) {
-        case TextButton.ID_DOWN:
+        case BaseButton.ID_DOWN:
             if (i < 4) {
                 i++;
             }
             break;
-        case TextButton.ID_UP:
+        case BaseButton.ID_UP:
             if (i > 0) {
                 i--;
             }
             break;
-        case TextButton.ID_LEFT:
+        case BaseButton.ID_LEFT:
             if (j > 0) {
                 j--;
             }
             break;
-        case TextButton.ID_RIGHT:
+        case BaseButton.ID_RIGHT:
             if (j < 3) {
                 j++;
             }

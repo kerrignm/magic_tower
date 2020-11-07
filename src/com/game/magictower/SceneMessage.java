@@ -13,7 +13,7 @@ import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.widget.TextButton;
+import com.game.magictower.widget.BaseButton;
 
 public class SceneMessage {
     
@@ -141,7 +141,7 @@ public class SceneMessage {
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case TextButton.ID_OK:
+        case BaseButton.ID_OK:
             if (mMode == MODE_ALERT) {
                 game.status = Status.Playing;
             } else if (mMode == MODE_AUTO_SCROLL) {

@@ -13,7 +13,7 @@ import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.widget.TextButton;
+import com.game.magictower.widget.BaseButton;
 
 public class SceneDialog {
     
@@ -115,7 +115,7 @@ public class SceneDialog {
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case TextButton.ID_OK:
+        case BaseButton.ID_OK:
             if (!getTalkInfo()) {
                 talkOver();
             }

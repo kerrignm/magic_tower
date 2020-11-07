@@ -12,7 +12,7 @@ import com.game.magictower.model.Player;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.widget.TextButton;
+import com.game.magictower.widget.BaseButton;
 
 public class SceneForecast {
     
@@ -155,7 +155,7 @@ public class SceneForecast {
     
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case TextButton.ID_LOOK:
+        case BaseButton.ID_LOOK:
             game.status = Status.Playing;
             break;
         }

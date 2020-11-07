@@ -13,7 +13,7 @@ import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.RectUtil;
-import com.game.magictower.widget.TextButton;
+import com.game.magictower.widget.BaseButton;
 
 public class SceneShop {
 
@@ -204,17 +204,17 @@ public class SceneShop {
         
     public void onBtnKey(int btnId) {
         switch (btnId) {
-        case TextButton.ID_UP:
+        case BaseButton.ID_UP:
             if (select > 0) {
                 select--;
             }
             break;
-        case TextButton.ID_DOWN:
+        case BaseButton.ID_DOWN:
             if (select < 3) {
                 select++;
             }
             break;
-        case TextButton.ID_OK:
+        case BaseButton.ID_OK:
             selected();
             break;
         }

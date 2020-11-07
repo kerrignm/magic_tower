@@ -14,6 +14,7 @@ import com.game.magictower.model.Tower;
 import com.game.magictower.util.ArrayUtil;
 import com.game.magictower.util.FileUtil;
 import com.game.magictower.util.JsonUtil;
+import com.game.magictower.widget.BaseButton;
 import com.google.gson.reflect.TypeToken;
 
 public class Game {
@@ -46,6 +47,16 @@ public class Game {
     
     private static Game sInstance;
     
+    private boolean testFlag = true;
+    private int index = 0;
+    private int cnt = 0;
+    private int[] sn = {
+            BaseButton.ID_LEFT,
+            BaseButton.ID_LEFT,
+            BaseButton.ID_RIGHT,
+            BaseButton.ID_RIGHT
+    };
+    
     private Game(Context context) {
         mContext = context;
         player = new Player();
@@ -72,7 +83,7 @@ public class Game {
         npcInfo.reset();
         lvMap = ArrayUtil.copy(tower.LvMap);
         resetMonster();
-        test();
+        resetTest();
     }
     
     public boolean loadGame() {
@@ -131,15 +142,34 @@ public class Game {
         monsterStronest();
     }
     
-    private void test() {
-        npcInfo.maxFloor = 20;
-        npcInfo.isHasJump = true;
-        npcInfo.isHasForecast = true;
-        player.setYkey(20);
-        player.setBkey(20);
-        player.setRkey(20);
-        player.setAttack(3000);
-        player.setDefend(3000);
-        player.setHp(80000);
+    public void checkTest(int id) {
+        if (testFlag) {
+            if (index < sn.length) {
+                if (id == sn[index]) {
+                    cnt++;
+                }
+                index++;
+            }
+            if (index == sn.length) {
+                if (cnt == sn.length) {
+                    npcInfo.maxFloor = 20;
+                    npcInfo.isHasJump = true;
+                    npcInfo.isHasForecast = true;
+                    player.setYkey(20);
+                    player.setBkey(20);
+                    player.setRkey(20);
+                    player.setAttack(3000);
+                    player.setDefend(3000);
+                    player.setHp(80000);
+                }
+                testFlag = false;
+            }
+        }
+    }
+    
+    private void resetTest() {
+        testFlag = true;
+        index = 0;
+        cnt = 0;
     }
 }

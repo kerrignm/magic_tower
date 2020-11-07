@@ -165,70 +165,74 @@ public class GameActivity extends Activity implements GameScreen {
         
         private void playBtnKey(int btnId){
             switch (btnId) {
-            case TextButton.ID_UP:
+            case BaseButton.ID_UP:
                 if (currentGame.status == Status.Playing) {
+                    currentGame.checkTest(btnId);
                     if (currentGame.player.getPosY() - 1 < 11 && currentGame.player.getPosY() - 1 >= 0) {
                         currentGame.player.setToward(3);
                         interaction(currentGame.player.getPosX(), currentGame.player.getPosY() - 1);
                     }
                 }
                 break;
-            case TextButton.ID_LEFT:
+            case BaseButton.ID_LEFT:
                 if (currentGame.status == Status.Playing) {
+                    currentGame.checkTest(btnId);
                     if (currentGame.player.getPosX() - 1 < 11 && currentGame.player.getPosX() - 1 >= 0) {
                         currentGame.player.setToward(0);
                         interaction(currentGame.player.getPosX() - 1, currentGame.player.getPosY());
                     }
                 }
                 break;
-            case TextButton.ID_RIGHT:
+            case BaseButton.ID_RIGHT:
                 if (currentGame.status == Status.Playing) {
+                    currentGame.checkTest(btnId);
                     if (currentGame.player.getPosX() + 1 < 11 && currentGame.player.getPosX() + 1 >= 0) {
                         currentGame.player.setToward(2);
                         interaction(currentGame.player.getPosX() + 1, currentGame.player.getPosY());
                     }
                 }
                 break;
-            case TextButton.ID_DOWN:
+            case BaseButton.ID_DOWN:
                 if (currentGame.status == Status.Playing) {
+                    currentGame.checkTest(btnId);
                     if (currentGame.player.getPosY() + 1 < 11 && currentGame.player.getPosY() + 1 >= 0) {
                         currentGame.player.setToward(1);
                         interaction(currentGame.player.getPosX(), currentGame.player.getPosY() + 1);
                     }
                 }
                 break;
-            case TextButton.ID_QUIT:
+            case BaseButton.ID_QUIT:
                 finish();
                 break;
-            case TextButton.ID_NEW:
+            case BaseButton.ID_NEW:
                 currentGame.newGame();
                 message.show(R.string.msg_restart);
                 break;
-            case TextButton.ID_SAVE:
+            case BaseButton.ID_SAVE:
                 if (currentGame.saveGame()) {
                     message.show(R.string.save_succeed);
                 } else {
                     message.show(R.string.save_failed);
                 }
                 break;
-            case TextButton.ID_READ:
+            case BaseButton.ID_READ:
                 if (currentGame.loadGame()) {
                     message.show(R.string.read_succeed);
                 } else {
                     message.show(R.string.read_failed);
                 }
                 break;
-            case TextButton.ID_LOOK:
+            case BaseButton.ID_LOOK:
                 if (currentGame.npcInfo.isHasForecast) {
                     forecast.show();
                 }
                 break;
-            case TextButton.ID_JUMP:
+            case BaseButton.ID_JUMP:
                 if (currentGame.npcInfo.isHasJump) {
                     jumpFloor.show();
                 }
                 break;
-            case TextButton.ID_OK:
+            case BaseButton.ID_OK:
                 break;
             }
         }
