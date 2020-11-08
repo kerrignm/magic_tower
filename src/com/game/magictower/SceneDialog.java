@@ -79,11 +79,13 @@ public class SceneDialog {
                 mMsgs[0] = talkInfo.mMsgs.get(mLineCount);
                 mMsgs[1] = talkInfo.mMsgs.get(mLineCount + 1);
                 mLineCount += 2;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
             } else if (mLineCount < talkInfo.mMsgs.size()) {
                 mMsgs[0] = talkInfo.mMsgs.get(mLineCount);
                 mMsgs[1] = null;
                 mSectionCount += 1;
                 mLineCount = 0;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
             } else {
                 mSectionCount += 1;
                 mLineCount = 0;
@@ -127,6 +129,7 @@ public class SceneDialog {
         boolean changeStatus = true;
         switch(mDialogId) {
         case 0:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
             game.lvMap[game.npcInfo.curFloor][8][5] = 0;
             game.lvMap[game.npcInfo.curFloor][8][4] = 24;
             game.player.setYkey(game.player.getYkey() + 1);

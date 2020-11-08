@@ -58,6 +58,7 @@ public class SceneBattle {
                 battle.attack();
                 battle.getHpInfo();
                 if (battle.mHp <= 0) {
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
                     battle.game.player.setMoney(battle.game.player.getMoney() + battle.mMonster.getMoney());
                     battle.game.player.setExp(battle.game.player.getExp() + battle.mMonster.getExp());
                     if ((battle.game.npcInfo.curFloor == 19) && (battle.mMonster.getId() == 59)) {
@@ -67,6 +68,7 @@ public class SceneBattle {
                     } else {
                         battle.game.message.show(String.format(battle.mContext.getResources().getString(R.string.get_money_exp),
                                 battle.mMonster.getMoney(), battle.mMonster.getExp()));
+                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
                     }
                     battle.game.lvMap[battle.game.npcInfo.curFloor][battle.mY][battle.mX] = 0;
                     if ((battle.game.npcInfo.curFloor == 16) && (battle.mMonster.getId() == 53)) {
@@ -115,6 +117,7 @@ public class SceneBattle {
     
     private void attack() {
         if (mPlayerRound) {
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ATTACK));
             if (game.player.getAttack() > mDefend) {
                 mHp = mHp - game.player.getAttack() + mDefend;
                 if (mHp <= 0) {
@@ -139,7 +142,6 @@ public class SceneBattle {
                 game.player.setHp(game.player.getHp() - mAttack + game.player.getDefend());
             }
         }
-        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ATTACK));
         mPlayerRound = !mPlayerRound;
     }
     

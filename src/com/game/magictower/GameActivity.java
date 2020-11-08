@@ -207,6 +207,7 @@ public class GameActivity extends Activity implements GameScreen {
             case BaseButton.ID_NEW:
                 currentGame.newGame();
                 message.show(R.string.msg_restart);
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_RECORD));
                 break;
             case BaseButton.ID_SAVE:
                 if (currentGame.saveGame()) {
@@ -214,6 +215,7 @@ public class GameActivity extends Activity implements GameScreen {
                 } else {
                     message.show(R.string.save_failed);
                 }
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_RECORD));
                 break;
             case BaseButton.ID_READ:
                 if (currentGame.loadGame()) {
@@ -221,6 +223,7 @@ public class GameActivity extends Activity implements GameScreen {
                 } else {
                     message.show(R.string.read_failed);
                 }
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_RECORD));
                 break;
             case BaseButton.ID_LOOK:
                 if (currentGame.npcInfo.isHasForecast) {
@@ -358,36 +361,43 @@ public class GameActivity extends Activity implements GameScreen {
             case 5:     // stone
                 break;
             case 6:     // yellow hey
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setYkey(currentGame.player.getYkey() + 1);
                 message.show(R.string.get_yellow_key);
                 break;
             case 7:     // blue key
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setBkey(currentGame.player.getBkey() + 1);
                 message.show(R.string.get_bule_key);
                 break;
             case 8:     // red key
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setRkey(currentGame.player.getRkey() + 1);
                 message.show(R.string.get_red_key);
                 break;
             case 9:     // sapphire
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setDefend(currentGame.player.getDefend() + 3);
                 message.show(R.string.get_sapphire);
                 break;
             case 10:    // ruby
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setAttack(currentGame.player.getAttack() + 3);
                 message.show(R.string.get_ruby);
                 break;
             case 11:    // red potion
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setHp(currentGame.player.getHp() + 200);
                 message.show(R.string.get_red_potion);
                 break;
             case 12:    // blue potion
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setHp(currentGame.player.getHp() + 500);
                 message.show(R.string.get_blue_potion);
@@ -483,6 +493,7 @@ public class GameActivity extends Activity implements GameScreen {
                 }
                 break;
             case 30:    // little flying feather
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setLevel(currentGame.player.getLevel() + 1);
                 currentGame.player.setHp(currentGame.player.getHp() + 1000);
@@ -491,6 +502,7 @@ public class GameActivity extends Activity implements GameScreen {
                 message.show(R.string.get_little_fly);
                 break;
             case 31:    // big flying feather
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setLevel(currentGame.player.getLevel() + 3);
                 currentGame.player.setHp(currentGame.player.getHp() + 3000);
@@ -499,27 +511,31 @@ public class GameActivity extends Activity implements GameScreen {
                 message.show(R.string.get_big_fly);
                 break;
             case 32:    // cross
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasCross = true;
                 message.show(R.string.treasure_cross, R.string.treasure_cross_info, SceneMessage.MODE_ALERT);
                 break;
             case 33:    // holy water bottle
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 message.show(R.string.treasure_holy_water, R.string.treasure_holy_water_info, SceneMessage.MODE_ALERT);
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_STEP));
                 currentGame.player.setHp(currentGame.player.getHp() * 2);
                 break;
             case 34:    // emblem of light
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasForecast = true;
                 message.show(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info, SceneMessage.MODE_ALERT);
                 break;
             case 35:    // compass of wind
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasJump = true;
                 message.show(R.string.treasure_compass, R.string.treasure_compass_info, SceneMessage.MODE_ALERT);
                 break;
             case 36:    // key box
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setYkey(currentGame.player.getYkey() + 1);
                 currentGame.player.setBkey(currentGame.player.getBkey() + 1);
@@ -527,11 +543,13 @@ public class GameActivity extends Activity implements GameScreen {
                 message.show(R.string.get_key_box);
                 break;
             case 38:    // hammer
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasHammer = true;
                 message.show(R.string.treasure_hammer, R.string.treasure_hammer_info, SceneMessage.MODE_ALERT);
                 break;
             case 39:    // gold nugget
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setMoney(currentGame.player.getMoney() + 300);
                 message.show(R.string.get_gold_block);

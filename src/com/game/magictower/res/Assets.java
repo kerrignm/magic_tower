@@ -112,17 +112,25 @@ public final class Assets {
     public static final int SND_ID_PICKAXE = 6;
     public static final int SND_ID_STEP = 7;
     public static final int SND_ID_WATER = 8;
+    public static final int SND_ID_DIALOG = 9;
+    public static final int SND_ID_RECORD = 10;
+    public static final int SND_ID_SHOP_CHANGE = 11;
+    public static final int SND_ID_SHOP_DONE = 12;
     
     private static final String[] soundstrs = {
         "attack.wav",
         "door.ogg",
         "fariy.wav",
         "floor.ogg",
-        "item.ogg",
+        "item.wav",
         "level.wav",
         "pickaxe.ogg",
         "step.wav",
-        "water.wav"
+        "water.wav",
+        "dialog.wav",
+        "record.wav",
+        "shop_change.wav",
+        "shop_done.wav"
     };
     
     private static float[] leftPath = {
