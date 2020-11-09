@@ -421,7 +421,7 @@ public class GameActivity extends Activity implements GameScreen {
             case 15:    // barrier not accessible
                 break;
             case 16:   // accessible guardrail
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DOOR));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 break;
             case 19:    // sea of fire

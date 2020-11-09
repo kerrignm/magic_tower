@@ -79,13 +79,11 @@ public class SceneDialog {
                 mMsgs[0] = talkInfo.mMsgs.get(mLineCount);
                 mMsgs[1] = talkInfo.mMsgs.get(mLineCount + 1);
                 mLineCount += 2;
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
             } else if (mLineCount < talkInfo.mMsgs.size()) {
                 mMsgs[0] = talkInfo.mMsgs.get(mLineCount);
                 mMsgs[1] = null;
                 mSectionCount += 1;
                 mLineCount = 0;
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
             } else {
                 mSectionCount += 1;
                 mLineCount = 0;
@@ -118,6 +116,7 @@ public class SceneDialog {
     public void onBtnKey(int btnId) {
         switch (btnId) {
         case BaseButton.ID_OK:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
             if (!getTalkInfo()) {
                 talkOver();
             }

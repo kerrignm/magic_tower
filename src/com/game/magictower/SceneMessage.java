@@ -123,7 +123,7 @@ public class SceneMessage {
                 y = TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.BIG_TEXT_SIZE + TowerDimen.TOWER_GRID_SIZE * (i - 1) + (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 - mCurScroll;
                 if ((y >= mMinY) &&(y <= mMaxY)) {
                     if (i == 0) {
-                        x = TowerDimen.R_AUTO_SCROLL_INFO.left + (TowerDimen.R_AUTO_SCROLL_INFO.width() - GameGraphics.getInstance().getTextBounds(mInfo.get(i), graphics.bigTextPaint).width()) / 2;
+                        x = TowerDimen.R_AUTO_SCROLL_INFO.left + (TowerDimen.R_AUTO_SCROLL_INFO.width() - (int)graphics.bigTextPaint.measureText(mInfo.get(i))) / 2;
                     } else {
                         x = TowerDimen.R_AUTO_SCROLL_INFO.left;
                     }

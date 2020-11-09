@@ -2,13 +2,14 @@ package com.game.magictower.res;
 
 import java.io.IOException;
 
-import com.game.magictower.Settings;
-
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
+
+import com.game.magictower.Settings;
 
 public final class GlobalSoundPool {
     
@@ -26,6 +27,10 @@ public final class GlobalSoundPool {
             }
         }
         return sInstance;
+    }
+    
+    public void setOnLoadCompleteListener(OnLoadCompleteListener listener) {
+        soundPool.setOnLoadCompleteListener(listener);
     }
     
     protected final int loadSound(Context context, String assets) {

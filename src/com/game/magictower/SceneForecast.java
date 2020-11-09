@@ -61,19 +61,28 @@ public class SceneForecast {
             int palyerAttack = player.getAttack() - monster.getDefend();
             int monsterHp = monster.getHp();
             int monsterAttack = monster.getAttack() - player.getDefend();
-            int firstAttack = monsterAttack;
+            int lose = 0;
             int times = 0;
             if (monsterHp % palyerAttack == 0) {
                 times = monsterHp / palyerAttack;
             } else {
                 times = monsterHp / palyerAttack + 1;
             }
+            times -= 1;
             if (monster.getId() == 50) {
-                firstAttack = player.getHp() / 4;
+                lose = player.getHp() / 4;
+                if (times > 1) {
+                    lose = lose + (times - 1) * monsterAttack;
+                }
             } else if (monster.getId() == 57) {
-                firstAttack = player.getHp() / 3;
+                lose = player.getHp() / 3;
+                if (times > 1) {
+                    lose = lose + (times - 1) * monsterAttack;
+                }
+            } else {
+                lose = times * monsterAttack;
             }
-            return firstAttack + (times - 1) * monsterAttack + "";
+            return lose + "";
         }
     }
     

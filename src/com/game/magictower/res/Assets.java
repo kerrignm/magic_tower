@@ -5,6 +5,8 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 import android.view.WindowManager;
 
 import com.game.magictower.util.LogUtil;
@@ -116,11 +118,12 @@ public final class Assets {
     public static final int SND_ID_RECORD = 10;
     public static final int SND_ID_SHOP_CHANGE = 11;
     public static final int SND_ID_SHOP_DONE = 12;
+    public static final int SND_ID_COIN = 13;
     
     private static final String[] soundstrs = {
         "attack.wav",
         "door.ogg",
-        "fariy.wav",
+        "fairy.wav",
         "floor.ogg",
         "item.wav",
         "level.wav",
@@ -130,7 +133,8 @@ public final class Assets {
         "dialog.wav",
         "record.wav",
         "shop_change.wav",
-        "shop_done.wav"
+        "shop_done.wav",
+        "coin.wav"
     };
     
     private static float[] leftPath = {
@@ -209,6 +213,7 @@ public final class Assets {
     private final int loadSound(final int hasCompleted, final int total,
             Context context, LoadingProgressListener listener) {
         GlobalSoundPool sp = GlobalSoundPool.getInstance();
+        sp.setOnLoadCompleteListener(new SoundpoolListener(listener, soundstrs.length));
         int completed = hasCompleted;
         for (int i = 0; i < soundstrs.length; i++) {
             soundIds[i] = sp.loadSound(context, soundstrs[i]);
@@ -278,7 +283,26 @@ public final class Assets {
         listener.onProgressChanged(progress);
     }
     
-    public interface LoadingProgressListener{
+    private static class SoundpoolListener implements OnLoadCompleteListener {
+        private LoadingProgressListener listener;
+        private int count;
+        private int totalCount;
+        
+        public SoundpoolListener(LoadingProgressListener listener, int totalCount) {
+            count = 0;
+            this.totalCount = totalCount;
+            this.listener = listener;
+        }
+        
+        public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+            count++;
+            if (count >= totalCount) {
+                listener.onLoadCompleted();
+            }
+        }
+    }
+    
+    public interface LoadingProgressListener {
         void onProgressChanged(int progress/*, String currentTaskDescription*/);
         void onLoadCompleted();
     }

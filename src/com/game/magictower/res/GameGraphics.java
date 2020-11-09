@@ -75,12 +75,6 @@ public final class GameGraphics {
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
-    public Rect getTextBounds(String text, Paint paint) {
-        Rect textBounds = new Rect();
-        paint.getTextBounds(text, 0, text.length(), textBounds);
-        return textBounds;
-    }
-    
     public void drawBitmap(Canvas canvas, LiveBitmap bitmap, int x, int y, int srcX, int srcY,
             int srcWidth, int srcHeight) {
         srcRect.left = srcX;
@@ -192,8 +186,7 @@ public final class GameGraphics {
         if (canvas == null || msg == null) {
             return;
         }
-        int textWidth = getTextBounds(msg, paint).width();
-        x = x + (w - textWidth) / 2;
+        x = x + (w - (int)paint.measureText(msg)) / 2;
         y = y + (h - (int)paint.getTextSize()) / 2 + (int)paint.getTextSize();
         canvas.drawText(msg, x, y, paint);
     }
