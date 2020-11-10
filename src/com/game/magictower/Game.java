@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.game.magictower.model.Monster;
 import com.game.magictower.model.NpcInfo;
@@ -30,6 +29,8 @@ public class Game {
     }
     
     private Context mContext;
+    
+    private GameControler mControler;
     
     public SceneDialog dialog;
     public SceneMessage message;
@@ -57,8 +58,9 @@ public class Game {
             BaseButton.ID_RIGHT
     };
     
-    private Game(Context context) {
+    private Game(Context context, GameControler controler) {
         mContext = context;
+        mControler = controler;
         player = new Player();
         npcInfo = new NpcInfo();
         tower = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "tower.json"), Tower.class);
@@ -67,10 +69,14 @@ public class Game {
         dialogs = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "dialog.json"), new TypeToken<HashMap<Integer, ArrayList<TalkInfo>>>(){}.getType());
     }
     
-    public static final void init(Context context) {
+    public static final void init(Context context, GameControler controler) {
         if (sInstance == null) {
-            sInstance = new Game(context);
+            sInstance = new Game(context, controler);
         }
+    }
+    
+    public static final void destroy() {
+        sInstance = null;
     }
     
     public static final Game getInstance() {
@@ -132,8 +138,7 @@ public class Game {
     }
     
     public void gameOver() {
-        mContext.startActivity(new Intent(mContext, LoadingActivity.class));
-        newGame();
+        mControler.gameOver();
     }
     
     private void resetMonster() {

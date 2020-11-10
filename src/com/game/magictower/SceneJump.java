@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
+import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
 
@@ -68,6 +69,7 @@ public class SceneJump {
             } else {
                 game.npcInfo.curFloor = mSeclet + 1;
             }
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
             game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
             game.status = Status.Playing;
             break;
@@ -87,21 +89,33 @@ public class SceneJump {
         case BaseButton.ID_DOWN:
             if (i < 4) {
                 i++;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+            } else {
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
             break;
         case BaseButton.ID_UP:
             if (i > 0) {
                 i--;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+            } else {
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
             break;
         case BaseButton.ID_LEFT:
             if (j > 0) {
                 j--;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+            } else {
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
             break;
         case BaseButton.ID_RIGHT:
             if (j < 3) {
                 j++;
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+            } else {
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
             break;
         }

@@ -213,11 +213,12 @@ public final class Assets {
     private final int loadSound(final int hasCompleted, final int total,
             Context context, LoadingProgressListener listener) {
         GlobalSoundPool sp = GlobalSoundPool.getInstance();
-        sp.setOnLoadCompleteListener(new SoundpoolListener(listener, soundstrs.length));
+        sp.setOnLoadCompleteListener(new SoundpoolListener(listener, soundstrs.length, hasCompleted, total));
         int completed = hasCompleted;
         for (int i = 0; i < soundstrs.length; i++) {
             soundIds[i] = sp.loadSound(context, soundstrs[i]);
-            notifyProgressChanged(++completed, total, listener);
+            ++completed;
+            //notifyProgressChanged(++completed, total, listener);
         }
         return completed;
     }
@@ -287,15 +288,20 @@ public final class Assets {
         private LoadingProgressListener listener;
         private int count;
         private int totalCount;
+        private int completeCount;
+        private int completeTotal;
         
-        public SoundpoolListener(LoadingProgressListener listener, int totalCount) {
+        public SoundpoolListener(LoadingProgressListener listener, int totalCount, int completeCount, int completeTotal) {
             count = 0;
             this.totalCount = totalCount;
+            this.completeCount = completeCount;
+            this.completeTotal = completeTotal;
             this.listener = listener;
         }
         
         public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
             count++;
+            Assets.getInstance().notifyProgressChanged(count + completeCount, completeTotal, listener);
             if (count >= totalCount) {
                 listener.onLoadCompleted();
             }

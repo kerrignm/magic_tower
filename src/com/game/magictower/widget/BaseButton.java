@@ -12,9 +12,8 @@ import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
-import com.game.magictower.util.RectUtil;
 
-public class BaseButton implements BaseView {
+public class BaseButton extends BaseView {
     
     public static final int ID_UP = 0;
     public static final int ID_LEFT = 1;
@@ -41,30 +40,13 @@ public class BaseButton implements BaseView {
         TowerDimen.R_BTN_J,
         TowerDimen.R_BTN_OK
     };
-    
-    protected GameGraphics graphics;
-    
-    protected onClickListener listener;
-    
-    protected Rect rect;
-    protected final int id;
-    protected final int x;
-    protected final int y;
-    protected final int w;
-    protected final int h;
     protected boolean isPressed;
     protected boolean repeat;
     protected LiveBitmap bkgNormal;
     protected LiveBitmap bkgPressed;
     
     public BaseButton(GameGraphics graphics, int id, int x, int y, int w, int h, boolean repeat) {
-        this.graphics = graphics;
-        this.id = id;
-        rect = RectUtil.createRect(x, y, w, h);
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
+        super(graphics, id, x, y, w, h);
         this.repeat = repeat;
         this.bkgNormal = Assets.getInstance().bkgBtnNormal;
         this.bkgPressed = Assets.getInstance().bkgBtnPressed;
@@ -102,9 +84,9 @@ public class BaseButton implements BaseView {
     
     @Override
     public boolean onTouch(MotionEvent event) {
-        if (inBounds(event)){
-            switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            if (inBounds(event)) {
                 isPressed = true;
                 if (listener != null) {
                     listener.onClicked(getId());
@@ -112,38 +94,21 @@ public class BaseButton implements BaseView {
                         handler.sendEmptyMessageDelayed(MSG_ID_LONG_PRESS, MSG_DELAY_LONG_PRESS);
                     }
                 }
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-            case MotionEvent.ACTION_CANCEL:
-                handler.removeMessages(MSG_ID_LONG_PRESS);
-                isPressed = false;
-                break;
             }
+            break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_POINTER_UP:
+        case MotionEvent.ACTION_CANCEL:
+            handler.removeMessages(MSG_ID_LONG_PRESS);
+            isPressed = false;
+            break;
         }
-        return false;
+        return super.onTouch(event);
     }
     
     @Override
     public void onPaint(Canvas canvas) {
         LiveBitmap btnBkg = isPressed ? bkgNormal : bkgPressed;
         graphics.drawBitmap(canvas, btnBkg, null, rect, null);
-    }
-    
-    private boolean inBounds(MotionEvent event){
-        boolean result = rect.contains((int)event.getX(), (int)event.getY());
-        return result;
-    }
-    
-    public int getId() {
-        return id;
-    }
-    
-    public interface onClickListener{
-        void onClicked(int id);
-    }
-
-    public void setOnClickListener(onClickListener listener) {
-        this.listener = listener;
     }
 }

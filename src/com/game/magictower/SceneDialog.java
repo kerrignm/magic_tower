@@ -147,17 +147,20 @@ public class SceneDialog {
         case 2:
             break;
         case 3:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
             game.player.setAttack(game.player.getAttack() + 120);
             game.player.setExp(game.player.getExp() - 500);
             game.lvMap[15][3][4] = 0;
             break;
         case 4:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
             game.message.show(R.string.get_steel_sword);
             game.player.setAttack(game.player.getAttack() + 70);
             game.lvMap[2][10][7] = 0;
             changeStatus = false;
             break;
         case 5:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
             game.message.show(R.string.get_steel_shield);
             game.player.setDefend(game.player.getDefend() + 30);
             game.lvMap[2][10][9] = 0;
@@ -166,6 +169,7 @@ public class SceneDialog {
         case 6:
             break;
         case 7:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
             game.player.setDefend(game.player.getDefend() + 120);
             game.player.setMoney(game.player.getMoney() - 500);
             game.lvMap[15][3][6] = 0;

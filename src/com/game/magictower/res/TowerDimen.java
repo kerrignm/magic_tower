@@ -27,6 +27,8 @@ public class TowerDimen {
     public static Rect R_BTN_R;
     public static Rect R_BTN_D;
     
+    public static Rect R_ROCKER;
+    
     public static Rect R_BTN_Q;
     public static Rect R_BTN_N;
     public static Rect R_BTN_S;
@@ -107,6 +109,8 @@ public class TowerDimen {
         R_BTN_L = RectUtil.createRect(R_BTN_U, -btn_real_size, btn_real_size);
         R_BTN_R = RectUtil.createRect(R_BTN_U, btn_real_size, btn_real_size);
         R_BTN_D = RectUtil.createRect(R_BTN_U, 0, btn_real_size * 2);
+        
+        R_ROCKER = RectUtil.createRect(R_BTN_U, 0, btn_real_size);
         
         R_BTN_Q = RectUtil.createRect(R_TOWER.right + btn_margin, height - btn_real_size * 4 - btn_size / 2, btn_large_size, btn_size);
         R_BTN_N = RectUtil.createRect(R_BTN_Q, btn_large_size + btn_margin, 0);

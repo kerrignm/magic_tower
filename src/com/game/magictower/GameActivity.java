@@ -24,13 +24,15 @@ import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.LogUtil;
 import com.game.magictower.widget.BaseButton;
-import com.game.magictower.widget.BaseButton.onClickListener;
+import com.game.magictower.widget.BaseView;
+import com.game.magictower.widget.BaseView.onClickListener;
 import com.game.magictower.widget.BitmapButton;
 import com.game.magictower.widget.GameScreen;
 import com.game.magictower.widget.GameView;
+import com.game.magictower.widget.RockerView;
 import com.game.magictower.widget.TextButton;
 
-public class GameActivity extends Activity implements GameScreen {
+public class GameActivity extends Activity implements GameScreen, GameControler {
     
     private static final String TAG = "MagicTower:GameActivity";
     
@@ -78,7 +80,7 @@ public class GameActivity extends Activity implements GameScreen {
         setContentView(new GameView(this, graphics, this));
         createButtons();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        Game.init(this);
+        Game.init(this, this);
         currentGame = Game.getInstance();
         message = new SceneMessage(this, currentGame);
         dialog = new SceneDialog(this, currentGame);
@@ -114,15 +116,22 @@ public class GameActivity extends Activity implements GameScreen {
     protected void onDestroy() {
         super.onDestroy();
         LogUtil.d(TAG, "onDestroy()");
+        Game.destroy();
         timer.cancel();
     }
     
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        for (BaseButton button: activeButtons){
-            if (button.onTouch(ev)){
-                break;
+        if (BaseView.getFocusView() == null) {
+            if ((ev.getAction() & MotionEvent.ACTION_MASK) != MotionEvent.ACTION_MOVE) {
+                for (BaseView view: activeViews){
+                    if (view.onTouch(ev)){
+                        break;
+                    }
+                }
             }
+        } else {
+            BaseView.getFocusView().onTouch(ev);
         }
         return super.dispatchTouchEvent(ev);
     }
@@ -135,8 +144,13 @@ public class GameActivity extends Activity implements GameScreen {
         return false;
     }
     
-    private ArrayList<BaseButton> activeButtons = new ArrayList<BaseButton>();
-    private onClickListener btnClickListener = new onClickListener() {
+    public void gameOver() {
+        startActivity(new Intent(this, LoadingActivity.class));
+        finish();
+    }
+    
+    private ArrayList<BaseView> activeViews = new ArrayList<BaseView>();
+    private onClickListener clickListener = new onClickListener() {
         @Override
         public void onClicked(int id) {
             switch (currentGame.status) {
@@ -242,25 +256,26 @@ public class GameActivity extends Activity implements GameScreen {
     };
     
     private void createButtons() {
-        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_UP, assets.upBtn, true));
-        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_LEFT, assets.leftBtn, true));
-        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_RIGHT, assets.rightBtn, true));
-        activeButtons.add(BitmapButton.create(graphics, BaseButton.ID_DOWN, assets.downBtn, true));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_QUIT, getResources().getString(R.string.btn_quit), false));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_NEW, getResources().getString(R.string.btn_new), false));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_SAVE, getResources().getString(R.string.btn_save), false));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_READ, getResources().getString(R.string.btn_load), false));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_LOOK, getResources().getString(R.string.btn_look), false));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_JUMP, getResources().getString(R.string.btn_jump), false));
-        activeButtons.add(TextButton.create(graphics, BaseButton.ID_OK, getResources().getString(R.string.btn_ok), false));
-        for (BaseButton button: activeButtons){
-            button.setOnClickListener(btnClickListener);
+        activeViews.add(BitmapButton.create(graphics, BaseButton.ID_UP, assets.upBtn, true));
+        activeViews.add(BitmapButton.create(graphics, BaseButton.ID_LEFT, assets.leftBtn, true));
+        activeViews.add(BitmapButton.create(graphics, BaseButton.ID_RIGHT, assets.rightBtn, true));
+        activeViews.add(BitmapButton.create(graphics, BaseButton.ID_DOWN, assets.downBtn, true));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_QUIT, getResources().getString(R.string.btn_quit), false));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_NEW, getResources().getString(R.string.btn_new), false));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_SAVE, getResources().getString(R.string.btn_save), false));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_READ, getResources().getString(R.string.btn_load), false));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_LOOK, getResources().getString(R.string.btn_look), false));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_JUMP, getResources().getString(R.string.btn_jump), false));
+        activeViews.add(TextButton.create(graphics, BaseButton.ID_OK, getResources().getString(R.string.btn_ok), false));
+        activeViews.add(new RockerView(graphics, BaseButton.ID_OK, TowerDimen.R_ROCKER.left, TowerDimen.R_ROCKER.top, TowerDimen.R_ROCKER.width(), TowerDimen.R_ROCKER.height()));
+        for (BaseView view: activeViews){
+            view.setOnClickListener(clickListener);
         }
     }
     
     private void drawActiveButtons(GameGraphics graphics, Canvas canvas){
-        for (BaseButton button: activeButtons){
-            button.onPaint(canvas);
+        for (BaseView view: activeViews){
+            view.onPaint(canvas);
         }
     }
     
@@ -506,8 +521,8 @@ public class GameActivity extends Activity implements GameScreen {
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.player.setLevel(currentGame.player.getLevel() + 3);
                 currentGame.player.setHp(currentGame.player.getHp() + 3000);
-                currentGame.player.setAttack(currentGame.player.getAttack() + 20);
-                currentGame.player.setDefend(currentGame.player.getDefend() + 20);
+                currentGame.player.setAttack(currentGame.player.getAttack() + 30);
+                currentGame.player.setDefend(currentGame.player.getDefend() + 30);
                 message.show(R.string.get_big_fly);
                 break;
             case 32:    // cross

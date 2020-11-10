@@ -68,20 +68,12 @@ public class SceneForecast {
             } else {
                 times = monsterHp / palyerAttack + 1;
             }
-            times -= 1;
             if (monster.getId() == 50) {
                 lose = player.getHp() / 4;
-                if (times > 1) {
-                    lose = lose + (times - 1) * monsterAttack;
-                }
             } else if (monster.getId() == 57) {
                 lose = player.getHp() / 3;
-                if (times > 1) {
-                    lose = lose + (times - 1) * monsterAttack;
-                }
-            } else {
-                lose = times * monsterAttack;
             }
+            lose += (times - 1) * monsterAttack;
             return lose + "";
         }
     }

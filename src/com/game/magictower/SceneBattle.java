@@ -41,7 +41,7 @@ public class SceneBattle {
     
     private static final int MSG_ID_FIGHT = 1;
     
-    private static final int MSG_DELAY_REMOVE_MSG = 300;
+    private static final int MSG_DELAY_FIGHT_MSG = 300;
     
     private static final class FightHandler extends Handler {
         private WeakReference<SceneBattle> wk;
@@ -79,7 +79,7 @@ public class SceneBattle {
                         battle.game.monsterStronest();
                     }
                 } else {
-                    sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_REMOVE_MSG);
+                    sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
                 }
             }
             super.handleMessage(msg);
@@ -107,7 +107,7 @@ public class SceneBattle {
         mMagicAttack = false;
         getHpInfo();
         game.status = Status.Fighting;
-        handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_REMOVE_MSG);
+        handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
     }
     
     private void getHpInfo() {
@@ -116,29 +116,23 @@ public class SceneBattle {
     }
     
     private void attack() {
+        if (!mMagicAttack && (mMonster.getId() == 50)) {
+            mMagicAttack = true;
+            game.player.setHp(game.player.getHp() - game.player.getHp() / 4);
+        } else if (!mMagicAttack && (mMonster.getId() == 57)) {
+            mMagicAttack = true;
+            game.player.setHp(game.player.getHp() - game.player.getHp() / 3);
+        }
         if (mPlayerRound) {
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ATTACK));
             if (game.player.getAttack() > mDefend) {
                 mHp = mHp - game.player.getAttack() + mDefend;
                 if (mHp <= 0) {
                     mHp = 0;
-                    if (!mMagicAttack && (mMonster.getId() == 50)) {
-                        mMagicAttack = true;
-                        game.player.setHp(game.player.getHp() - game.player.getHp() / 4);
-                    } else if (!mMagicAttack && (mMonster.getId() == 57)) {
-                        mMagicAttack = true;
-                        game.player.setHp(game.player.getHp() - game.player.getHp() / 3);
-                    }
                 }
             }
         } else {
-            if (!mMagicAttack && (mMonster.getId() == 50)) {
-                mMagicAttack = true;
-                game.player.setHp(game.player.getHp() - game.player.getHp() / 4);
-            } else if (!mMagicAttack && (mMonster.getId() == 57)) {
-                mMagicAttack = true;
-                game.player.setHp(game.player.getHp() - game.player.getHp() / 3);
-            } else if (mAttack > game.player.getDefend()) {
+            if (mAttack > game.player.getDefend()) {
                 game.player.setHp(game.player.getHp() - mAttack + game.player.getDefend());
             }
         }
