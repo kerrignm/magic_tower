@@ -9,7 +9,6 @@ import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -65,7 +64,7 @@ public final class BitmapUtil {
         canvas.setBitmap(bitmap);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.WHITE);
+        paint.setColor(0xaaffffff);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawColor(0);
         canvas.drawPath(path, paint);

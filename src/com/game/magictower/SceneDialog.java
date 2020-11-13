@@ -128,7 +128,7 @@ public class SceneDialog {
         boolean changeStatus = true;
         switch(mDialogId) {
         case 0:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.lvMap[game.npcInfo.curFloor][8][5] = 0;
             game.lvMap[game.npcInfo.curFloor][8][4] = 24;
             game.player.setYkey(game.player.getYkey() + 1);
@@ -137,7 +137,7 @@ public class SceneDialog {
             game.npcInfo.mFairyStatus = NpcInfo.FAIRY_STATUS_WAIT_CROSS;
             break;
         case 1:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.player.setHp(game.player.getHp() * 4 / 3);
             game.player.setAttack(game.player.getAttack() * 4 / 3);
             game.player.setDefend(game.player.getDefend() * 4 / 3);
@@ -147,20 +147,20 @@ public class SceneDialog {
         case 2:
             break;
         case 3:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.player.setAttack(game.player.getAttack() + 120);
             game.player.setExp(game.player.getExp() - 500);
             game.lvMap[15][3][4] = 0;
             break;
         case 4:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.message.show(R.string.get_steel_sword);
             game.player.setAttack(game.player.getAttack() + 70);
             game.lvMap[2][10][7] = 0;
             changeStatus = false;
             break;
         case 5:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.message.show(R.string.get_steel_shield);
             game.player.setDefend(game.player.getDefend() + 30);
             game.lvMap[2][10][9] = 0;
@@ -169,14 +169,13 @@ public class SceneDialog {
         case 6:
             break;
         case 7:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.player.setDefend(game.player.getDefend() + 120);
             game.player.setMoney(game.player.getMoney() - 500);
             game.lvMap[15][3][6] = 0;
             break;
         case 8:
             game.lvMap[2][6][1] = 0;
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_PICKAXE));
             game.npcInfo.mThiefStatus = NpcInfo.THIEF_STATUS_WAIT_HAMMER;
             break;
         case 9:

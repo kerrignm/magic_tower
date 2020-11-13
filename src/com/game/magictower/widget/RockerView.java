@@ -76,6 +76,7 @@ public class RockerView extends BaseView {
         case MotionEvent.ACTION_UP:
         case MotionEvent.ACTION_POINTER_UP:
         case MotionEvent.ACTION_CANCEL:
+        case MotionEvent.ACTION_OUTSIDE:
             rocker.x = centerX;
             rocker.y = centerY;
             handler.removeMessages(MSG_ID_ACTION_PRESS);

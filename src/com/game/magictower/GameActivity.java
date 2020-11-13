@@ -49,6 +49,9 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
     private SceneShop shop;
     private SceneMessage message;
     
+    private int musicId = -1;
+    private int streamId = -1;
+    
     private boolean animFlag = true;
     
     protected static Intent getIntent(Context context, boolean load){
@@ -93,8 +96,10 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
         currentGame.newGame();
         if (getIntent().getBooleanExtra("load", false)) {
             currentGame.loadGame();
+            playBackgroundMusic(getMuisicId(currentGame.npcInfo.curFloor));
         } else {
             message.show(1, null, null, SceneMessage.MODE_AUTO_SCROLL);
+            playBackgroundMusic(getMuisicId(-1));
         }
         imageMap = assets.animMap0;
         timer.schedule(timerTask, 1000, 500);
@@ -103,12 +108,18 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
     @Override
     protected void onPause() {
         super.onPause();
+        if (Settings.isVoiceEnabled()) {
+            pauseBackgroundMusic();
+        }
         LogUtil.d(TAG, "onPause()");
     }
     
     @Override
     protected void onResume() {
         super.onResume();
+        if (Settings.isVoiceEnabled()) {
+            resumeBackgroundMusic();
+        }
         LogUtil.d(TAG, "onResume()");
     }
     
@@ -116,8 +127,61 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
     protected void onDestroy() {
         super.onDestroy();
         LogUtil.d(TAG, "onDestroy()");
+        if (Settings.isVoiceEnabled()) {
+            stopBackgroundMusic();
+        }
         Game.destroy();
         timer.cancel();
+    }
+    
+    private void playBackgroundMusic(int id) {
+        if (id != musicId) {
+            musicId = id;
+            streamId = GlobalSoundPool.getInstance().playSound(id, -1);
+        }
+    }
+    
+    private void pauseBackgroundMusic() {
+        if (streamId > 0) {
+            GlobalSoundPool.getInstance().pauseSound(streamId);
+        }
+    }
+    
+    private void resumeBackgroundMusic() {
+        if (streamId > 0) {
+            GlobalSoundPool.getInstance().resumeSound(streamId);
+        }
+    }
+    
+    private void stopBackgroundMusic() {
+        if (streamId > 0) {
+            GlobalSoundPool.getInstance().stopSound(streamId);
+        }
+    }
+    
+    private void changeBackgroundMusic(int floor) {
+        int id = getMuisicId(floor);
+        if (id != musicId) {
+            stopBackgroundMusic();
+            playBackgroundMusic(id);
+        }
+    }
+    
+    private int getMuisicId(int floor) {
+        int id = 0;
+        if (floor == 0) {
+            id = Assets.SND_ID_BGM_2;
+        } else if ((floor >= 1) && (floor <= 7)) {
+            id = Assets.SND_ID_BGM_3;
+        } else if ((floor >= 8) && (floor <= 14)) {
+            id = Assets.SND_ID_BGM_4;
+        } else if ((floor >= 15) && (floor <= 18)) {
+            id = Assets.SND_ID_BGM_5;
+        } else {
+            id = Assets.SND_ID_BGM_1;
+        }
+        id = Assets.getInstance().getSoundId(id);
+        return id;
     }
     
     @Override
@@ -142,6 +206,10 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
             return true;
         }
         return false;
+    }
+    
+    public void changeMusic() {
+        changeBackgroundMusic(currentGame.npcInfo.curFloor);
     }
     
     public void gameOver() {
@@ -222,6 +290,7 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 currentGame.newGame();
                 message.show(R.string.msg_restart);
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_RECORD));
+                changeBackgroundMusic(currentGame.npcInfo.curFloor);
                 break;
             case BaseButton.ID_SAVE:
                 if (currentGame.saveGame()) {
@@ -238,6 +307,7 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                     message.show(R.string.read_failed);
                 }
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_RECORD));
+                changeBackgroundMusic(currentGame.npcInfo.curFloor);
                 break;
             case BaseButton.ID_LOOK:
                 if (currentGame.npcInfo.isHasForecast) {
@@ -354,21 +424,21 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 break;
             case 2:     // yellow door
                 if (currentGame.player.getYkey() > 0) {
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                     currentGame.player.setYkey(currentGame.player.getYkey() - 1);
                 }
                 break;
             case 3:     // blue door
                 if (currentGame.player.getBkey() > 0) {
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                     currentGame.player.setBkey(currentGame.player.getBkey() - 1);
                 }
                 break;
             case 4:     // red door
                 if (currentGame.player.getRkey() > 0) {
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                     currentGame.player.setRkey(currentGame.player.getRkey() - 1);
                 }
@@ -419,8 +489,9 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 break;
             case 13:    // upstairs
                 message.show(R.string.msg_upstairs);
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                 currentGame.npcInfo.curFloor++;
+                changeBackgroundMusic(currentGame.npcInfo.curFloor);
                 currentGame.npcInfo.maxFloor = Math.max(currentGame.npcInfo.maxFloor, currentGame.npcInfo.curFloor);
                 currentGame.player.move(currentGame.tower.initPos[currentGame.npcInfo.curFloor][0], currentGame.tower.initPos[currentGame.npcInfo.curFloor][1]);
                 if (currentGame.npcInfo.curFloor == 21) {
@@ -429,14 +500,15 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 break;
             case 14:    // downstairs
                 message.show(R.string.msg_downstairs);
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                 currentGame.npcInfo.curFloor--;
+                changeBackgroundMusic(currentGame.npcInfo.curFloor);
                 currentGame.player.move(currentGame.tower.finPos[currentGame.npcInfo.curFloor][0], currentGame.tower.finPos[currentGame.npcInfo.curFloor][1]);
                 break;
             case 15:    // barrier not accessible
                 break;
             case 16:   // accessible guardrail
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 break;
             case 19:    // sea of fire
@@ -526,25 +598,25 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 message.show(R.string.get_big_fly);
                 break;
             case 32:    // cross
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasCross = true;
                 message.show(R.string.treasure_cross, R.string.treasure_cross_info, SceneMessage.MODE_ALERT);
                 break;
             case 33:    // holy water bottle
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 message.show(R.string.treasure_holy_water, R.string.treasure_holy_water_info, SceneMessage.MODE_ALERT);
                 currentGame.player.setHp(currentGame.player.getHp() * 2);
                 break;
             case 34:    // emblem of light
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasForecast = true;
                 message.show(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info, SceneMessage.MODE_ALERT);
                 break;
             case 35:    // compass of wind
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasJump = true;
                 message.show(R.string.treasure_compass, R.string.treasure_compass_info, SceneMessage.MODE_ALERT);
@@ -558,7 +630,7 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 message.show(R.string.get_key_box);
                 break;
             case 38:    // hammer
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FAIRY));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
                 currentGame.npcInfo.isHasHammer = true;
                 message.show(R.string.treasure_hammer, R.string.treasure_hammer_info, SceneMessage.MODE_ALERT);
@@ -645,7 +717,7 @@ public class GameActivity extends Activity implements GameScreen, GameControler 
                 break;
             case 101:
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;
-                dialog.show(10, 59);
+                dialog.show(10, 53);
                 break;
             case 102:
                 currentGame.lvMap[currentGame.npcInfo.curFloor][y][x] = 0;

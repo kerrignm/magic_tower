@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
 import com.game.magictower.res.Assets;
-import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.Assets.LoadingProgressListener;
+import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.util.LogUtil;
 
 public class LoadingActivity extends Activity {
@@ -36,7 +36,7 @@ public class LoadingActivity extends Activity {
                 @Override
                 public void onLoadCompleted() {
                     LogUtil.d(TAG, "onLoadCompleted()");
-                    handler.sendEmptyMessage(LoadHandler.MSG_OADING_COMPLETE);
+                    handler.sendEmptyMessage(LoadHandler.MSG_LOADING_COMPLETE);
                 }
             });
             return null;
@@ -75,24 +75,33 @@ public class LoadingActivity extends Activity {
         }
     }
     
-    private static final class LoadHandler extends Handler{
+    private static final class LoadHandler extends Handler {
+        
         public static final int MSG_START_LOADING = 1;
-        public static final int MSG_OADING_COMPLETE = 2;
+        public static final int MSG_LOADING_COMPLETE = 2;
+        public static final int MSG_START_GAME = 3;
+        public static final int MSG_LOAD_GAME = 4;
+        
         private WeakReference<LoadingActivity> wk;
 
         public LoadHandler(WeakReference<LoadingActivity> wk) {
             super();
             this.wk = wk;
         }
+        
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             LoadingActivity activity = wk.get();
             if (msg.what == MSG_START_LOADING && activity != null) {
                 activity.loadTask.execute();
-            } else if (msg.what == MSG_OADING_COMPLETE && activity != null) {
+            } else if (msg.what == MSG_LOADING_COMPLETE && activity != null) {
                 activity.progressBar.setVisibility(View.INVISIBLE);
                 activity.findViewById(R.id.loading_ll_btns).setVisibility(View.VISIBLE);
+            } else if (msg.what == MSG_START_GAME && activity != null) {
+                activity.startGame(false);
+            } else if (msg.what == MSG_LOAD_GAME && activity != null) {
+                activity.startGame(true);
             }
         }
     }
@@ -101,17 +110,20 @@ public class LoadingActivity extends Activity {
         switch (v.getId()) {
         case R.id.loading_btn_startgame:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-            startActivity(GameActivity.getIntent(LoadingActivity.this, false));
-            finish();
+            handler.sendEmptyMessageDelayed(LoadHandler.MSG_START_GAME, 1000);
             break;
         case R.id.loading_btn_loadgame:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-            startActivity(GameActivity.getIntent(LoadingActivity.this, true));
-            finish();
+            handler.sendEmptyMessageDelayed(LoadHandler.MSG_LOAD_GAME, 1000);
             break;
         default:
             break;
         }
+    }
+    
+    private void startGame(boolean load) {
+        startActivity(GameActivity.getIntent(LoadingActivity.this, load));
+        finish();
     }
 
 }

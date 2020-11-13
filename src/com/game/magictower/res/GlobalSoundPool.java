@@ -44,9 +44,32 @@ public final class GlobalSoundPool {
         return -1;
     }
     
-    public void playSound(int soundId) {
+    public int playSound(int soundId) {
+        return playSound(soundId, 0);
+    }
+    
+    public int playSound(int soundId, int loop) {
         if (Settings.isVoiceEnabled()) {
-            soundPool.play(soundId, 0.5F, 0.5F, 0, 0, 1.0F);
+            return soundPool.play(soundId, 0.5F, 0.5F, 0, loop, 1.0F);
+        }
+        return -1;
+    }
+    
+    public void pauseSound(int streamId) {
+        if (Settings.isVoiceEnabled()) {
+            soundPool.pause(streamId);
+        }
+    }
+    
+    public void resumeSound(int streamId) {
+        if (Settings.isVoiceEnabled()) {
+            soundPool.resume(streamId);
+        }
+    }
+    
+    public void stopSound(int streamId) {
+        if (Settings.isVoiceEnabled()) {
+            soundPool.stop(streamId);
         }
     }
 

@@ -69,7 +69,7 @@ public class SceneJump {
             } else {
                 game.npcInfo.curFloor = mSeclet + 1;
             }
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
             game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
             game.status = Status.Playing;
             break;
@@ -89,7 +89,7 @@ public class SceneJump {
         case BaseButton.ID_DOWN:
             if (i < 4) {
                 i++;
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
             } else {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
@@ -97,7 +97,7 @@ public class SceneJump {
         case BaseButton.ID_UP:
             if (i > 0) {
                 i--;
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
             } else {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
@@ -105,7 +105,7 @@ public class SceneJump {
         case BaseButton.ID_LEFT:
             if (j > 0) {
                 j--;
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
             } else {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }
@@ -113,7 +113,7 @@ public class SceneJump {
         case BaseButton.ID_RIGHT:
             if (j < 3) {
                 j++;
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_SHOP_DONE));
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
             } else {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
             }

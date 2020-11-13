@@ -1,8 +1,12 @@
 package com.game.magictower.util;
 
+import java.util.Random;
+
 public class MathUtil {
 
     public static final float EPSILON = 0.00001f;
+    
+    private static final Random sRandom = new Random();
     
     public static boolean equals(float left, float right) {
         return Math.abs(left -right) < EPSILON;
@@ -19,5 +23,13 @@ public class MathUtil {
             rad = -rad;
         }
         return rad;
+    }
+    
+    public static int getRandom(int min, int max) {
+        return sRandom.nextInt(max - min + 1) + min;
+    }
+    
+    public static boolean percent(float rate) {
+        return sRandom.nextFloat() < rate * 0.01f;
     }
 }

@@ -4,6 +4,9 @@ import com.game.magictower.res.Assets;
 import com.game.magictower.res.LiveBitmap;
 
 public class Player {
+    
+    private static final float CRIT_RATE = 5.0f;
+    private static final float RISE_RATE = 0.005f;
 
     private int level;
     private int hp;
@@ -150,6 +153,10 @@ public class Player {
 
     public void setPosY(int posY) {
         this.posY = posY;
+    }
+    
+    public float getCritRate() {
+        return CRIT_RATE + RISE_RATE * attack;
     }
 }
 

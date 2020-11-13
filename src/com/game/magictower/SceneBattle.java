@@ -14,6 +14,7 @@ import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
+import com.game.magictower.util.MathUtil;
 
 public class SceneBattle {
     
@@ -58,7 +59,7 @@ public class SceneBattle {
                 battle.attack();
                 battle.getHpInfo();
                 if (battle.mHp <= 0) {
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_FLOOR));
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     battle.game.player.setMoney(battle.game.player.getMoney() + battle.mMonster.getMoney());
                     battle.game.player.setExp(battle.game.player.getExp() + battle.mMonster.getExp());
                     if ((battle.game.npcInfo.curFloor == 19) && (battle.mMonster.getId() == 59)) {
@@ -68,7 +69,7 @@ public class SceneBattle {
                     } else {
                         battle.game.message.show(String.format(battle.mContext.getResources().getString(R.string.get_money_exp),
                                 battle.mMonster.getMoney(), battle.mMonster.getExp()));
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WATER));
+                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
                     }
                     battle.game.lvMap[battle.game.npcInfo.curFloor][battle.mY][battle.mX] = 0;
                     if ((battle.game.npcInfo.curFloor == 16) && (battle.mMonster.getId() == 53)) {
@@ -119,15 +120,25 @@ public class SceneBattle {
         if (!mMagicAttack && (mMonster.getId() == 50)) {
             mMagicAttack = true;
             game.player.setHp(game.player.getHp() - game.player.getHp() / 4);
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_MAGIC_4));
         } else if (!mMagicAttack && (mMonster.getId() == 57)) {
             mMagicAttack = true;
             game.player.setHp(game.player.getHp() - game.player.getHp() / 3);
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_MAGIC_3));
         }
         if (mPlayerRound) {
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ATTACK));
             if (game.player.getAttack() > mDefend) {
-                mHp = mHp - game.player.getAttack() + mDefend;
-                if (mHp <= 0) {
+                boolean critical = MathUtil.percent(game.player.getCritRate());
+                int attck = game.player.getAttack() - mDefend;
+                if (critical) {
+                    attck = attck * 2;
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_CRIT));
+                } else {
+                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ATTACK));
+                }
+                if (mHp > attck) {
+                    mHp -= attck;
+                } else {
                     mHp = 0;
                 }
             }

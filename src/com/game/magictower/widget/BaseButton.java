@@ -99,6 +99,7 @@ public class BaseButton extends BaseView {
         case MotionEvent.ACTION_UP:
         case MotionEvent.ACTION_POINTER_UP:
         case MotionEvent.ACTION_CANCEL:
+        case MotionEvent.ACTION_OUTSIDE:
             handler.removeMessages(MSG_ID_LONG_PRESS);
             isPressed = false;
             break;

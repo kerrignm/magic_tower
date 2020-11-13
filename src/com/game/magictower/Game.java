@@ -141,6 +141,10 @@ public class Game {
         mControler.gameOver();
     }
     
+    public void changeMusic() {
+        mControler.changeMusic();
+    }
+    
     private void resetMonster() {
         monsters = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "monster.json"), new TypeToken<HashMap<Integer, Monster>>(){}.getType());
         monsterStonger();

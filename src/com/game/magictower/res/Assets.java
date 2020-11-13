@@ -106,35 +106,45 @@ public final class Assets {
     };
     
     public static final int SND_ID_ATTACK = 0;
-    public static final int SND_ID_DOOR = 1;
-    public static final int SND_ID_FAIRY = 2;
-    public static final int SND_ID_FLOOR = 3;
-    public static final int SND_ID_ITEM = 4;
-    public static final int SND_ID_LEVEL = 5;
-    public static final int SND_ID_PICKAXE = 6;
-    public static final int SND_ID_STEP = 7;
-    public static final int SND_ID_WATER = 8;
-    public static final int SND_ID_DIALOG = 9;
+    public static final int SND_ID_CHANGE = 1;
+    public static final int SND_ID_COIN = 2;
+    public static final int SND_ID_CRIT = 3;
+    public static final int SND_ID_DIALOG = 4;
+    public static final int SND_ID_DONE = 5;
+    public static final int SND_ID_ITEM = 6;
+    public static final int SND_ID_MAGIC_3 = 7;
+    public static final int SND_ID_MAGIC_4 = 8;
+    public static final int SND_ID_POWER = 9;
     public static final int SND_ID_RECORD = 10;
-    public static final int SND_ID_SHOP_CHANGE = 11;
-    public static final int SND_ID_SHOP_DONE = 12;
-    public static final int SND_ID_COIN = 13;
+    public static final int SND_ID_STEP = 11;
+    public static final int SND_ID_WONDER = 12;
+    public static final int SND_ID_ZONE = 13;
+    public static final int SND_ID_BGM_1 = 14;
+    public static final int SND_ID_BGM_2 = 15;
+    public static final int SND_ID_BGM_3 = 16;
+    public static final int SND_ID_BGM_4 = 17;
+    public static final int SND_ID_BGM_5 = 18;
     
     private static final String[] soundstrs = {
-        "attack.wav",
-        "door.ogg",
-        "fairy.wav",
-        "floor.ogg",
-        "item.wav",
-        "level.wav",
-        "pickaxe.ogg",
-        "step.wav",
-        "water.wav",
-        "dialog.wav",
-        "record.wav",
-        "shop_change.wav",
-        "shop_done.wav",
-        "coin.wav"
+        "attack.ogg",
+        "change.ogg",
+        "coin.ogg",
+        "crit.ogg",
+        "dialog.ogg",
+        "done.ogg",
+        "item.ogg",
+        "magic_3.ogg",
+        "magic_4.ogg",
+        "power.ogg",
+        "record.ogg",
+        "step.ogg",
+        "wonder.ogg",
+        "zone.ogg",
+        "bgm_1.ogg",
+        "bgm_2.ogg",
+        "bgm_3.ogg",
+        "bgm_4.ogg",
+        "bgm_5.ogg"
     };
     
     private static float[] leftPath = {
@@ -207,7 +217,7 @@ public final class Assets {
         if (loadedRes != total) {
             throw new RuntimeException("Resource loaded "+loadedRes+", but it was declared to be "+total);
         }
-        listener.onLoadCompleted();
+        //listener.onLoadCompleted();
     }
     
     private final int loadSound(final int hasCompleted, final int total,
