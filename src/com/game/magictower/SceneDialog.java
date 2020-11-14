@@ -15,13 +15,9 @@ import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
 
-public class SceneDialog {
+public class SceneDialog extends BaseScene {
     
     private static final int TK_PLAYER = 0;
-    
-    private Context mContext;
-    
-    private Game game;
     
     private int mDialogId;
     private ArrayList<TalkInfo> mTalkList;
@@ -34,9 +30,8 @@ public class SceneDialog {
     private LiveBitmap mPlayerIcon = Assets.getInstance().playerMap.get(-2);
     private LiveBitmap mNpcIcn;
     
-    public SceneDialog(Context context, Game game) {
-        mContext = context;
-        this.game = game;
+    public SceneDialog(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
+        super(parent, context, game, id, x, y, w, h);
     }
     
     public void show(int dialogId, int npcId) {
@@ -47,6 +42,38 @@ public class SceneDialog {
         prepareTalkInfo(dialogId);
         getTalkInfo();
         game.status = Status.Dialoguing;
+    }
+    
+    @Override
+    public void onDrawFrame(Canvas canvas) {
+        super.onDrawFrame(canvas);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_DLG_BG, null);
+        graphics.drawRect(canvas, TowerDimen.R_DLG_BG);
+        graphics.drawText(canvas, mTkName, TowerDimen.R_DLG_NAME.left, 
+                        TowerDimen.R_DLG_NAME.top + TowerDimen.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - TowerDimen.TEXT_SIZE) / 2);
+        for (int i = 0; i < mMsgs.length; i++) {
+            if (mMsgs[i] != null) {
+                graphics.drawText(canvas, mMsgs[i], TowerDimen.R_DLG_TEXT.left, 
+                            TowerDimen.R_DLG_TEXT.top + i * TowerDimen.R_DLG_NAME.height() + TowerDimen.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - TowerDimen.TEXT_SIZE) / 2);
+            }
+        }
+        if (mTalker == TK_PLAYER) {
+            graphics.drawBitmap(canvas, mPlayerIcon, null, TowerDimen.R_DLG_ICON, null);
+        } else {
+            graphics.drawBitmap(canvas, mNpcIcn, null, TowerDimen.R_DLG_ICON, null);
+        }
+    }
+    
+    @Override
+    public void onAction(int id) {
+        switch (id) {
+        case BaseButton.ID_OK:
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
+            if (!getTalkInfo()) {
+                talkOver();
+            }
+            break;
+        }
     }
     
     private void prepareTalkInfo(int dialogId) {
@@ -95,35 +122,6 @@ public class SceneDialog {
         return result;
     }
     
-    public void draw(GameGraphics graphics, Canvas canvas) {
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_DLG_BG, null);
-        graphics.drawRect(canvas, TowerDimen.R_DLG_BG);
-        graphics.drawText(canvas, mTkName, TowerDimen.R_DLG_NAME.left, 
-                        TowerDimen.R_DLG_NAME.top + TowerDimen.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - TowerDimen.TEXT_SIZE) / 2);
-        for (int i = 0; i < mMsgs.length; i++) {
-            if (mMsgs[i] != null) {
-                graphics.drawText(canvas, mMsgs[i], TowerDimen.R_DLG_TEXT.left, 
-                            TowerDimen.R_DLG_TEXT.top + i * TowerDimen.R_DLG_NAME.height() + TowerDimen.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - TowerDimen.TEXT_SIZE) / 2);
-            }
-        }
-        if (mTalker == TK_PLAYER) {
-            graphics.drawBitmap(canvas, mPlayerIcon, null, TowerDimen.R_DLG_ICON, null);
-        } else {
-            graphics.drawBitmap(canvas, mNpcIcn, null, TowerDimen.R_DLG_ICON, null);
-        }
-    }
-    
-    public void onBtnKey(int btnId) {
-        switch (btnId) {
-        case BaseButton.ID_OK:
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DIALOG));
-            if (!getTalkInfo()) {
-                talkOver();
-            }
-            break;
-        }
-    }
-    
     public void talkOver() {
         boolean changeStatus = true;
         switch(mDialogId) {
@@ -154,14 +152,14 @@ public class SceneDialog {
             break;
         case 4:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
-            game.message.show(R.string.get_steel_sword);
+            parent.showToast(R.string.get_steel_sword);
             game.player.setAttack(game.player.getAttack() + 70);
             game.lvMap[2][10][7] = 0;
             changeStatus = false;
             break;
         case 5:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
-            game.message.show(R.string.get_steel_shield);
+            parent.showToast(R.string.get_steel_shield);
             game.player.setDefend(game.player.getDefend() + 30);
             game.lvMap[2][10][9] = 0;
             changeStatus = false;
@@ -195,7 +193,7 @@ public class SceneDialog {
         case 13:
             break;
         case 14:
-            game.message.show(2, null, null, SceneMessage.MODE_AUTO_SCROLL);
+            parent.showMessage(2, null, null, SceneMessage.MODE_AUTO_SCROLL);
             changeStatus = false;
             break;
         }

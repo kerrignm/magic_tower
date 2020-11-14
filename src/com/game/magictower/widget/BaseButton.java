@@ -45,15 +45,15 @@ public class BaseButton extends BaseView {
     protected LiveBitmap bkgNormal;
     protected LiveBitmap bkgPressed;
     
-    public BaseButton(GameGraphics graphics, int id, int x, int y, int w, int h, boolean repeat) {
-        super(graphics, id, x, y, w, h);
+    public BaseButton(int id, int x, int y, int w, int h, boolean repeat) {
+        super(id, x, y, w, h);
         this.repeat = repeat;
         this.bkgNormal = Assets.getInstance().bkgBtnNormal;
         this.bkgPressed = Assets.getInstance().bkgBtnPressed;
     }
     
     public static BaseButton create(GameGraphics graphics, int id, String label, boolean repeat) {
-        return new BaseButton(graphics, id, BTN_RECTS[id].left, BTN_RECTS[id].top, BTN_RECTS[id].width(), BTN_RECTS[id].height(), repeat);
+        return new BaseButton(id, BTN_RECTS[id].left, BTN_RECTS[id].top, BTN_RECTS[id].width(), BTN_RECTS[id].height(), repeat);
     }
     
     private Handler handler = new LongHandler(new WeakReference<BaseButton>(this));
@@ -74,19 +74,26 @@ public class BaseButton extends BaseView {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            BaseButton button = wk.get();
-            if (msg.what == MSG_ID_LONG_PRESS && button != null && button.listener != null && button.isPressed) {
-                button.listener.onClicked(button.getId());
-                sendEmptyMessageDelayed(MSG_ID_LONG_PRESS, MSG_DELAY_REPEAT_PRESS);
+            if (BaseView.getForbidTouch()) {
+                removeMessages(MSG_ID_LONG_PRESS);
+
+            } else {
+                BaseButton button = wk.get();
+                if (msg.what == MSG_ID_LONG_PRESS && button != null && button.listener != null && button.isPressed) {
+                    button.listener.onClicked(button.getId());
+                    sendEmptyMessageDelayed(MSG_ID_LONG_PRESS, MSG_DELAY_REPEAT_PRESS);
+                }
             }
         }
     }
     
     @Override
     public boolean onTouch(MotionEvent event) {
+        boolean result = false;
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
             if (inBounds(event)) {
+                result = true;
                 isPressed = true;
                 if (listener != null) {
                     listener.onClicked(getId());
@@ -100,16 +107,16 @@ public class BaseButton extends BaseView {
         case MotionEvent.ACTION_POINTER_UP:
         case MotionEvent.ACTION_CANCEL:
         case MotionEvent.ACTION_OUTSIDE:
-            handler.removeMessages(MSG_ID_LONG_PRESS);
+            result = true;
             isPressed = false;
+            handler.removeMessages(MSG_ID_LONG_PRESS);
             break;
         }
-        return super.onTouch(event);
+        return result;
     }
     
     @Override
-    public void onPaint(Canvas canvas) {
-        LiveBitmap btnBkg = isPressed ? bkgNormal : bkgPressed;
-        graphics.drawBitmap(canvas, btnBkg, null, rect, null);
+    public void onDrawFrame(Canvas canvas) {
+        graphics.drawBitmap(canvas, isPressed ? bkgNormal : bkgPressed, null, rect, null);
     }
 }

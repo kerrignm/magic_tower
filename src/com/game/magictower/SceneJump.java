@@ -3,35 +3,34 @@ package com.game.magictower;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
-import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
 
-public class SceneJump {
-    
-    private Context mContext;
+public class SceneJump extends BaseScene {
 
     private Rect[][] mFloorRect;
+    private Rect[][] mEdgeRect;
     private String[][] mFloorName;
     private int mSeclet;
     
-    private Game game;
-    
-    public SceneJump(Context context, Game game) {
-        mContext = context;
-        this.game = game;
+    public SceneJump(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
+        super(parent, context, game, id, x, y, w, h);
         mFloorRect = new Rect[5][];
+        mEdgeRect = new Rect[5][];
         mFloorName = new String[5][];
         for(int i = 0; i < 5; i++) {
             mFloorRect[i] = new Rect[4];
+            mEdgeRect[i] = new Rect[4];
             mFloorName[i] = new String[4];
             for (int j = 0; j < 4; j++) {
                 mFloorRect[i][j] = new Rect(TowerDimen.R_JUMP_GRID);
                 mFloorRect[i][j].offset(j * TowerDimen.R_JUMP_GRID.width(), i * TowerDimen.R_JUMP_GRID.height());
+                mEdgeRect[i][j] = new Rect(mFloorRect[i][j].left + 5, mFloorRect[i][j].top + 5, mFloorRect[i][j].right - 5, mFloorRect[i][j].bottom - 5);
                 mFloorName[i][j] = String.format(mContext.getResources().getString(R.string.jump_ordinal_floor), (j * 5 + i + 1));
             }
         }
@@ -39,30 +38,34 @@ public class SceneJump {
     
     public void show() {
         game.status = Status.Jumping;
-        mSeclet = 0;/*game.npcInfo.curFloor - 1;
-        if (mSeclet < 0) {
-            mSeclet = 0;
-        }*/
+        mSeclet = 0;
     }
     
-    public void draw(GameGraphics graphics, Canvas canvas) {
+    @Override
+    public void onDrawFrame(Canvas canvas) {
+        super.onDrawFrame(canvas);
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_JUMP, null);
         graphics.drawRect(canvas, TowerDimen.R_JUMP);
-        int y;
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                y = mFloorRect[i][j].top + TowerDimen.TEXT_SIZE + (mFloorRect[i][j].height() - TowerDimen.TEXT_SIZE) / 2;
                 if ((j * 5 + i) == mSeclet) {
-                    graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, y, graphics.textPaint);
+                    graphics.textPaint.setStyle(Style.STROKE);
+                    graphics.drawRect(canvas, mEdgeRect[i][j], graphics.textPaint);
+                    graphics.textPaint.setStyle(Style.FILL);
+                    graphics.drawTextInCenter(canvas, mFloorName[i][j], mFloorRect[i][j], graphics.textPaint);
                 } else {
-                    graphics.drawText(canvas, mFloorName[i][j], mFloorRect[i][j].left, y, graphics.disableTextPaint);
+                    graphics.disableTextPaint.setStyle(Style.STROKE);
+                    graphics.drawRect(canvas, mEdgeRect[i][j], graphics.disableTextPaint);
+                    graphics.disableTextPaint.setStyle(Style.FILL);
+                    graphics.drawTextInCenter(canvas, mFloorName[i][j], mFloorRect[i][j], graphics.disableTextPaint);
                 }
             }
         }
     }
     
-    public void onBtnKey(int btnId) {
-        switch (btnId) {
+    @Override
+    public void onAction(int id) {
+        switch (id) {
         case BaseButton.ID_OK:
             if (mSeclet + 1 > game.npcInfo.maxFloor) {
                 game.npcInfo.curFloor = game.npcInfo.maxFloor;
@@ -71,21 +74,22 @@ public class SceneJump {
             }
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
             game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
+            game.changeMusic();
             game.status = Status.Playing;
             break;
         case BaseButton.ID_DOWN:
         case BaseButton.ID_UP:
         case BaseButton.ID_LEFT:
         case BaseButton.ID_RIGHT:
-            moveSelect(btnId);
+            moveSelect(id);
             break;
         }
     }
     
-    private void moveSelect(int btnId) {
+    private void moveSelect(int id) {
         int i = mSeclet % 5;
         int j = mSeclet / 5;
-        switch (btnId) {
+        switch (id) {
         case BaseButton.ID_DOWN:
             if (i < 4) {
                 i++;

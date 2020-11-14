@@ -10,17 +10,13 @@ import android.os.Message;
 import com.game.magictower.Game.Status;
 import com.game.magictower.model.Monster;
 import com.game.magictower.res.Assets;
-import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.MathUtil;
 
-public class SceneBattle {
+public class SceneBattle extends BaseScene {
     
-    private Context mContext;
-    
-    private Game game;
     private Monster mMonster;
     private boolean mPlayerRound;
     private int mX;
@@ -38,58 +34,8 @@ public class SceneBattle {
     
     private boolean mMagicAttack;
     
-    private Handler handler = new FightHandler(new WeakReference<SceneBattle>(this));
-    
-    private static final int MSG_ID_FIGHT = 1;
-    
-    private static final int MSG_DELAY_FIGHT_MSG = 300;
-    
-    private static final class FightHandler extends Handler {
-        private WeakReference<SceneBattle> wk;
-
-        public FightHandler(WeakReference<SceneBattle> wk) {
-            super();
-            this.wk = wk;
-        }
-        
-        @Override
-        public void handleMessage(Message msg) {
-            SceneBattle battle = wk.get();
-            if (msg.what == MSG_ID_FIGHT && battle != null) {
-                battle.attack();
-                battle.getHpInfo();
-                if (battle.mHp <= 0) {
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    battle.game.player.setMoney(battle.game.player.getMoney() + battle.mMonster.getMoney());
-                    battle.game.player.setExp(battle.game.player.getExp() + battle.mMonster.getExp());
-                    if ((battle.game.npcInfo.curFloor == 19) && (battle.mMonster.getId() == 59)) {
-                        battle.game.dialog.show(13, 59);
-                    } else if ((battle.game.npcInfo.curFloor == 21) && (battle.mMonster.getId() == 59)) {
-                        battle.game.dialog.show(14, 59);
-                    } else {
-                        battle.game.message.show(String.format(battle.mContext.getResources().getString(R.string.get_money_exp),
-                                battle.mMonster.getMoney(), battle.mMonster.getExp()));
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
-                    }
-                    battle.game.lvMap[battle.game.npcInfo.curFloor][battle.mY][battle.mX] = 0;
-                    if ((battle.game.npcInfo.curFloor == 16) && (battle.mMonster.getId() == 53)) {
-                        battle.game.npcInfo.isMonsterStonger = true;
-                        battle.game.monsterStonger();
-                    } else if ((battle.game.npcInfo.curFloor == 19) && (battle.mMonster.getId() == 59)) {
-                        battle.game.npcInfo.isMonsterStongest = true;
-                        battle.game.monsterStronest();
-                    }
-                } else {
-                    sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
-                }
-            }
-            super.handleMessage(msg);
-        }
-    };
-    
-    public SceneBattle(Context context, Game game) {
-        mContext = context;
-        this.game = game;
+    public SceneBattle(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
+        super(parent, context, game, id, x, y, w, h);
     }
 
     public void show(int id, int x, int y) {
@@ -109,6 +55,24 @@ public class SceneBattle {
         getHpInfo();
         game.status = Status.Fighting;
         handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
+    }
+    
+    @Override
+    public void onDrawFrame(Canvas canvas) {
+        super.onDrawFrame(canvas);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBattle, null, TowerDimen.R_BATTLE, null);
+        graphics.drawBitmap(canvas, mMstIcon, null, TowerDimen.R_BTL_MST_ICON, null);
+        graphics.drawTextInCenter(canvas, mMstHp, TowerDimen.R_BTL_MST_HP);
+        graphics.drawTextInCenter(canvas, mMstAttack, TowerDimen.R_BTL_MST_ATTACK);
+        graphics.drawTextInCenter(canvas, mMstDefend, TowerDimen.R_BTL_MST_DEFEND);
+        graphics.drawTextInCenter(canvas, mPlrHp, TowerDimen.R_BTL_PLR_HP);
+        graphics.drawTextInCenter(canvas, mPlrAttack, TowerDimen.R_BTL_PLR_ATTACK);
+        graphics.drawTextInCenter(canvas, mPlrDefend, TowerDimen.R_BTL_PLR_DEFEND);
+    }
+    
+    @Override
+    public void onAction(int id) {
+        
     }
     
     private void getHpInfo() {
@@ -148,16 +112,61 @@ public class SceneBattle {
             }
         }
         mPlayerRound = !mPlayerRound;
+        getHpInfo();
+        if (mHp <= 0) {
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
+            game.player.setMoney(game.player.getMoney() + mMonster.getMoney());
+            game.player.setExp(game.player.getExp() + mMonster.getExp());
+            game.lvMap[game.npcInfo.curFloor][mY][mX] = 0;
+            handler.sendEmptyMessageDelayed(MSG_ID_FIGHT_OVER, MSG_DELAY_FIGHT_MSG);
+        } else {
+            handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
+        }
     }
     
-    public void draw(GameGraphics graphics, Canvas canvas) {
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBattle, null, TowerDimen.R_BATTLE, null);
-        graphics.drawBitmap(canvas, mMstIcon, null, TowerDimen.R_BTL_MST_ICON, null);
-        graphics.drawTextInCenter(canvas, mMstHp, TowerDimen.R_BTL_MST_HP);
-        graphics.drawTextInCenter(canvas, mMstAttack, TowerDimen.R_BTL_MST_ATTACK);
-        graphics.drawTextInCenter(canvas, mMstDefend, TowerDimen.R_BTL_MST_DEFEND);
-        graphics.drawTextInCenter(canvas, mPlrHp, TowerDimen.R_BTL_PLR_HP);
-        graphics.drawTextInCenter(canvas, mPlrAttack, TowerDimen.R_BTL_PLR_ATTACK);
-        graphics.drawTextInCenter(canvas, mPlrDefend, TowerDimen.R_BTL_PLR_DEFEND);
+    private void fightOver() {
+        game.status = Status.Playing;
+        parent.showToast(String.format(mContext.getResources().getString(R.string.get_money_exp), mMonster.getMoney(), mMonster.getExp()));
+        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
+        if ((game.npcInfo.curFloor == 19) && (mMonster.getId() == 59)) {
+            parent.showDialog(13, 59);
+        } else if ((game.npcInfo.curFloor == 21) && (mMonster.getId() == 59)) {
+            parent.showDialog(14, 59);
+        }
+        if ((game.npcInfo.curFloor == 16) && (mMonster.getId() == 53)) {
+            game.npcInfo.isMonsterStonger = true;
+            game.monsterStonger();
+        } else if ((game.npcInfo.curFloor == 19) && (mMonster.getId() == 59)) {
+            game.npcInfo.isMonsterStongest = true;
+            game.monsterStronest();
+        }
     }
+    
+    private Handler handler = new FightHandler(new WeakReference<SceneBattle>(this));
+    
+    private static final int MSG_ID_FIGHT = 1;
+    
+    private static final int MSG_ID_FIGHT_OVER = 2;
+    
+    private static final int MSG_DELAY_FIGHT_MSG = 200;
+    
+    private static final class FightHandler extends Handler {
+        private WeakReference<SceneBattle> wk;
+
+        public FightHandler(WeakReference<SceneBattle> wk) {
+            super();
+            this.wk = wk;
+        }
+        
+        @Override
+        public void handleMessage(Message msg) {
+            SceneBattle battle = wk.get();
+            if (msg.what == MSG_ID_FIGHT && battle != null) {
+                battle.attack();
+            } else if (msg.what == MSG_ID_FIGHT_OVER && battle != null) {
+                battle.fightOver();
+            }
+            super.handleMessage(msg);
+        }
+    };
 }

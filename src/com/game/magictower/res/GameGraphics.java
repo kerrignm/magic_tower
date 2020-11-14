@@ -132,7 +132,11 @@ public final class GameGraphics {
     }
 
     public void drawRect(Canvas canvas, Rect rect) {
-        canvas.drawRect(rect, rectPaint);
+        drawRect(canvas, rect, rectPaint);
+    }
+
+    public void drawRect(Canvas canvas, Rect rect, Paint paint) {
+        canvas.drawRect(rect, paint);
     }
     
     public void drawNumericText(Canvas canvas, LiveBitmap numbeBitmap, String msg, int x, int y) {

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 
-import com.game.magictower.res.GameGraphics;
 import com.game.magictower.util.MathUtil;
 
 public class RockerView extends BaseView {
@@ -30,8 +29,8 @@ public class RockerView extends BaseView {
     
     private Paint paint = new Paint();
     
-    public RockerView(GameGraphics graphics, int id, int x, int y, int w, int h) {
-        super(graphics, id, x, y, w, h);
+    public RockerView( int id, int x, int y, int w, int h) {
+        super(id, x, y, w, h);
         centerX = x + w / 2;
         centerY = y + h / 2;
         rocker = new Point(centerX, centerY);
@@ -42,14 +41,17 @@ public class RockerView extends BaseView {
     
     @Override
     public boolean onTouch(MotionEvent event) {
+        boolean result = false;
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
             if (inBounds(event)) {
+                result = true;
                 rocker.x = (int)event.getX();
                 rocker.y = (int)event.getY();
             }
             break;
         case MotionEvent.ACTION_MOVE:
+            result = true;
             if (!inBounds(event)) {
                 double rad = MathUtil.getRad(centerX, centerY, (int)event.getX(), (int)event.getY());
                 rocker.x = (int)(outerRadius * Math.cos(rad)) + centerX;
@@ -77,17 +79,18 @@ public class RockerView extends BaseView {
         case MotionEvent.ACTION_POINTER_UP:
         case MotionEvent.ACTION_CANCEL:
         case MotionEvent.ACTION_OUTSIDE:
+            result = true;
             rocker.x = centerX;
             rocker.y = centerY;
             handler.removeMessages(MSG_ID_ACTION_PRESS);
             action = -1;
             break;
         }
-        return super.onTouch(event);
+        return result;
     }
     
     @Override
-    public void onPaint(Canvas canvas) {
+    public void onDrawFrame(Canvas canvas) {
         paint.setColor(0x70ffffff);
         canvas.drawCircle(centerX, centerY, outerRadius, paint);
         paint.setColor(0xaaffffff);
@@ -118,11 +121,16 @@ public class RockerView extends BaseView {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            RockerView rocker = wk.get();
-            if (msg.what == MSG_ID_ACTION_PRESS && rocker != null && rocker.listener != null) {
-                if (rocker.getAction() >= 0) {
-                    rocker.listener.onClicked(rocker.getAction());
-                    sendEmptyMessageDelayed(MSG_ID_ACTION_PRESS, MSG_DELAY_ACTION_PRESS);
+            if (BaseView.getForbidTouch()) {
+                removeMessages(MSG_ID_ACTION_PRESS);
+
+            } else {
+                RockerView rocker = wk.get();
+                if (msg.what == MSG_ID_ACTION_PRESS && rocker != null && rocker.listener != null) {
+                    if (rocker.getAction() >= 0) {
+                        rocker.listener.onClicked(rocker.getAction());
+                        sendEmptyMessageDelayed(MSG_ID_ACTION_PRESS, MSG_DELAY_ACTION_PRESS);
+                    }
                 }
             }
         }

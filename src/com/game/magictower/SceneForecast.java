@@ -10,15 +10,11 @@ import com.game.magictower.Game.Status;
 import com.game.magictower.model.Monster;
 import com.game.magictower.model.Player;
 import com.game.magictower.res.Assets;
-import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
 
-public class SceneForecast {
+public class SceneForecast extends BaseScene {
     
-    private Context mContext;
-    
-    private Game game;
     private HashSet<Integer> mForecastSet = new HashSet<>();
     private Object[] mIds;
     private String[] mHPs;
@@ -35,9 +31,8 @@ public class SceneForecast {
     private String mMoney;
     private String mLose;
     
-    public SceneForecast(Context context, Game game) {
-        mContext = context;
-        this.game = game;
+    public SceneForecast(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
+        super(parent, context, game, id, x, y, w, h);
         mName = mContext.getResources().getString(R.string.monster_name);
         mHP = mContext.getResources().getString(R.string.monster_hp);
         mAttack = mContext.getResources().getString(R.string.monster_attack);
@@ -75,6 +70,50 @@ public class SceneForecast {
             }
             lose += (times - 1) * monsterAttack;
             return lose + "";
+        }
+    }
+    
+    public void show() {
+        getForecastInfo();
+        if (mForecastSet.size() > 0) {
+            game.status = Status.Looking;
+        }
+    }
+    
+    @Override
+    public void onDrawFrame(Canvas canvas) {
+        super.onDrawFrame(canvas);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_FORECAST, null);
+        graphics.drawRect(canvas, TowerDimen.R_FORECAST);
+        
+        if (mForecastSet.size() > 0) {
+            graphics.drawTextInCenter(canvas, mName, TowerDimen.R_FC_NAME);
+            graphics.drawTextInCenter(canvas, mHP, TowerDimen.R_FC_HP);
+            graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_FC_ATTACK);
+            graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_FC_DEFEND);
+            graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_FC_MONEY);
+            graphics.drawTextInCenter(canvas, mLose, TowerDimen.R_FC_LOSE);
+            
+            Monster monster;
+            for (int i = 0; i < mForecastSet.size(); i++) {
+                monster = game.monsters.get(mIds[i]);
+                graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(mIds[i]), null, mRects[i][0], null);
+                graphics.drawTextInCenter(canvas, monster.getName(), mRects[i][1]);
+                graphics.drawTextInCenter(canvas, mHPs[i], mRects[i][2]);
+                graphics.drawTextInCenter(canvas, mAttacks[i], mRects[i][3]);
+                graphics.drawTextInCenter(canvas, mDefends[i], mRects[i][4]);
+                graphics.drawTextInCenter(canvas, mMoneys[i], mRects[i][5]);
+                graphics.drawTextInCenter(canvas, mLoses[i], mRects[i][6]);
+            }
+        }
+    }
+    
+    @Override
+    public void onAction(int id) {
+        switch (id) {
+        case BaseButton.ID_LOOK:
+            game.status = Status.Playing;
+            break;
         }
     }
     
@@ -122,43 +161,4 @@ public class SceneForecast {
             }
         }
 }
-    
-    public void show() {
-        getForecastInfo();
-        game.status = Status.Looking;
-    }
-    
-    public void draw(GameGraphics graphics, Canvas canvas) {
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_FORECAST, null);
-        graphics.drawRect(canvas, TowerDimen.R_FORECAST);
-        
-        if (mForecastSet.size() > 0) {
-            graphics.drawTextInCenter(canvas, mName, TowerDimen.R_FC_NAME);
-            graphics.drawTextInCenter(canvas, mHP, TowerDimen.R_FC_HP);
-            graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_FC_ATTACK);
-            graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_FC_DEFEND);
-            graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_FC_MONEY);
-            graphics.drawTextInCenter(canvas, mLose, TowerDimen.R_FC_LOSE);
-            
-            Monster monster;
-            for (int i = 0; i < mForecastSet.size(); i++) {
-                monster = game.monsters.get(mIds[i]);
-                graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(mIds[i]), null, mRects[i][0], null);
-                graphics.drawTextInCenter(canvas, monster.getName(), mRects[i][1]);
-                graphics.drawTextInCenter(canvas, mHPs[i], mRects[i][2]);
-                graphics.drawTextInCenter(canvas, mAttacks[i], mRects[i][3]);
-                graphics.drawTextInCenter(canvas, mDefends[i], mRects[i][4]);
-                graphics.drawTextInCenter(canvas, mMoneys[i], mRects[i][5]);
-                graphics.drawTextInCenter(canvas, mLoses[i], mRects[i][6]);
-            }
-        }
-    }
-    
-    public void onBtnKey(int btnId) {
-        switch (btnId) {
-        case BaseButton.ID_LOOK:
-            game.status = Status.Playing;
-            break;
-        }
-    }
 }

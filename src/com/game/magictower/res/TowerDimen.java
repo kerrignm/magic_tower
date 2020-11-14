@@ -22,6 +22,9 @@ public class TowerDimen {
     
     
     public static Rect R_TOWER;
+    
+    public static Rect R_PLAY;
+    
     public static Rect R_BTN_U;
     public static Rect R_BTN_L;
     public static Rect R_BTN_R;
@@ -97,6 +100,8 @@ public class TowerDimen {
         LogUtil.d("MagicTower:TowerDimen", "init() TOWER_LEFT=" + TOWER_LEFT + ",TOWER_TOP=" + TOWER_TOP);
         R_TOWER = RectUtil.createRect(TOWER_LEFT, TOWER_TOP, TOWER_GRID_SIZE * TOWER_COLUMNS, TOWER_GRID_SIZE * TOWER_ROWS);
         
+        R_PLAY = RectUtil.createRect(TOWER_LEFT + TOWER_GRID_SIZE * 6, TOWER_TOP + TOWER_GRID_SIZE, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 11);
+        
         TEXT_SIZE = TOWER_GRID_SIZE / 2;
         BIG_TEXT_SIZE = TEXT_SIZE * 3 / 2;
 
@@ -112,13 +117,13 @@ public class TowerDimen {
         
         R_ROCKER = RectUtil.createRect(R_BTN_U, 0, btn_real_size);
         
-        R_BTN_Q = RectUtil.createRect(R_TOWER.right + btn_margin, height - btn_real_size * 4 - btn_size / 2, btn_large_size, btn_size);
+        R_BTN_Q = RectUtil.createRect(R_TOWER.right + btn_margin, height - btn_real_size * 4 - 4 * btn_size / 2, btn_large_size, btn_size);
         R_BTN_N = RectUtil.createRect(R_BTN_Q, btn_large_size + btn_margin, 0);
-        R_BTN_S = RectUtil.createRect(R_BTN_Q, 0, btn_real_size);
-        R_BTN_A = RectUtil.createRect(R_BTN_N, 0, btn_real_size);
-        R_BTN_K = RectUtil.createRect(R_BTN_S, 0, btn_real_size);
-        R_BTN_J = RectUtil.createRect(R_BTN_A, 0, btn_real_size);
-        R_BTN_OK = RectUtil.createRect(R_TOWER.right + (TOWER_LEFT - btn_large_size) / 2, R_BTN_K.top + btn_real_size, btn_large_size, btn_size);
+        R_BTN_S = RectUtil.createRect(R_BTN_Q, 0, btn_real_size + btn_size / 2);
+        R_BTN_A = RectUtil.createRect(R_BTN_N, 0, btn_real_size + btn_size / 2);
+        R_BTN_K = RectUtil.createRect(R_BTN_S, 0, btn_real_size + btn_size / 2);
+        R_BTN_J = RectUtil.createRect(R_BTN_A, 0, btn_real_size + btn_size / 2);
+        R_BTN_OK = RectUtil.createRect(R_TOWER.right + (TOWER_LEFT - btn_large_size) / 2, R_BTN_K.top + btn_real_size + btn_size / 2, btn_large_size, btn_size);
         
         R_PLR_LEVEL = RectUtil.createRect(TOWER_LEFT + (int)(182 * TOWER_SCALE), TOWER_TOP + (int)(118 * TOWER_SCALE), (int)(108 * TOWER_SCALE), TEXT_SIZE);
         R_PLR_HP = RectUtil.createRect(TOWER_LEFT + (int)(170 * TOWER_SCALE), TOWER_TOP + (int)(183 * TOWER_SCALE), (int)(175 * TOWER_SCALE), TEXT_SIZE);

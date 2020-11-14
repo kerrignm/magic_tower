@@ -9,11 +9,8 @@ import com.game.magictower.util.RectUtil;
 
 public abstract class BaseView {
     
-    public abstract void onPaint(Canvas canvas);
+    private static boolean sIsForbidTouch;
 
-    private static BaseView mFocused;
-    
-    
     protected GameGraphics graphics;
     
     protected onClickListener listener;
@@ -25,8 +22,8 @@ public abstract class BaseView {
     protected final int w;
     protected final int h;
     
-    public BaseView(GameGraphics graphics, int id, int x, int y, int w, int h) {
-        this.graphics = graphics;
+    public BaseView(int id, int x, int y, int w, int h) {
+        graphics = GameGraphics.getInstance();
         this.id = id;
         rect = RectUtil.createRect(x, y, w, h);
         this.x = x;
@@ -35,19 +32,17 @@ public abstract class BaseView {
         this.h = h;
     }
     
+    public static void setForbidTouch(boolean forbid) {
+        sIsForbidTouch = forbid;
+    }
+    
+    public static boolean getForbidTouch() {
+        return sIsForbidTouch;
+    }
+    
+    public abstract void onDrawFrame(Canvas canvas);
+    
     public boolean onTouch(MotionEvent event) {
-        switch (event.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-            if (inBounds(event)) {
-                setFocusView(this);
-            }
-            break;
-        case MotionEvent.ACTION_UP:
-        case MotionEvent.ACTION_POINTER_UP:
-        case MotionEvent.ACTION_CANCEL:
-            setFocusView(null);
-            break;
-        }
         return false;
     }
     
@@ -58,14 +53,6 @@ public abstract class BaseView {
     
     public int getId() {
         return id;
-    }
-    
-    public static void setFocusView(BaseView focus) {
-        mFocused = focus;
-    }
-    
-    public static BaseView getFocusView() {
-        return mFocused;
     }
     
     public interface onClickListener{

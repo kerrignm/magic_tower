@@ -32,9 +32,6 @@ public class Game {
     
     private GameControler mControler;
     
-    public SceneDialog dialog;
-    public SceneMessage message;
-    
     public Status status;
     
     public Player player;
@@ -139,6 +136,10 @@ public class Game {
     
     public void gameOver() {
         mControler.gameOver();
+    }
+    
+    public void quitGame() {
+        mControler.quitGame();
     }
     
     public void changeMusic() {
