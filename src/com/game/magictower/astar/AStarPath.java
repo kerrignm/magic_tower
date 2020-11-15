@@ -15,6 +15,8 @@ public class AStarPath {
     
     private AStarPoint[][] points;
     
+    private ObstacleFilter filter;
+    
     public AStarPath(int width, int height) {
         points = initePoints(width, height);
     }
@@ -52,7 +54,9 @@ public class AStarPath {
 
                 if (closeSet.contains(temp)) {
                     continue;
-                } else if (isObstacle(map[y_t][x_t])) {
+                } else if ((filter != null) && filter.isObstacle(map[y_t][x_t], x_t, y_t)) {
+                    continue;
+                } else if ((filter == null) && isObstacle(map[y_t][x_t])) {
                     continue;
                 } else if (openSet.contains(temp)) {
                     if (current.getG_score() <= temp.getG_score()) {
@@ -77,6 +81,10 @@ public class AStarPath {
         }
 
         return goal.getFather();
+    }
+    
+    public void setFilter(ObstacleFilter filter) {
+        this.filter = filter;
     }
 
     private AStarPoint[][] initePoints(int width, int height) {
