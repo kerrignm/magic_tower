@@ -2,20 +2,42 @@ package com.game.magictower;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.view.MotionEvent;
 
 import com.game.magictower.Game.Status;
+import com.game.magictower.astar.AStarPath;
+import com.game.magictower.astar.AStarPoint;
 import com.game.magictower.model.NpcInfo;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
+import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.LogUtil;
+import com.game.magictower.util.RectUtil;
 import com.game.magictower.widget.BaseButton;
 
 public class ScenePlay extends BaseScene {
     
     private static final String TAG = "MagicTower:ScenePlay";
     
+    private Rect[][] mPathRects;
+    
+    private Point touchPoint;
+    
+    private AStarPath astarPath;
+    private AStarPoint astarPoint;
+    
     public ScenePlay(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
+        mPathRects = new Rect[11][11];
+        for(int i = 0; i < mPathRects.length; i++) {
+            for (int j = 0; j < mPathRects[i].length; j++) {
+                mPathRects[i][j] = RectUtil.createRect(TowerDimen.R_TOUCH_GRID, j * TowerDimen.TOWER_GRID_SIZE, i * TowerDimen.TOWER_GRID_SIZE);
+            }
+        }
+        astarPath = new AStarPath(11, 11);
+        astarPoint = null;
     }
 
     public void show() {
@@ -23,8 +45,56 @@ public class ScenePlay extends BaseScene {
     }
     
     @Override
+    public boolean onTouch(MotionEvent event) {
+        boolean result = false;
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            if (inBounds(event)) {
+                result = true;
+                touchPoint = getTouchGrid((int)event.getX(), (int)event.getY());
+                astarPoint = astarPath.getPath(game.player.getPosX(), game.player.getPosY(), touchPoint.x, touchPoint.y, game.lvMap[game.npcInfo.curFloor]);
+            }
+            break;
+        case MotionEvent.ACTION_MOVE:
+           result = true;
+            break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_POINTER_UP:
+        case MotionEvent.ACTION_CANCEL:
+        case MotionEvent.ACTION_OUTSIDE:
+            result = true;
+            break;
+        }
+        return result;
+    }
+    
+    private Point getTouchGrid(int x, int y) {
+        Point point = new Point();
+        point.x = (x - rect.left) / TowerDimen.TOWER_GRID_SIZE;
+        point.y = (y - rect.top) / TowerDimen.TOWER_GRID_SIZE;
+        return point;
+    }
+    
+    private void drawGrid(Canvas canvas) {
+        if (touchPoint != null) {
+            Rect r = RectUtil.createRect(rect.left + touchPoint.x * TowerDimen.TOWER_GRID_SIZE, rect.top + touchPoint.y * TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_GRID_SIZE);
+            graphics.drawRect(canvas, r);
+        }
+        if (astarPoint != null) {
+            AStarPoint current = astarPoint;
+            Rect r = null;
+            while (current.getFather() != null) {
+                r = mPathRects[current.getY()][current.getX()];
+                graphics.drawRect(canvas, r);
+                current = current.getFather();
+            }
+        }
+    }
+    
+    @Override
     public void onDrawFrame(Canvas canvas) {
         super.onDrawFrame(canvas);
+        drawGrid(canvas);
     }
     
     @Override

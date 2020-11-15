@@ -24,6 +24,7 @@ public class TowerDimen {
     public static Rect R_TOWER;
     
     public static Rect R_PLAY;
+    public static Rect R_TOUCH_GRID;
     
     public static Rect R_BTN_U;
     public static Rect R_BTN_L;
@@ -101,6 +102,8 @@ public class TowerDimen {
         R_TOWER = RectUtil.createRect(TOWER_LEFT, TOWER_TOP, TOWER_GRID_SIZE * TOWER_COLUMNS, TOWER_GRID_SIZE * TOWER_ROWS);
         
         R_PLAY = RectUtil.createRect(TOWER_LEFT + TOWER_GRID_SIZE * 6, TOWER_TOP + TOWER_GRID_SIZE, TOWER_GRID_SIZE * 11, TOWER_GRID_SIZE * 11);
+        
+        R_TOUCH_GRID = RectUtil.createRect(R_PLAY.left + TOWER_GRID_SIZE / 4, R_PLAY.top + TOWER_GRID_SIZE / 4, TOWER_GRID_SIZE / 2, TOWER_GRID_SIZE / 2);
         
         TEXT_SIZE = TOWER_GRID_SIZE / 2;
         BIG_TEXT_SIZE = TEXT_SIZE * 3 / 2;

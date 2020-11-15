@@ -101,12 +101,18 @@ public class GameView extends RedrawableView {
         }
         switch(event.getAction()) {
         case MotionEvent.ACTION_DOWN:
-            for (BaseView child : mChildrens) {
-                if (child.onTouch(event)) {
-                    mFocused = child;
-                    result = true;
-                    performClick();
-                    break;
+            if (getScene().onTouch(event)) {
+                mFocused = getScene();
+                result = true;
+                performClick();
+            } else {
+                for (BaseView child : mChildrens) {
+                    if (child.onTouch(event)) {
+                        mFocused = child;
+                        result = true;
+                        performClick();
+                        break;
+                    }
                 }
             }
             break;
