@@ -67,9 +67,7 @@ public class SceneJump extends BaseScene {
     public void onAction(int id) {
         switch (id) {
         case BaseButton.ID_OK:
-            if (mSeclet + 1 > game.npcInfo.maxFloor) {
-                game.npcInfo.curFloor = game.npcInfo.maxFloor;
-            } else {
+            if (mSeclet + 1 <= game.npcInfo.maxFloor) {
                 game.npcInfo.curFloor = mSeclet + 1;
             }
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));

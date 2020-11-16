@@ -4,7 +4,12 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Shader;
+import android.graphics.Typeface;
 
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
@@ -29,8 +34,20 @@ public class SceneMessage extends BaseScene {
     private int mCurScroll;
     private Rect mClip;
     
+    private Paint shaderPaint = new Paint();
+    private LinearGradient fadeOutShader;
+    private LinearGradient fadeInShader;
+    
     public SceneMessage(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
+        shaderPaint.setAntiAlias(true);
+        shaderPaint.setARGB(255, 255, 255, 255);
+        shaderPaint.setTextSize(TowerDimen.BIG_TEXT_SIZE);
+        shaderPaint.setStrokeWidth(5);
+        shaderPaint.setStyle(Paint.Style.FILL);
+        shaderPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        fadeOutShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.TOWER_GRID_SIZE, 0, TowerDimen.R_AUTO_SCROLL_INFO.top, Color.WHITE, 0, Shader.TileMode.CLAMP);
+        fadeInShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.bottom, 0, TowerDimen.R_AUTO_SCROLL_INFO.bottom - TowerDimen.TOWER_GRID_SIZE, 0, Color.WHITE, Shader.TileMode.CLAMP);
     }
     
     public void show(int titleId, int msgId, int mode) {
@@ -94,7 +111,15 @@ public class SceneMessage extends BaseScene {
                     } else {
                         x = TowerDimen.R_AUTO_SCROLL_INFO.left;
                     }
-                    graphics.drawText(canvas, mInfo.get(i), x, y, graphics.bigTextPaint);
+                    if (y <= TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.TOWER_GRID_SIZE * 2) {
+                        shaderPaint.setShader(fadeOutShader);
+                        graphics.drawText(canvas, mInfo.get(i), x, y, shaderPaint);
+                    } else if (y >= TowerDimen.R_AUTO_SCROLL_INFO.bottom - TowerDimen.TOWER_GRID_SIZE * 2) {
+                        shaderPaint.setShader(fadeInShader);
+                        graphics.drawText(canvas, mInfo.get(i), x, y, shaderPaint);
+                    } else {
+                        graphics.drawText(canvas, mInfo.get(i), x, y, graphics.bigTextPaint);
+                    }
                 }
             }
             canvas.restore();

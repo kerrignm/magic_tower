@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.Paint.Style;
 
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
@@ -20,14 +21,18 @@ public class SceneShop extends BaseScene {
     private LiveBitmap imgIcon;
     private int id = 0;
     private int select = 0;
-    private Rect[] mTExtRect = new Rect[4];
+    private Rect[] mTextRect = new Rect[4];
+    private Rect[] mEdgeRect = new Rect[4];
     
     public SceneShop(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
-        mTExtRect[0] = TowerDimen.R_SHOP_TEXT;
-        mTExtRect[1] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height());
-        mTExtRect[2] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 2);
-        mTExtRect[3] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 3);
+        mTextRect[0] = TowerDimen.R_SHOP_TEXT;
+        mTextRect[1] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height());
+        mTextRect[2] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 2);
+        mTextRect[3] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 3);
+        for (int i = 0; i < 4; i++) {
+            mEdgeRect[i] = new Rect(mTextRect[i].left, mTextRect[i].top + 5, mTextRect[i].right, mTextRect[i].bottom - 5);
+        }
     }
 
     public void show(int shopId, int npcId) {
@@ -46,9 +51,15 @@ public class SceneShop extends BaseScene {
         graphics.drawBitmap(canvas, imgIcon, TowerDimen.R_SHOP_ICON.left, TowerDimen.R_SHOP_ICON.top);
         for (int i = 0; i < 4; i++) {
             if (i == select) {
-                graphics.drawText(canvas, choices.get(i), mTExtRect[i].left, mTExtRect[i].top + TowerDimen.TEXT_SIZE + (mTExtRect[i].height() - TowerDimen.TEXT_SIZE) / 2);
+                graphics.textPaint.setStyle(Style.STROKE);
+                graphics.drawRect(canvas, mEdgeRect[i], graphics.textPaint);
+                graphics.textPaint.setStyle(Style.FILL);
+                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + 10, mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2);
             } else {
-                graphics.drawText(canvas, choices.get(i), mTExtRect[i].left, mTExtRect[i].top + TowerDimen.TEXT_SIZE + (mTExtRect[i].height() - TowerDimen.TEXT_SIZE) / 2, graphics.disableTextPaint);
+                graphics.disableTextPaint.setStyle(Style.STROKE);
+                graphics.drawRect(canvas, mEdgeRect[i], graphics.disableTextPaint);
+                graphics.disableTextPaint.setStyle(Style.FILL);
+                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + 10, mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2, graphics.disableTextPaint);
             }
         }
     }

@@ -37,6 +37,7 @@ public class ScenePlay extends BaseScene {
     
     private ArrayList<AStarPoint> stepList = new ArrayList<AStarPoint>();
     private boolean canReach = false;
+    private boolean startQutoStep = false;
     
     public ScenePlay(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
@@ -67,8 +68,7 @@ public class ScenePlay extends BaseScene {
                         gridFilter.setTarget(point.x, point.y);
                         AStarPoint astarPoint = astarPath.getPath(game.player.getPosX(), game.player.getPosY(), point.x, point.y, game.lvMap[game.npcInfo.curFloor]);
                         if (astarPoint == null) {
-                            stepList.clear();
-                            canReach = false;
+                            clearTouchStep();
                         } else {
                             AStarPoint current = astarPoint;
                             stepList.clear();
@@ -81,6 +81,7 @@ public class ScenePlay extends BaseScene {
                         }
                     }
                 } else {
+                    startQutoStep = true;
                     handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
                 }
             }
@@ -114,7 +115,7 @@ public class ScenePlay extends BaseScene {
                 if (!canInteraction(x, y)) {
                     result = true;
                 }
-            } else if (value > 0) {
+            } else if ((value > 0) && (value < 100)) {
                 result = true; 
             }
             //LogUtil.d(TAG, "isObstacle() x = " + x + ", y = " + y + ", targetX = " + targetX + ", targetY = " + targetY + ", result = " + result);
@@ -129,6 +130,7 @@ public class ScenePlay extends BaseScene {
     
     private void clearTouchStep() {
         canReach = false;
+        startQutoStep = false;
         touchPoint = null;
         stepList.clear();
     }
@@ -144,11 +146,33 @@ public class ScenePlay extends BaseScene {
         if (canReach) {
             if (stepList.size() > 0) {
                 AStarPoint current = stepList.remove(stepList.size() - 1);
+                if (current.getY() < game.player.getPosY()) {
+                    game.player.setToward(3);
+                } else if (current.getY() > game.player.getPosY()) {
+                    game.player.setToward(1);
+                } else if (current.getX() > game.player.getPosX()) {
+                    game.player.setToward(2);
+                } else {
+                    game.player.setToward(0);
+                }
                 interaction(current.getX(), current.getY());
-                handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
+                if (game.lvMap[game.npcInfo.curFloor][current.getY()][current.getX()] == 0) {
+                    handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
+                } else {
+                    clearTouchStep();
+                }
             } else {
+                if (touchPoint.y < game.player.getPosY()) {
+                    game.player.setToward(3);
+                } else if (touchPoint.y > game.player.getPosY()) {
+                    game.player.setToward(1);
+                } else if (touchPoint.x > game.player.getPosX()) {
+                    game.player.setToward(2);
+                } else {
+                    game.player.setToward(0);
+                }
                 interaction(touchPoint.x, touchPoint.y);
-                canReach = false;
+                clearTouchStep();
             }
         }
     }
@@ -160,12 +184,10 @@ public class ScenePlay extends BaseScene {
                 graphics.drawRect(canvas, r);
             }
             AStarPoint current = null;
-            Rect r = null;
             int i = stepList.size();
             while (i > 0) {
                 current = stepList.get(i - 1);
-                r = mPathRects[current.getY()][current.getX()];
-                graphics.drawRect(canvas, r);
+                graphics.drawRect(canvas, mPathRects[current.getY()][current.getX()]);
                 i--;
             }
         }
@@ -179,7 +201,9 @@ public class ScenePlay extends BaseScene {
     
     @Override
     public void onAction(int id) {
-        clearTouchStep();
+        if (id != BaseButton.ID_OK) {
+            clearTouchStep();
+        }
         switch (id) {
         case BaseButton.ID_UP:
             if (game.status == Status.Playing) {
@@ -254,6 +278,9 @@ public class ScenePlay extends BaseScene {
             }
             break;
         case BaseButton.ID_OK:
+                if (canReach && !startQutoStep) {
+                    autoStep();
+                }
             break;
         }
     }
@@ -580,8 +607,6 @@ public class ScenePlay extends BaseScene {
             case 5:     // stone
             case 15:    // barrier not accessible
             case 20:    // starry sky
-            case 101:
-            case 102:
                 result = false;
                 break;
             default:
@@ -595,7 +620,7 @@ public class ScenePlay extends BaseScene {
     
     private static final int MSG_ID_AUTO_STEP = 1;
     
-    private static final int MSG_DELAY_AUTO_STEP = 100;
+    private static final int MSG_DELAY_AUTO_STEP = 50;
     
     private static final class PlayHandler extends Handler {
         private WeakReference<ScenePlay> wk;
