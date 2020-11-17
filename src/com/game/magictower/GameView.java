@@ -57,7 +57,7 @@ public class GameView extends RedrawableView {
         sceneMessage = new SceneMessage(this, context, game, 33, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
         sceneDialog = new SceneDialog(this, context, game, 34, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
         sceneForecast = new SceneForecast(this, context, game, 35, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
-        sceneJump = new SceneJump(this, context, game, 36, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
+        sceneJump = new SceneJump(this, context, game, 36, TowerDimen.R_JUMP.left, TowerDimen.R_JUMP.top, TowerDimen.R_JUMP.width(), TowerDimen.R_JUMP.height());
     }
 
     private void createChildrens() {

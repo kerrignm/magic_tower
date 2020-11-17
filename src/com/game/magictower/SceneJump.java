@@ -2,8 +2,10 @@ package com.game.magictower;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.Paint.Style;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.view.MotionEvent;
 
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
@@ -16,7 +18,9 @@ public class SceneJump extends BaseScene {
     private Rect[][] mFloorRect;
     private Rect[][] mEdgeRect;
     private String[][] mFloorName;
-    private int mSeclet;
+    private int mSelected;
+    private Rect mTouchRect = new Rect(TowerDimen.R_JUMP.left + TowerDimen.TOWER_GRID_SIZE / 2, TowerDimen.R_JUMP.top + TowerDimen.TOWER_GRID_SIZE / 2,
+                                    TowerDimen.R_JUMP.right - TowerDimen.TOWER_GRID_SIZE / 2, TowerDimen.R_JUMP.bottom - TowerDimen.TOWER_GRID_SIZE / 2);
     
     public SceneJump(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
@@ -38,7 +42,49 @@ public class SceneJump extends BaseScene {
     
     public void show() {
         game.status = Status.Jumping;
-        mSeclet = 0;
+        mSelected = 0;
+    }
+    
+    @Override
+    public boolean onTouch(MotionEvent event) {
+        boolean result = false;
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            if (inBounds(event)) {
+                result = true;
+                Point point = getTouchGrid((int)event.getX(), (int)event.getY());
+                int selected = point.x * 5 + point.y;
+                if (selected != mSelected) {
+                    mSelected = selected;
+                } else {
+                    doJump();
+                }
+            }
+            break;
+        case MotionEvent.ACTION_MOVE:
+           result = true;
+            break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_POINTER_UP:
+        case MotionEvent.ACTION_CANCEL:
+        case MotionEvent.ACTION_OUTSIDE:
+            result = true;
+            break;
+        }
+        return result;
+    }
+    
+    @Override
+    protected boolean inBounds(MotionEvent event){
+        boolean result = mTouchRect.contains((int)event.getX(), (int)event.getY());
+        return result;
+    }
+    
+    private Point getTouchGrid(int x, int y) {
+        Point point = new Point();
+        point.x = (x - TowerDimen.R_JUMP_GRID.left) / TowerDimen.R_JUMP_GRID.width();
+        point.y = (y - TowerDimen.R_JUMP_GRID.top) / TowerDimen.R_JUMP_GRID.height();
+        return point;
     }
     
     @Override
@@ -48,7 +94,7 @@ public class SceneJump extends BaseScene {
         graphics.drawRect(canvas, TowerDimen.R_JUMP);
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {
-                if ((j * 5 + i) == mSeclet) {
+                if ((j * 5 + i) == mSelected) {
                     graphics.textPaint.setStyle(Style.STROKE);
                     graphics.drawRect(canvas, mEdgeRect[i][j], graphics.textPaint);
                     graphics.textPaint.setStyle(Style.FILL);
@@ -67,13 +113,7 @@ public class SceneJump extends BaseScene {
     public void onAction(int id) {
         switch (id) {
         case BaseButton.ID_OK:
-            if (mSeclet + 1 <= game.npcInfo.maxFloor) {
-                game.npcInfo.curFloor = mSeclet + 1;
-            }
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-            game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
-            game.changeMusic();
-            game.status = Status.Playing;
+            doJump();
             break;
         case BaseButton.ID_DOWN:
         case BaseButton.ID_UP:
@@ -84,9 +124,19 @@ public class SceneJump extends BaseScene {
         }
     }
     
+    private void doJump() {
+        if (mSelected + 1 <= game.npcInfo.maxFloor) {
+            game.npcInfo.curFloor = mSelected + 1;
+        }
+        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
+        game.player.move(game.tower.initPos[game.npcInfo.curFloor][0], game.tower.initPos[game.npcInfo.curFloor][1]);
+        game.changeMusic();
+        game.status = Status.Playing;
+    }
+    
     private void moveSelect(int id) {
-        int i = mSeclet % 5;
-        int j = mSeclet / 5;
+        int i = mSelected % 5;
+        int j = mSelected / 5;
         switch (id) {
         case BaseButton.ID_DOWN:
             if (i < 4) {
@@ -121,6 +171,6 @@ public class SceneJump extends BaseScene {
             }
             break;
         }
-        mSeclet = j * 5 + i;
+        mSelected = j * 5 + i;
     }
 }

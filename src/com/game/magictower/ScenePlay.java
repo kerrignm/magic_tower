@@ -155,12 +155,12 @@ public class ScenePlay extends BaseScene {
                 } else {
                     game.player.setToward(0);
                 }
-                interaction(current.getX(), current.getY());
                 if (game.lvMap[game.npcInfo.curFloor][current.getY()][current.getX()] == 0) {
                     handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
                 } else {
                     clearTouchStep();
                 }
+                interaction(current.getX(), current.getY());
             } else {
                 if (touchPoint.y < game.player.getPosY()) {
                     game.player.setToward(3);

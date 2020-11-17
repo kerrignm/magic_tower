@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.view.MotionEvent;
 
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
@@ -20,9 +21,10 @@ public class SceneShop extends BaseScene {
     ArrayList<String> choices;
     private LiveBitmap imgIcon;
     private int id = 0;
-    private int select = 0;
+    private int mSelected = 0;
     private Rect[] mTextRect = new Rect[4];
     private Rect[] mEdgeRect = new Rect[4];
+    private Rect mTouchRect;
     
     public SceneShop(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
@@ -33,14 +35,49 @@ public class SceneShop extends BaseScene {
         for (int i = 0; i < 4; i++) {
             mEdgeRect[i] = new Rect(mTextRect[i].left, mTextRect[i].top + 5, mTextRect[i].right, mTextRect[i].bottom - 5);
         }
+        mTouchRect = new Rect(TowerDimen.R_SHOP_TEXT.left, TowerDimen.R_SHOP_TEXT.top, TowerDimen.R_SHOP_TEXT.right, TowerDimen.R_SHOP_TEXT.top + TowerDimen.R_SHOP_TEXT.height() * 4);
     }
 
     public void show(int shopId, int npcId) {
         choices = game.shops.get(shopId);
         imgIcon = Assets.getInstance().animMap0.get(npcId);
         this.id = shopId;
-        select = 0;
+        mSelected = 0;
         game.status = Status.Shopping;
+    }
+    
+    @Override
+    public boolean onTouch(MotionEvent event) {
+        boolean result = false;
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            if (inBounds(event)) {
+                result = true;
+                int selected = ((int)event.getY() - mTouchRect.top) / TowerDimen.R_SHOP_TEXT.height();
+                if (selected != mSelected) {
+                    mSelected = selected;
+                } else {
+                    selected();
+                }
+            }
+            break;
+        case MotionEvent.ACTION_MOVE:
+           result = true;
+            break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_POINTER_UP:
+        case MotionEvent.ACTION_CANCEL:
+        case MotionEvent.ACTION_OUTSIDE:
+            result = true;
+            break;
+        }
+        return result;
+    }
+    
+    @Override
+    protected boolean inBounds(MotionEvent event){
+        boolean result = mTouchRect.contains((int)event.getX(), (int)event.getY());
+        return result;
     }
     
     @Override
@@ -50,7 +87,7 @@ public class SceneShop extends BaseScene {
         graphics.drawRect(canvas, TowerDimen.R_SHOP);
         graphics.drawBitmap(canvas, imgIcon, TowerDimen.R_SHOP_ICON.left, TowerDimen.R_SHOP_ICON.top);
         for (int i = 0; i < 4; i++) {
-            if (i == select) {
+            if (i == mSelected) {
                 graphics.textPaint.setStyle(Style.STROKE);
                 graphics.drawRect(canvas, mEdgeRect[i], graphics.textPaint);
                 graphics.textPaint.setStyle(Style.FILL);
@@ -69,14 +106,14 @@ public class SceneShop extends BaseScene {
         switch (id) {
         case BaseButton.ID_UP:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_CHANGE));
-            if (select > 0) {
-                select--;
+            if (mSelected > 0) {
+                mSelected--;
             }
             break;
         case BaseButton.ID_DOWN:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_CHANGE));
-            if (select < 3) {
-                select++;
+            if (mSelected < 3) {
+                mSelected++;
             }
             break;
         case BaseButton.ID_OK:
@@ -88,7 +125,7 @@ public class SceneShop extends BaseScene {
     private void selected() {
         switch (id) {
         case 0:     //  3 floor
-            switch (select) {
+            switch (mSelected) {
                 case 0:
                     if (game.player.getMoney() >= 25) {
                         GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
@@ -123,7 +160,7 @@ public class SceneShop extends BaseScene {
             }
             break;
         case 1:     // 5 floor
-            switch (select) {
+            switch (mSelected) {
                 case 0:
                     if (game.player.getExp() >= 100) {
                         GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
@@ -161,7 +198,7 @@ public class SceneShop extends BaseScene {
             }
             break;
         case 2:     // 5 floor
-            switch (select) {
+            switch (mSelected) {
                 case 0:
                     if (game.player.getMoney() >= 10) {
                         GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
@@ -196,7 +233,7 @@ public class SceneShop extends BaseScene {
             }
             break;
         case 3:     // 11 floor
-            switch (select) {
+            switch (mSelected) {
                 case 0:
                     if (game.player.getMoney() >= 100) {
                         GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
@@ -231,7 +268,7 @@ public class SceneShop extends BaseScene {
             }
             break;
         case 4:     // 12 floor
-            switch (select) {
+            switch (mSelected) {
                 case 0:
                     if (game.player.getYkey() > 0) {
                         GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
@@ -266,7 +303,7 @@ public class SceneShop extends BaseScene {
             }
             break;
         case 5:     // 13 floor
-            switch (select) {
+            switch (mSelected) {
                 case 0:
                     if (game.player.getExp() >= 270) {
                         GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));

@@ -161,7 +161,7 @@ public class SceneDialog extends BaseScene {
             parent.showToast(R.string.get_steel_shield);
             game.player.setDefend(game.player.getDefend() + 30);
             game.lvMap[2][10][9] = 0;
-            return;
+            break;
         case 6:
             break;
         case 7:
