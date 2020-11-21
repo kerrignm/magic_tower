@@ -81,14 +81,14 @@ public class SceneBattle extends BaseScene {
     }
     
     private void attack() {
-        if (!mMagicAttack && (mMonster.getId() == 50)) {
+        if (!mMagicAttack && (mMonster.getMagicDamage() > 0)) {
             mMagicAttack = true;
-            game.player.setHp(game.player.getHp() - game.player.getHp() / 4);
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_MAGIC_4));
-        } else if (!mMagicAttack && (mMonster.getId() == 57)) {
-            mMagicAttack = true;
-            game.player.setHp(game.player.getHp() - game.player.getHp() / 3);
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_MAGIC_3));
+            game.player.setHp(game.player.getHp() - game.player.getHp() / mMonster.getMagicDamage());
+            if (mMonster.getMagicDamage() == 4) {
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_MAGIC_4));
+            } else {
+                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_MAGIC_3));
+            }
         }
         if (mPlayerRound) {
             if (game.player.getAttack() > mDefend) {

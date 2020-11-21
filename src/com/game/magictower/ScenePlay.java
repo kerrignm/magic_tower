@@ -5,8 +5,12 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
@@ -39,6 +43,9 @@ public class ScenePlay extends BaseScene {
     private boolean canReach = false;
     private boolean startQutoStep = false;
     
+    private Paint mTouchPaint;
+    private Paint mPathPaint;
+    
     public ScenePlay(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
         mPathRects = new Rect[11][11];
@@ -49,6 +56,20 @@ public class ScenePlay extends BaseScene {
         }
         astarPath = new AStarPath(11, 11);
         astarPath.setFilter(gridFilter);
+        
+        mTouchPaint = new Paint();
+        mTouchPaint.setAntiAlias(true);
+        mTouchPaint.setARGB(255, 0xcc, 0x66, 0x00);
+        mTouchPaint.setStyle(Style.STROKE);
+        mTouchPaint.setStrokeWidth(5);
+        mTouchPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        mPathPaint = new Paint();
+        mPathPaint.setAntiAlias(true);
+        mPathPaint.setARGB(255, 0xcc, 0x66, 0x00);
+        mPathPaint.setStyle(Style.STROKE);
+        mPathPaint.setStrokeWidth(5);
+        mPathPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        mPathPaint.setPathEffect(new DashPathEffect(new float[] {10, 5}, 0));
     }
 
     public void show() {
@@ -180,14 +201,16 @@ public class ScenePlay extends BaseScene {
     private void drawGrid(Canvas canvas) {
         if (canReach) {
             if (touchPoint != null) {
-                Rect r = RectUtil.createRect(rect.left + touchPoint.x * TowerDimen.TOWER_GRID_SIZE, rect.top + touchPoint.y * TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_GRID_SIZE);
-                graphics.drawRect(canvas, r);
+                Rect r = RectUtil.createRect(rect.left + touchPoint.x * TowerDimen.TOWER_GRID_SIZE,
+                            rect.top + touchPoint.y * TowerDimen.TOWER_GRID_SIZE,
+                            TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_GRID_SIZE);
+                graphics.drawRect(canvas, r, mTouchPaint);
             }
             AStarPoint current = null;
             int i = stepList.size();
             while (i > 0) {
                 current = stepList.get(i - 1);
-                graphics.drawRect(canvas, mPathRects[current.getY()][current.getX()]);
+                graphics.drawRect(canvas, mPathRects[current.getY()][current.getX()], mPathPaint);
                 i--;
             }
         }

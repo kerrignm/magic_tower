@@ -12,8 +12,9 @@ public class Monster {
     private int exp;
     private String name;
     private boolean stronger;
+    private int magicDamage;
 
-    public Monster(int id, int hp, int attack, int defend, int money, int exp, String name, boolean stronger) {
+    public Monster(int id, int hp, int attack, int defend, int money, int exp, String name, boolean stronger, int magicDamage) {
         this.id = id;
         this.name = name;
         this.hp = hp;
@@ -22,6 +23,7 @@ public class Monster {
         this.money = money;
         this.exp = exp;
         this.stronger = stronger;
+        this.magicDamage = magicDamage;
     }
 
     public int getId() {
@@ -75,6 +77,10 @@ public class Monster {
             money = money * 3 / 2;
             exp = exp * 3 / 2;
         }
+    }
+    
+    public int getMagicDamage() {
+        return magicDamage;
     }
 
 }

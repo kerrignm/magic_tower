@@ -46,10 +46,8 @@ public class SceneForecast extends BaseScene {
             return "???";
         } else if (player.getDefend() >= monster.getAttack()) {
             int lose = 0;
-            if (monster.getId() == 50) {
-                lose = player.getHp() / 4;
-            } else if (monster.getId() == 57) {
-                lose = player.getHp() / 3;
+            if (monster.getMagicDamage() > 0) {
+                lose = player.getHp() / monster.getMagicDamage();
             }
             return lose + "";
         } else {
@@ -63,10 +61,8 @@ public class SceneForecast extends BaseScene {
             } else {
                 times = monsterHp / palyerAttack + 1;
             }
-            if (monster.getId() == 50) {
-                lose = player.getHp() / 4;
-            } else if (monster.getId() == 57) {
-                lose = player.getHp() / 3;
+            if (monster.getMagicDamage() > 0) {
+                lose = player.getHp() / monster.getMagicDamage();
             }
             lose += (times - 1) * monsterAttack;
             return lose + "";

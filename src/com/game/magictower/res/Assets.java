@@ -249,11 +249,11 @@ public final class Assets {
         
         int completed = hasCompleted;
         
-        bkgGame = LiveBitmap.loadBitmap(context, "GameBg.png");
+        bkgGame = LiveBitmap.loadBitmap(context, "bkg_game.png");
         notifyProgressChanged(++completed, total, listener);
-        bkgBlank = LiveBitmap.loadBitmap(context, "BlankBg.png");
+        bkgBlank = LiveBitmap.loadBitmap(context, "bkg_blank.png");
         notifyProgressChanged(++completed, total, listener);
-        bkgBattle = LiveBitmap.loadBitmap(context, "BattleBg.png");
+        bkgBattle = LiveBitmap.loadBitmap(context, "bkg_battle.png");
         notifyProgressChanged(++completed, total, listener);
         bkgBtnNormal = LiveBitmap.loadBitmap(context, "bkg_btn_normal.png");
         notifyProgressChanged(++completed, total, listener);

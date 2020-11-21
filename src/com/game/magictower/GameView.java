@@ -89,6 +89,7 @@ public class GameView extends RedrawableView {
     
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
         boolean result = false;
         if (isToastShowing) {
             if (mFocused != null) {

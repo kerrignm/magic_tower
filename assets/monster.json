@@ -107,7 +107,8 @@
     "id": 50,
     "money": 40,
     "name": "白衣武士",
-    "stronger": false
+    "stronger": false,
+    "magicDamage": 4
   },
   "51": {
     "attack": 250,
@@ -177,7 +178,8 @@
     "id": 57,
     "money": 80,
     "name": "灵法师",
-    "stronger": false
+    "stronger": false,
+    "magicDamage": 3
   },
   "58": {
     "attack": 980,

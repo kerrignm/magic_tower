@@ -104,7 +104,7 @@ public class SceneMessage extends BaseScene {
             canvas.save();
             canvas.clipRect(mClip);
             for (int i = 0; i < mInfo.size(); i++) {
-                y = TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.BIG_TEXT_SIZE + TowerDimen.TOWER_GRID_SIZE * (i - 1) + (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 - mCurScroll;
+                y = TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.BIG_TEXT_SIZE + TowerDimen.TOWER_GRID_SIZE * i + (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 - mCurScroll;
                 if ((y >= mMinY) &&(y <= mMaxY)) {
                     if (i == 0) {
                         x = TowerDimen.R_AUTO_SCROLL_INFO.left + (TowerDimen.R_AUTO_SCROLL_INFO.width() - (int)graphics.bigTextPaint.measureText(mInfo.get(i))) / 2;
