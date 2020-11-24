@@ -74,6 +74,7 @@ public class SceneForecast extends BaseScene {
         if (mForecastSet.size() > 0) {
             game.status = Status.Looking;
         }
+        parent.requestRender();
     }
     
     @Override

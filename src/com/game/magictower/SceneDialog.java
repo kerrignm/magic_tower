@@ -42,6 +42,7 @@ public class SceneDialog extends BaseScene {
         prepareTalkInfo(dialogId);
         getTalkInfo();
         game.status = Status.Dialoguing;
+        parent.requestRender();
     }
     
     @Override

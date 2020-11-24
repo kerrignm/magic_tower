@@ -18,15 +18,23 @@ public abstract class BaseScene extends BaseView {
     
     private static final boolean DBG_DRAW = false;
     
+    protected static boolean sAnimFlag;
+    private static HashMap<Integer, LiveBitmap> animMap;
+    
     protected Context mContext;
     
     protected Game game;
     
     protected GameView parent;
     
-    protected boolean animFlag;
-    private long lastTime;
-    private HashMap<Integer, LiveBitmap> animMap;
+    public static void updateAni() {
+        sAnimFlag = !sAnimFlag;
+        if (sAnimFlag) {
+            animMap = Assets.getInstance().animMap0;
+        } else {
+            animMap = Assets.getInstance().animMap1;
+        }
+    }
     
     public BaseScene(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(id, x, y, w, h);
@@ -34,8 +42,7 @@ public abstract class BaseScene extends BaseView {
         this.parent = parent;
         this.game = game;
         animMap = Assets.getInstance().animMap0;
-        lastTime = System.currentTimeMillis();
-        animFlag = true;
+        sAnimFlag = true;
     }
     
     public abstract void onAction(int id);
@@ -46,19 +53,6 @@ public abstract class BaseScene extends BaseView {
         graphics.drawBitmap(canvas, Assets.getInstance().bkgGame, TowerDimen.TOWER_LEFT, TowerDimen.TOWER_TOP);
         drawInfoPanel(canvas);
         drawTower(canvas);
-        updateAnim();
-    }
-    
-    private void updateAnim() {
-        if (System.currentTimeMillis() - lastTime >= 500) {
-            lastTime = System.currentTimeMillis();
-            animFlag = !animFlag;
-        }
-        if (animFlag) {
-            animMap = Assets.getInstance().animMap0;
-        } else {
-            animMap = Assets.getInstance().animMap1;
-        }
     }
     
     private void drawInfoPanel(Canvas canvas) {

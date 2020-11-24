@@ -74,6 +74,7 @@ public class ScenePlay extends BaseScene {
 
     public void show() {
         game.status = Status.Playing;
+        parent.requestRender();
     }
     
     @Override
@@ -105,6 +106,7 @@ public class ScenePlay extends BaseScene {
                     startQutoStep = true;
                     handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
                 }
+                parent.requestRender();
             }
             break;
         case MotionEvent.ACTION_MOVE:
@@ -115,6 +117,7 @@ public class ScenePlay extends BaseScene {
         case MotionEvent.ACTION_CANCEL:
         case MotionEvent.ACTION_OUTSIDE:
             result = true;
+            parent.requestRender();
             break;
         }
         return result;
@@ -195,6 +198,7 @@ public class ScenePlay extends BaseScene {
                 interaction(touchPoint.x, touchPoint.y);
                 clearTouchStep();
             }
+            parent.requestRender();
         }
     }
     

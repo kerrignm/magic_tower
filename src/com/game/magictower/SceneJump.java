@@ -43,6 +43,7 @@ public class SceneJump extends BaseScene {
     public void show() {
         game.status = Status.Jumping;
         mSelected = 0;
+        parent.requestRender();
     }
     
     @Override
@@ -59,6 +60,7 @@ public class SceneJump extends BaseScene {
                 } else {
                     doJump();
                 }
+                parent.requestRender();
             }
             break;
         case MotionEvent.ACTION_MOVE:
@@ -69,6 +71,7 @@ public class SceneJump extends BaseScene {
         case MotionEvent.ACTION_CANCEL:
         case MotionEvent.ACTION_OUTSIDE:
             result = true;
+            parent.requestRender();
             break;
         }
         return result;

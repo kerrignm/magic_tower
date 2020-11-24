@@ -55,6 +55,7 @@ public class SceneBattle extends BaseScene {
         getHpInfo();
         game.status = Status.Fighting;
         handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
+        parent.requestRender();
     }
     
     @Override
@@ -122,6 +123,7 @@ public class SceneBattle extends BaseScene {
         } else {
             handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
         }
+        parent.requestRender();
     }
     
     private void fightOver() {
@@ -140,6 +142,7 @@ public class SceneBattle extends BaseScene {
             game.npcInfo.isMonsterStongest = true;
             game.monsterStronest();
         }
+        parent.requestRender();
     }
     
     private Handler handler = new FightHandler(new WeakReference<SceneBattle>(this));

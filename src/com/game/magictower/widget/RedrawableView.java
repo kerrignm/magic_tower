@@ -2,17 +2,29 @@ package com.game.magictower.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.game.magictower.util.LogUtil;
 
-public abstract class RedrawableView extends SurfaceView implements SurfaceHolder.Callback {
+public abstract class RedrawableView extends SurfaceView implements SurfaceHolder.Callback, Renderer {
 
     private static final String TAG = "MagicTower:RedrawableView";
     
     private SurfaceHolder holder;
     private RenderThread renderThread;
+    
+    private Object sLock = new Object();
+    
+    private Handler handler = new Handler();
+    private Runnable renderRunnable = new Runnable() {
+        public void run() {
+            synchronized(sLock) {
+                sLock.notifyAll();
+            }
+        }
+    };
     
     public RedrawableView(Context context) {
         super(context);
@@ -41,12 +53,19 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
         if (renderThread != null && renderThread.isAlive()) {
             try {
                 renderThread.stopThread();
+                synchronized(sLock) {
+                    sLock.notifyAll();
+                }
                 renderThread.join();
             } catch (Exception e) {
         
             }
         }
         renderThread = null;
+    }
+    
+    public void requestRender() {
+        handler.post(renderRunnable);
     }
     
     protected abstract void onDrawFrame(Canvas canvas);
@@ -83,18 +102,18 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
         }
         
         public void run() {
-            long startTime, endTime, freeTime;
-            while (!hasStopped) {
-                try {
-                    startTime = System.currentTimeMillis();
-                    redraw();
-                    endTime = System.currentTimeMillis();
-                    freeTime = 17 - (endTime - startTime);
-                    if (freeTime > 0) {
-                        sleep(freeTime);
+            synchronized(sLock) {
+                while (!hasStopped) {
+                    try {
+                        redraw();
+                    } catch (Exception e) {
+                        LogUtil.w(TAG, "exception while rendering:" + e.getMessage());
                     }
-                } catch (Exception e) {
-                    LogUtil.w(TAG, "exception while rendering:" + e.getMessage());
+                    try {
+                        sLock.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
         };

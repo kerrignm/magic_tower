@@ -78,12 +78,14 @@ public class GameView extends RedrawableView {
     private void addChild(BaseView child) {
         mChildrens.add(child);
         child.setOnClickListener(btnClickListener);
+        child.setRenderer(this);
     }
     
     private onClickListener btnClickListener = new onClickListener() {
         @Override
         public void onClicked(int id) {
             getScene().onAction(id);
+            requestRender();
         }
     };
     
@@ -97,6 +99,7 @@ public class GameView extends RedrawableView {
                 mFocused.onTouch(event);
                 result = true;
                 mFocused = null;
+                requestRender();
             }
             return result;
         }
@@ -134,6 +137,9 @@ public class GameView extends RedrawableView {
             }
             break;
         }
+        if (result) {
+            requestRender();
+        }
         return result;
     }
     
@@ -147,6 +153,15 @@ public class GameView extends RedrawableView {
         drawScene(canvas);
         drawChildrens(canvas);
         drawToast(canvas);
+    }
+    
+    protected void onPause() {
+        handler.removeMessages(MSG_ID_ANI);
+    }
+    
+    protected void onResume() {
+        handler.removeMessages(MSG_ID_ANI);
+        handler.sendEmptyMessageDelayed(MSG_ID_ANI, MSG_DELAY_ANI);
     }
     
     private void drawScene(Canvas canvas) {
@@ -170,9 +185,11 @@ public class GameView extends RedrawableView {
     
     private Handler handler = new MessagHandler(new WeakReference<GameView>(this));
     
-    private static final int MSG_DISPLAY_TIMEOUT = 20;
+    private static final int MSG_ID_DISPLAY_TIMEOUT = 20;
+    private static final int MSG_ID_ANI = 30;
     
-    private static final int MSGISPLAY_TIMEOUT_DELAY = 1000;
+    private static final int MSG_DELAY_DISPLAY_TIMEOUT = 1000;
+    private static final int MSG_DELAY_ANI = 500;
     
     private static final class MessagHandler extends Handler {
         private WeakReference<GameView> wk;
@@ -186,10 +203,15 @@ public class GameView extends RedrawableView {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             GameView gameview = wk.get();
-            if (msg.what == MSG_DISPLAY_TIMEOUT && gameview != null) {
+            if (msg.what == MSG_ID_DISPLAY_TIMEOUT && gameview != null) {
                 gameview.isToastShowing = false;
                 BaseView.setForbidTouch(false);
-             }
+                gameview.requestRender();
+            } else if (msg.what == MSG_ID_ANI && gameview != null) {
+                BaseScene.updateAni();
+                gameview.requestRender();
+                gameview.handler.sendEmptyMessageDelayed(MSG_ID_ANI, MSG_DELAY_ANI);
+            }
         }
     }
     
@@ -227,7 +249,7 @@ public class GameView extends RedrawableView {
         isToastShowing = true;
         BaseView.setForbidTouch(true);
         mMsg = msg;
-        handler.sendEmptyMessageDelayed(MSG_DISPLAY_TIMEOUT, MSGISPLAY_TIMEOUT_DELAY);
+        handler.sendEmptyMessageDelayed(MSG_ID_DISPLAY_TIMEOUT, MSG_DELAY_DISPLAY_TIMEOUT);
         
     }
     

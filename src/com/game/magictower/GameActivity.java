@@ -55,6 +55,7 @@ public class GameActivity extends Activity implements GameControler {
         if (Settings.isVoiceEnabled()) {
             pauseBackgroundMusic();
         }
+        gameView.onPause();
         LogUtil.d(TAG, "onPause()");
     }
     
@@ -64,6 +65,7 @@ public class GameActivity extends Activity implements GameControler {
         if (Settings.isVoiceEnabled()) {
             resumeBackgroundMusic();
         }
+        gameView.onResume();
         LogUtil.d(TAG, "onResume()");
     }
     

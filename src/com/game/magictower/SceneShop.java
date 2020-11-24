@@ -44,6 +44,7 @@ public class SceneShop extends BaseScene {
         this.id = shopId;
         mSelected = 0;
         game.status = Status.Shopping;
+        parent.requestRender();
     }
     
     @Override
@@ -59,6 +60,7 @@ public class SceneShop extends BaseScene {
                 } else {
                     selected();
                 }
+                parent.requestRender();
             }
             break;
         case MotionEvent.ACTION_MOVE:
@@ -69,6 +71,7 @@ public class SceneShop extends BaseScene {
         case MotionEvent.ACTION_CANCEL:
         case MotionEvent.ACTION_OUTSIDE:
             result = true;
+            parent.requestRender();
             break;
         }
         return result;

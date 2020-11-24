@@ -15,6 +15,8 @@ public abstract class BaseView {
     
     protected onClickListener listener;
     
+    protected Renderer renderer;
+    
     protected Rect rect;
     protected final int id;
     protected final int x;
@@ -53,6 +55,10 @@ public abstract class BaseView {
     
     public int getId() {
         return id;
+    }
+    
+    public void setRenderer(Renderer renderer) {
+        this.renderer = renderer;
     }
     
     public interface onClickListener{

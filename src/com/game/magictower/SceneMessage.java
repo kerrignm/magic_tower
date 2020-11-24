@@ -79,6 +79,7 @@ public class SceneMessage extends BaseScene {
             TowerDimen.R_ALERT_INFO.bottom = TowerDimen.R_ALERT_INFO.top + TowerDimen.TOWER_GRID_SIZE * mInfo.size();
             TowerDimen.R_ALERT.bottom = TowerDimen.R_ALERT_INFO.bottom + TowerDimen.TOWER_GRID_SIZE / 2;
         }
+        parent.requestRender();
     }
     
     @Override
@@ -124,6 +125,7 @@ public class SceneMessage extends BaseScene {
             }
             canvas.restore();
             mCurScroll++;
+            parent.requestRender();
             if (mCurScroll >= mMaxScroll) {
                 messageOver();
             }
@@ -154,6 +156,7 @@ public class SceneMessage extends BaseScene {
             game.status = Status.Playing;
             break;
         }
+        parent.requestRender();
     }
 
 }
