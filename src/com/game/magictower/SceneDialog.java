@@ -41,7 +41,7 @@ public class SceneDialog extends BaseScene {
         mNpcIcn = Assets.getInstance().animMap0.get(npcId);
         prepareTalkInfo(dialogId);
         getTalkInfo();
-        game.status = Status.Dialoguing;
+        game.status = Status.Dialoging;
         parent.requestRender();
     }
     

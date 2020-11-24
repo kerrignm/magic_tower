@@ -27,8 +27,8 @@ public class NpcInfo {
     public boolean isHasJump = false;
     public boolean isHasHammer = false;
     
-    public boolean isMonsterStonger = false;
-    public boolean isMonsterStongest = false;
+    public boolean isMonsterStronger = false;
+    public boolean isMonsterStrongest = false;
     
     public NpcInfo() {
         reset();
@@ -44,7 +44,7 @@ public class NpcInfo {
         isHasForecast = false;
         isHasJump = false;
         isHasHammer = false;
-        isMonsterStonger = false;
-        isMonsterStongest = false;
+        isMonsterStronger = false;
+        isMonsterStrongest = false;
     }
 }

@@ -225,7 +225,7 @@ public class GameView extends RedrawableView {
             return sceneShop;
         case Messaging:
             return sceneMessage;
-        case Dialoguing:
+        case Dialoging:
             return sceneDialog;
         case Looking:
             return sceneForecast;

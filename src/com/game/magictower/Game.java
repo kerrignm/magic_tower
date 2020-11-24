@@ -23,7 +23,7 @@ public class Game {
         Fighting,
         Shopping,
         Messaging,
-        Dialoguing,
+        Dialoging,
         Looking,
         Jumping;
     }
@@ -118,8 +118,8 @@ public class Game {
         return true;
     }
     
-    public void monsterStonger() {
-        if (npcInfo.isMonsterStonger) {
+    public void monsterStronger() {
+        if (npcInfo.isMonsterStronger) {
             for(int key : monsters.keySet()) {
                 monsters.get(key).setStronger();
             }
@@ -127,7 +127,7 @@ public class Game {
     }
     
     public void monsterStronest() {
-        if (npcInfo.isMonsterStongest) {
+        if (npcInfo.isMonsterStrongest) {
             for(int key : monsters.keySet()) {
                 monsters.get(key).setStrongest();
             }
@@ -148,7 +148,7 @@ public class Game {
     
     private void resetMonster() {
         monsters = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "monster.json"), new TypeToken<HashMap<Integer, Monster>>(){}.getType());
-        monsterStonger();
+        monsterStronger();
         monsterStronest();
     }
     

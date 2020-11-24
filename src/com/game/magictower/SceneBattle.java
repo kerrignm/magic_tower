@@ -136,10 +136,10 @@ public class SceneBattle extends BaseScene {
             parent.showDialog(14, 59);
         }
         if ((game.npcInfo.curFloor == 16) && (mMonster.getId() == 53)) {
-            game.npcInfo.isMonsterStonger = true;
-            game.monsterStonger();
+            game.npcInfo.isMonsterStronger = true;
+            game.monsterStronger();
         } else if ((game.npcInfo.curFloor == 19) && (mMonster.getId() == 59)) {
-            game.npcInfo.isMonsterStongest = true;
+            game.npcInfo.isMonsterStrongest = true;
             game.monsterStronest();
         }
         parent.requestRender();
