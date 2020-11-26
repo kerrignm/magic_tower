@@ -2,6 +2,7 @@ package com.game.magictower.widget;
 
 import java.lang.ref.WeakReference;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -10,7 +11,6 @@ import android.view.MotionEvent;
 
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
-import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 
 public class BaseButton extends BaseView {
@@ -20,12 +20,11 @@ public class BaseButton extends BaseView {
     public static final int ID_RIGHT = 2;
     public static final int ID_DOWN = 3;
     public static final int ID_QUIT = 4;
-    public static final int ID_NEW = 5;
-    public static final int ID_SAVE = 6;
-    public static final int ID_READ = 7;
-    public static final int ID_LOOK = 8;
-    public static final int ID_JUMP = 9;
-    public static final int ID_OK = 10;
+    public static final int ID_SAVE = 5;
+    public static final int ID_READ = 6;
+    public static final int ID_LOOK = 7;
+    public static final int ID_JUMP = 8;
+    public static final int ID_OK = 9;
     
     public static Rect[] BTN_RECTS = {
         TowerDimen.R_BTN_U,
@@ -33,7 +32,6 @@ public class BaseButton extends BaseView {
         TowerDimen.R_BTN_R,
         TowerDimen.R_BTN_D,
         TowerDimen.R_BTN_Q,
-        TowerDimen.R_BTN_N,
         TowerDimen.R_BTN_S,
         TowerDimen.R_BTN_A,
         TowerDimen.R_BTN_K,
@@ -42,8 +40,8 @@ public class BaseButton extends BaseView {
     };
     protected boolean isPressed;
     protected boolean repeat;
-    protected LiveBitmap bkgNormal;
-    protected LiveBitmap bkgPressed;
+    protected Bitmap bkgNormal;
+    protected Bitmap bkgPressed;
     
     public BaseButton(int id, int x, int y, int w, int h, boolean repeat) {
         super(id, x, y, w, h);

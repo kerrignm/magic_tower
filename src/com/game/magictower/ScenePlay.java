@@ -51,7 +51,7 @@ public class ScenePlay extends BaseScene {
         mPathRects = new Rect[11][11];
         for(int i = 0; i < mPathRects.length; i++) {
             for (int j = 0; j < mPathRects[i].length; j++) {
-                mPathRects[i][j] = RectUtil.createRect(TowerDimen.R_TOUCH_GRID, j * TowerDimen.TOWER_GRID_SIZE, i * TowerDimen.TOWER_GRID_SIZE);
+                mPathRects[i][j] = RectUtil.createRect(TowerDimen.R_TOUCH_GRID, j * TowerDimen.GRID_SIZE, i * TowerDimen.GRID_SIZE);
             }
         }
         astarPath = new AStarPath(11, 11);
@@ -161,8 +161,8 @@ public class ScenePlay extends BaseScene {
     
     private Point getTouchGrid(int x, int y) {
         Point point = new Point();
-        point.x = (x - rect.left) / TowerDimen.TOWER_GRID_SIZE;
-        point.y = (y - rect.top) / TowerDimen.TOWER_GRID_SIZE;
+        point.x = (x - rect.left) / TowerDimen.GRID_SIZE;
+        point.y = (y - rect.top) / TowerDimen.GRID_SIZE;
         return point;
     }
     
@@ -205,9 +205,9 @@ public class ScenePlay extends BaseScene {
     private void drawGrid(Canvas canvas) {
         if (canReach) {
             if (touchPoint != null) {
-                Rect r = RectUtil.createRect(rect.left + touchPoint.x * TowerDimen.TOWER_GRID_SIZE,
-                            rect.top + touchPoint.y * TowerDimen.TOWER_GRID_SIZE,
-                            TowerDimen.TOWER_GRID_SIZE, TowerDimen.TOWER_GRID_SIZE);
+                Rect r = RectUtil.createRect(rect.left + touchPoint.x * TowerDimen.GRID_SIZE,
+                            rect.top + touchPoint.y * TowerDimen.GRID_SIZE,
+                            TowerDimen.GRID_SIZE, TowerDimen.GRID_SIZE);
                 graphics.drawRect(canvas, r, mTouchPaint);
             }
             AStarPoint current = null;
@@ -270,12 +270,6 @@ public class ScenePlay extends BaseScene {
             break;
         case BaseButton.ID_QUIT:
             game.quitGame();
-            break;
-        case BaseButton.ID_NEW:
-            game.newGame();
-            parent.showToast(R.string.msg_restart);
-            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_RECORD));
-            game.changeMusic();
             break;
         case BaseButton.ID_SAVE:
             if (game.saveGame()) {

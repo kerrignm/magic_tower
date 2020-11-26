@@ -4,11 +4,14 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.view.WindowManager;
 
+import com.game.magictower.util.BitmapUtil;
 import com.game.magictower.util.LogUtil;
 
 public final class Assets {
@@ -177,20 +180,20 @@ public final class Assets {
     
     private static Assets sInstance;
     
-    public LiveBitmap bkgGame;
-    public LiveBitmap bkgBlank;
-    public LiveBitmap bkgBattle;
-    public LiveBitmap bkgBtnNormal;
-    public LiveBitmap bkgBtnPressed;
+    public Bitmap bkgTower;
+    public Bitmap bkgBlank;
+    public Bitmap bkgBattle;
+    public Bitmap bkgBtnNormal;
+    public Bitmap bkgBtnPressed;
     
-    public LiveBitmap leftBtn;
-    public LiveBitmap upBtn;
-    public LiveBitmap rightBtn;
-    public LiveBitmap downBtn;
+    public Bitmap leftBtn;
+    public Bitmap upBtn;
+    public Bitmap rightBtn;
+    public Bitmap downBtn;
     
-    public HashMap<Integer, LiveBitmap> playerMap = new HashMap<>();
-    public HashMap<Integer, LiveBitmap> animMap0 = new HashMap<>();
-    public HashMap<Integer, LiveBitmap> animMap1 = new HashMap<>();
+    public HashMap<Integer, Bitmap> playerMap = new HashMap<>();
+    public HashMap<Integer, Bitmap> animMap0 = new HashMap<>();
+    public HashMap<Integer, Bitmap> animMap1 = new HashMap<>();
     
     private int[] soundIds = new int [soundstrs.length];
     
@@ -249,38 +252,62 @@ public final class Assets {
         
         int completed = hasCompleted;
         
-        bkgGame = LiveBitmap.loadBitmap(context, "bkg_game.png");
+        bkgTower = BitmapUtil.loadBitmap(context, "bkg_tower.png");
         notifyProgressChanged(++completed, total, listener);
-        bkgBlank = LiveBitmap.loadBitmap(context, "bkg_blank.png");
+        bkgBlank = BitmapUtil.loadBitmap(context, "bkg_blank.png");
         notifyProgressChanged(++completed, total, listener);
-        bkgBattle = LiveBitmap.loadBitmap(context, "bkg_battle.png");
+        bkgBattle = BitmapUtil.loadBitmap(context, "bkg_battle.png");
         notifyProgressChanged(++completed, total, listener);
-        bkgBtnNormal = LiveBitmap.loadBitmap(context, "bkg_btn_normal.png");
+        bkgBtnNormal = BitmapUtil.loadBitmap(context, "bkg_btn_normal.png");
         notifyProgressChanged(++completed, total, listener);
-        bkgBtnPressed = LiveBitmap.loadBitmap(context, "bkg_btn_pressed.png");
+        bkgBtnPressed = BitmapUtil.loadBitmap(context, "bkg_btn_pressed.png");
         notifyProgressChanged(++completed, total, listener);
         
-        leftBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_L.width(),TowerDimen.R_BTN_L.height(), leftPath);
-        upBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_U.width(),TowerDimen.R_BTN_U.height(), upPath);
-        rightBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_R.width(),TowerDimen.R_BTN_R.height(), rightPath);
-        downBtn = LiveBitmap.creatBitmap(TowerDimen.R_BTN_D.width(),TowerDimen.R_BTN_D.height(), downPath);
+        leftBtn = BitmapUtil.creatBitmap(TowerDimen.R_BTN_L.width(),TowerDimen.R_BTN_L.height(), leftPath);
+        upBtn = BitmapUtil.creatBitmap(TowerDimen.R_BTN_U.width(),TowerDimen.R_BTN_U.height(), upPath);
+        rightBtn = BitmapUtil.creatBitmap(TowerDimen.R_BTN_R.width(),TowerDimen.R_BTN_R.height(), rightPath);
+        downBtn = BitmapUtil.creatBitmap(TowerDimen.R_BTN_D.width(),TowerDimen.R_BTN_D.height(), downPath);
+        
+        Bitmap blankBitmap = Bitmap.createBitmap(point.x, point.y, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas();
+        canvas.setBitmap(blankBitmap);
+        int column = point.x / bkgBlank.getWidth();
+        if (point.x % bkgBlank.getWidth() != 0) {
+            column += 1;
+        }
+        int row = point.y / bkgBlank.getHeight();
+        if (point.y % bkgBlank.getHeight() != 0) {
+            row += 1;
+        }
+        int x = 0;
+        int y = 0;
+        for (int i =0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                x = j * bkgBlank.getWidth();
+                y = i * bkgBlank.getHeight();
+                canvas.drawBitmap(bkgBlank, x, y, null);
+            }
+        }
+        bkgBlank = blankBitmap;
+        /*String fileName = context.getExternalFilesDir(null).getPath() + File.separator + "bkg_blank.png";
+        BitmapUtil.saveBitmapToFile(fileName, blankBitmap);*/
        
         playerMap.clear();
-        playerMap.put(PLAYER_LEFT, LiveBitmap.loadBitmap(context, "left.png"));
-        playerMap.put(PLAYER_RIGHT, LiveBitmap.loadBitmap(context, "right.png"));
-        playerMap.put(PLAYER_UP, LiveBitmap.loadBitmap(context, "up.png"));
-        playerMap.put(PLAYER_DOWN, LiveBitmap.loadBitmap(context, "down.png"));
+        playerMap.put(PLAYER_LEFT, BitmapUtil.loadBitmap(context, "left.png"));
+        playerMap.put(PLAYER_RIGHT, BitmapUtil.loadBitmap(context, "right.png"));
+        playerMap.put(PLAYER_UP, BitmapUtil.loadBitmap(context, "up.png"));
+        playerMap.put(PLAYER_DOWN, BitmapUtil.loadBitmap(context, "down.png"));
         completed += 4;
         notifyProgressChanged(completed, total, listener);
         
         
         for (int i = 0; i < IMAGE_ID.length; i++) {
-            animMap0.put(IMAGE_ID[i], LiveBitmap.loadBitmap(context, "map0/" + IMAGE_ID[i] + ".png"));
+            animMap0.put(IMAGE_ID[i], BitmapUtil.loadBitmap(context, "map0/" + IMAGE_ID[i] + ".png"));
             ++completed;
         }
         notifyProgressChanged(completed, total, listener);
         for (int i = 0; i < IMAGE_ID.length; i++) {
-            animMap1.put(IMAGE_ID[i], LiveBitmap.loadBitmap(context, "map1/" + IMAGE_ID[i] + ".png"));
+            animMap1.put(IMAGE_ID[i], BitmapUtil.loadBitmap(context, "map1/" + IMAGE_ID[i] + ".png"));
             ++completed;
         }
         notifyProgressChanged(completed, total, listener);

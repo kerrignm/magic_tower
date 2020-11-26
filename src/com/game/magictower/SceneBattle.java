@@ -3,6 +3,7 @@ package com.game.magictower;
 import java.lang.ref.WeakReference;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +12,6 @@ import com.game.magictower.Game.Status;
 import com.game.magictower.model.Monster;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
-import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.MathUtil;
 
@@ -22,7 +22,7 @@ public class SceneBattle extends BaseScene {
     private int mX;
     private int mY;
     private int mHp;
-    private LiveBitmap mMstIcon;
+    private Bitmap mMstIcon;
     private int mAttack;
     private int mDefend;
     private String mMstHp;

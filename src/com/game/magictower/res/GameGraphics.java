@@ -2,6 +2,7 @@ package com.game.magictower.res;
 
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -75,7 +76,7 @@ public final class GameGraphics {
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
-    public void drawBitmap(Canvas canvas, LiveBitmap bitmap, int x, int y, int srcX, int srcY,
+    public void drawBitmap(Canvas canvas, Bitmap bitmap, int x, int y, int srcX, int srcY,
             int srcWidth, int srcHeight) {
         srcRect.left = srcX;
         srcRect.top = srcY;
@@ -87,11 +88,11 @@ public final class GameGraphics {
         dstRect.right = x + srcWidth;
         dstRect.bottom = y + srcHeight;
 
-        canvas.drawBitmap(bitmap.getBitmap(), srcRect, dstRect, null);
+        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
     }
 
-    public void drawBitmap(Canvas canvas, LiveBitmap bitmap, Rect src, Rect dst, Paint paint) {
-        canvas.drawBitmap(bitmap.getBitmap(), src, dst, paint);
+    public void drawBitmap(Canvas canvas, Bitmap bitmap, Rect src, Rect dst, Paint paint) {
+        canvas.drawBitmap(bitmap, src, dst, paint);
     }
 
     public final void setAlpha(int alpha){
@@ -107,25 +108,25 @@ public final class GameGraphics {
     }
 
     public void drawBitmapUsingAlpha(Canvas canvas,
-            LiveBitmap bitmap, int x, int y) {
-        canvas.drawBitmap(bitmap.getBitmap(), x, y,
+            Bitmap bitmap, int x, int y) {
+        canvas.drawBitmap(bitmap, x, y,
                 getCorrespondingPaint());
     }
     
-    public void drawBitmap(Canvas canvas, LiveBitmap bitmap, int x, int y) {
-        canvas.drawBitmap(bitmap.getBitmap(), x, y, null);
+    public void drawBitmap(Canvas canvas, Bitmap bitmap, int x, int y) {
+        canvas.drawBitmap(bitmap, x, y, null);
     }
 
-    public void drawBitmap(Canvas canvas, LiveBitmap bitmap, int x, int y, int srcWidth,
+    public void drawBitmap(Canvas canvas, Bitmap bitmap, int x, int y, int srcWidth,
             int srcHeight) {
         dstRect.left = x;
         dstRect.top = y;
         dstRect.right = x + srcWidth;
         dstRect.bottom = y + srcHeight;
-        canvas.drawBitmap(bitmap.getBitmap(), null, dstRect, null);
+        canvas.drawBitmap(bitmap, null, dstRect, null);
     }
 
-    public void drawBitmapInParentCenter(Canvas canvas, LiveBitmap bitmap, Point center) {
+    public void drawBitmapInParentCenter(Canvas canvas, Bitmap bitmap, Point center) {
         int x = center.x - (int) (bitmap.getWidth() / 2 + 0.5f);
         int y = center.y - (int) (bitmap.getHeight() / 2 + 0.5f);
         drawBitmap(canvas, bitmap, x, y);
@@ -137,27 +138,6 @@ public final class GameGraphics {
 
     public void drawRect(Canvas canvas, Rect rect, Paint paint) {
         canvas.drawRect(rect, paint);
-    }
-    
-    public void drawNumericText(Canvas canvas, LiveBitmap numbeBitmap, String msg, int x, int y) {
-        if (!msg.matches("[0-9 ]*")){
-            throw new IllegalArgumentException("drawable msg should contain only numbers and spaces. msg="+msg);
-        }
-        int len = msg.length();
-        for (int i = 0; i < len; i++) {
-            char character = msg.charAt(i);
-
-            if (character == ' ') {
-                x += 20;
-                continue;
-            }
-
-            int srcX = (character - '0') * 17;
-            int srcWidth = 17;
-                
-            drawBitmap(canvas, numbeBitmap, x, y, srcX, 0, srcWidth, 21);
-            x += srcWidth;
-        }
     }
     
     public void drawText(Canvas canvas, String msg, int x, int y) {
@@ -204,10 +184,10 @@ public final class GameGraphics {
         getCorrespondingPaint());
     }
 
-    public Point getCenter(LiveBitmap pixmap, float x, float y)
+    public Point getCenter(Bitmap pixmap, float x, float y)
     {
-        int centerX = (int) (x + pixmap.getRawWidth() / 2 + 0.5f);
-        int centerY = (int) (y + pixmap.getRawHeight() / 2 + 0.5f);
+        int centerX = (int) (x + pixmap.getWidth() / 2 + 0.5f);
+        int centerY = (int) (y + pixmap.getHeight() / 2 + 0.5f);
         return new Point(centerX, centerY);
     }
     

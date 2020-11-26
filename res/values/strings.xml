@@ -9,7 +9,6 @@
     <string name="loading_load_game">旧的回忆</string>
     
     <string name="btn_quit">Quit</string>
-    <string name="btn_new">Reset</string>
     <string name="btn_save">Save</string>
     <string name="btn_load">Load</string>
     <string name="btn_look">Look</string>
@@ -22,6 +21,12 @@
     <string name="read_succeed">数据读取成功！</string>
     <string name="read_failed">数据读取失败！</string>
     
+    <string name="panel_level">级</string>
+    <string name="panel_number">个</string>
+    <string name="panel_serial">第</string>
+    <string name="panel_layer">层</string>
+    <string name="panel_prologue">序\u3000章</string>
+    
     <string name="msg_upstairs">上楼······</string>
     <string name="msg_downstairs">下楼······</string>
     
@@ -29,12 +34,14 @@
     
     <string name="exclamatory_colon">： </string>
     
-    <string name="monster_name">名称</string>
-    <string name="monster_hp">生命 </string>
-    <string name="monster_attack">攻击 </string>
-    <string name="monster_defend">防御 </string>
-    <string name="monster_money">金 · 经 </string>
-    <string name="monster_lose">损失 </string>
+    <string name="txt_name">名称</string>
+    <string name="txt_hp">生命 </string>
+    <string name="txt_attack">攻击 </string>
+    <string name="txt_defend">防御 </string>
+    <string name="txt_money">金币 </string>
+    <string name="txt_exp">经验 </string>
+    <string name="txt_money_exp">金 · 经 </string>
+    <string name="txt_lose">损失 </string>
     
     <string name="jump_ordinal_floor">第<xliff:g id="1">%d</xliff:g>层</string>
     

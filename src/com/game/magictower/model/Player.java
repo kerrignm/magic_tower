@@ -1,7 +1,8 @@
 package com.game.magictower.model;
 
+import android.graphics.Bitmap;
+
 import com.game.magictower.res.Assets;
-import com.game.magictower.res.LiveBitmap;
 
 public class Player {
     
@@ -47,7 +48,7 @@ public class Player {
         posY = cy;
     }
 
-    public LiveBitmap getImage() {
+    public Bitmap getImage() {
         if (toward == 0)
             return Assets.getInstance().playerMap.get(-1);
         if (toward == 1)

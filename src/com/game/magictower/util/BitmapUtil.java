@@ -6,13 +6,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
+
+import com.game.magictower.res.TowerDimen;
 
 public final class BitmapUtil {
     
@@ -25,6 +30,52 @@ public final class BitmapUtil {
             return bitmap.getByteCount();
         }
         return bitmap.getRowBytes() * bitmap.getHeight();               //earlier version
+    }
+
+    public static final Bitmap loadBitmap(Context context, String assets) {
+        Bitmap instance = null;
+        AssetManager am = context.getAssets();
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(am.open("image/" + assets));
+            instance = scaleBitmap(bitmap, TowerDimen.TOWER_SCALE, TowerDimen.TOWER_SCALE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return instance;
+    }
+    
+    public static final Bitmap loadBitmap(Context context, String assets,
+            int width, int height) {
+        Bitmap instance = null;
+        AssetManager am = context.getAssets();
+        try {
+            Bitmap bitmap = BitmapFactory.decodeStream(am.open("image/" + assets));
+            if (width != 0 && height != 0) {
+                instance = scaleBitmap(bitmap, width, height);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return instance;
+    }
+    
+    public static final Bitmap creatBitmap(Bitmap bitmap, float scaleX, float scaleY) {
+        bitmap = scaleBitmap(bitmap, TowerDimen.TOWER_SCALE, TowerDimen.TOWER_SCALE);
+        return bitmap;
+    }
+    
+    public static final Bitmap creatBitmap(int width, int height, float[] pointArray) {
+        Path path = new Path();
+        for (int i = 0; i < pointArray.length / 2; i++) {
+            if (i == 0) {
+                path.moveTo(width * pointArray[i * 2], height * pointArray[i * 2 + 1]);
+            } else {
+                path.lineTo(width * pointArray[i * 2], height * pointArray[i * 2 + 1]);
+            }
+        }
+        path.close();
+        Bitmap bitmap = creatBitmap(width, height, path);
+        return bitmap;
     }
     
     public static final Bitmap scaleBitmap(Bitmap bitmap, int width, int height) {

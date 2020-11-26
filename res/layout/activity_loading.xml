@@ -2,56 +2,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blank_bg"
+    android:background="@drawable/bkg_blank"
     tools:context="${relativePackage}.${activityClass}" >
 
-    <ImageView
-        android:id="@+id/loading_img_icon"
-        android:contentDescription="@string/app_name"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/ic_launcher" />
-
-    <FrameLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loading_img_icon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" >
+        android:layout_centerInParent="true" >
 
-        <ProgressBar
-            android:id="@+id/loading_prg"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:max="100" />
-
-        <LinearLayout
-            android:id="@+id/loading_ll_btns"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible">
-
-            <ToggleButton
-                android:id="@+id/loading_tgb_voice"
-                style="@style/LoadingMenuBtn"
-                android:textOff="@string/loading_voice_disable"
-                android:textOn="@string/loading_voice_enable"
-                android:checked="true" />
-
-            <Button
-                android:id="@+id/loading_btn_startgame"
-                style="@style/LoadingMenuBtn"
-                android:text="@string/loading_start_game" />
-
-            <Button
-                android:id="@+id/loading_btn_loadgame"
-                style="@style/LoadingMenuBtn"
-                android:text="@string/loading_load_game" />
-        </LinearLayout>
-    </FrameLayout>
+	    <ImageView
+	        android:id="@+id/loading_img_icon"
+	        android:contentDescription="@string/app_name"
+	        android:layout_width="100dp"
+	        android:layout_height="100dp"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_marginTop="50dp"
+	        android:background="@drawable/ic_launcher" />
+	
+	    <FrameLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="50dp" >
+	
+	        <ProgressBar
+	            android:id="@+id/loading_prg"
+	            style="@android:style/Widget.ProgressBar.Horizontal"
+	            android:layout_width="250dp"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:max="100" />
+	
+	        <LinearLayout
+	            android:id="@+id/loading_ll_btns"
+	            android:orientation="vertical"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_horizontal"
+	            android:visibility="invisible">
+	
+	            <ToggleButton
+	                android:id="@+id/loading_tgb_voice"
+	                style="@style/LoadingMenuBtn"
+	                android:textOff="@string/loading_voice_disable"
+	                android:textOn="@string/loading_voice_enable"
+	                android:checked="true" />
+	
+	            <Button
+	                android:id="@+id/loading_btn_startgame"
+	                style="@style/LoadingMenuBtn"
+	                android:text="@string/loading_start_game" />
+	
+	            <Button
+	                android:id="@+id/loading_btn_loadgame"
+	                style="@style/LoadingMenuBtn"
+	                android:text="@string/loading_load_game" />
+	        </LinearLayout>
+	    </FrameLayout>
+    </LinearLayout>
 
 </RelativeLayout>

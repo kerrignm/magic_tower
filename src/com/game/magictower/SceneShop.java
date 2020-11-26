@@ -3,6 +3,7 @@ package com.game.magictower;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
@@ -11,7 +12,6 @@ import android.view.MotionEvent;
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
-import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.RectUtil;
 import com.game.magictower.widget.BaseButton;
@@ -19,12 +19,13 @@ import com.game.magictower.widget.BaseButton;
 public class SceneShop extends BaseScene {
 
     ArrayList<String> choices;
-    private LiveBitmap imgIcon;
+    private Bitmap imgIcon;
     private int id = 0;
     private int mSelected = 0;
     private Rect[] mTextRect = new Rect[4];
     private Rect[] mEdgeRect = new Rect[4];
     private Rect mTouchRect;
+    private Rect mBgd;
     
     public SceneShop(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
@@ -36,6 +37,7 @@ public class SceneShop extends BaseScene {
             mEdgeRect[i] = new Rect(mTextRect[i].left, mTextRect[i].top + 5, mTextRect[i].right, mTextRect[i].bottom - 5);
         }
         mTouchRect = new Rect(TowerDimen.R_SHOP_TEXT.left, TowerDimen.R_SHOP_TEXT.top, TowerDimen.R_SHOP_TEXT.right, TowerDimen.R_SHOP_TEXT.top + TowerDimen.R_SHOP_TEXT.height() * 4);
+        mBgd = new Rect(0, 0, TowerDimen.R_SHOP.width(), TowerDimen.R_SHOP.height());
     }
 
     public void show(int shopId, int npcId) {
@@ -86,7 +88,7 @@ public class SceneShop extends BaseScene {
     @Override
     public void onDrawFrame(Canvas canvas) {
         super.onDrawFrame(canvas);
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_SHOP, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mBgd, TowerDimen.R_SHOP, null);
         graphics.drawRect(canvas, TowerDimen.R_SHOP);
         graphics.drawBitmap(canvas, imgIcon, TowerDimen.R_SHOP_ICON.left, TowerDimen.R_SHOP_ICON.top);
         for (int i = 0; i < 4; i++) {

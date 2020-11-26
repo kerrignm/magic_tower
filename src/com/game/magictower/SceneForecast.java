@@ -31,14 +31,17 @@ public class SceneForecast extends BaseScene {
     private String mMoney;
     private String mLose;
     
+    private Rect mBgd;
+    
     public SceneForecast(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
-        mName = mContext.getResources().getString(R.string.monster_name);
-        mHP = mContext.getResources().getString(R.string.monster_hp);
-        mAttack = mContext.getResources().getString(R.string.monster_attack);
-        mDefend = mContext.getResources().getString(R.string.monster_defend);
-        mMoney = mContext.getResources().getString(R.string.monster_money);
-        mLose = mContext.getResources().getString(R.string.monster_lose);
+        mName = mContext.getResources().getString(R.string.txt_name);
+        mHP = mContext.getResources().getString(R.string.txt_hp);
+        mAttack = mContext.getResources().getString(R.string.txt_attack);
+        mDefend = mContext.getResources().getString(R.string.txt_defend);
+        mMoney = mContext.getResources().getString(R.string.txt_money_exp);
+        mLose = mContext.getResources().getString(R.string.txt_lose);
+        mBgd = new Rect(0, 0, TowerDimen.R_FORECAST.width(), TowerDimen.R_FORECAST.height());
     }
     
     public static String forecast(Player player, Monster monster) {
@@ -80,7 +83,7 @@ public class SceneForecast extends BaseScene {
     @Override
     public void onDrawFrame(Canvas canvas) {
         super.onDrawFrame(canvas);
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_FORECAST, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mBgd, TowerDimen.R_FORECAST, null);
         graphics.drawRect(canvas, TowerDimen.R_FORECAST);
         
         if (mForecastSet.size() > 0) {
@@ -137,19 +140,19 @@ public class SceneForecast extends BaseScene {
                 mRects[i] = new Rect[7];
                 monster = game.monsters.get(mIds[i]);
                 mRects[i][0] = new Rect(TowerDimen.R_FC_ICON);
-                mRects[i][0].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][0].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mRects[i][1] = new Rect(TowerDimen.R_FC_NAME);
-                mRects[i][1].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][1].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mRects[i][2] = new Rect(TowerDimen.R_FC_HP);
-                mRects[i][2].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][2].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mRects[i][3] = new Rect(TowerDimen.R_FC_ATTACK);
-                mRects[i][3].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][3].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mRects[i][4] = new Rect(TowerDimen.R_FC_DEFEND);
-                mRects[i][4].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][4].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mRects[i][5] = new Rect(TowerDimen.R_FC_MONEY);
-                mRects[i][5].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][5].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mRects[i][6] = new Rect(TowerDimen.R_FC_LOSE);
-                mRects[i][6].offset(0, (i + 1) * TowerDimen.TOWER_GRID_SIZE);
+                mRects[i][6].offset(0, (i + 1) * TowerDimen.GRID_SIZE);
                 mHPs[i] = monster.getHp() + "";
                 mAttacks[i] = monster.getAttack() + "";
                 mDefends[i] = monster.getDefend() + "";

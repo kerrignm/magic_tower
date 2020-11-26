@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
@@ -36,6 +37,7 @@ public class GameView extends RedrawableView {
     
     private boolean isToastShowing = false;
     private String mMsg;
+    private Rect mMsgBgd;
     
     private ScenePlay scenePlay;
     private SceneBattle sceneBattle;
@@ -51,13 +53,15 @@ public class GameView extends RedrawableView {
         this.game = Game.getInstance();
         graphics = GameGraphics.getInstance();
         createChildrens();
-        scenePlay = new ScenePlay(this, context, game, 30, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
-        sceneBattle = new SceneBattle(this, context, game, 31, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
-        sceneShop = new SceneShop(this, context, game, 32, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
-        sceneMessage = new SceneMessage(this, context, game, 33, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
-        sceneDialog = new SceneDialog(this, context, game, 34, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
-        sceneForecast = new SceneForecast(this, context, game, 35, TowerDimen.R_PLAY.left, TowerDimen.R_PLAY.top, TowerDimen.R_PLAY.width(), TowerDimen.R_PLAY.height());
+        scenePlay = new ScenePlay(this, context, game, 30, TowerDimen.R_TOWER.left, TowerDimen.R_TOWER.top, TowerDimen.R_TOWER.width(), TowerDimen.R_TOWER.height());
+        sceneBattle = new SceneBattle(this, context, game, 31, TowerDimen.R_TOWER.left, TowerDimen.R_TOWER.top, TowerDimen.R_TOWER.width(), TowerDimen.R_TOWER.height());
+        sceneShop = new SceneShop(this, context, game, 32, TowerDimen.R_TOWER.left, TowerDimen.R_TOWER.top, TowerDimen.R_TOWER.width(), TowerDimen.R_TOWER.height());
+        sceneMessage = new SceneMessage(this, context, game, 33, TowerDimen.R_TOWER.left, TowerDimen.R_TOWER.top, TowerDimen.R_TOWER.width(), TowerDimen.R_TOWER.height());
+        sceneDialog = new SceneDialog(this, context, game, 34, TowerDimen.R_TOWER.left, TowerDimen.R_TOWER.top, TowerDimen.R_TOWER.width(), TowerDimen.R_TOWER.height());
+        sceneForecast = new SceneForecast(this, context, game, 35, TowerDimen.R_TOWER.left, TowerDimen.R_TOWER.top, TowerDimen.R_TOWER.width(), TowerDimen.R_TOWER.height());
         sceneJump = new SceneJump(this, context, game, 36, TowerDimen.R_JUMP.left, TowerDimen.R_JUMP.top, TowerDimen.R_JUMP.width(), TowerDimen.R_JUMP.height());
+        
+        mMsgBgd = new Rect(0, 0, TowerDimen.R_MSG.width(), TowerDimen.R_MSG.height());
     }
 
     private void createChildrens() {
@@ -66,7 +70,6 @@ public class GameView extends RedrawableView {
         addChild(BitmapButton.create(BaseButton.ID_RIGHT, Assets.getInstance().rightBtn, true));
         addChild(BitmapButton.create(BaseButton.ID_DOWN, Assets.getInstance().downBtn, true));
         addChild(TextButton.create(BaseButton.ID_QUIT, getResources().getString(R.string.btn_quit), false));
-        addChild(TextButton.create(BaseButton.ID_NEW, getResources().getString(R.string.btn_new), false));
         addChild(TextButton.create(BaseButton.ID_SAVE, getResources().getString(R.string.btn_save), false));
         addChild(TextButton.create(BaseButton.ID_READ, getResources().getString(R.string.btn_load), false));
         addChild(TextButton.create(BaseButton.ID_LOOK, getResources().getString(R.string.btn_look), false));
@@ -176,8 +179,7 @@ public class GameView extends RedrawableView {
     
     private void drawToast(Canvas canvas) {
         if (isToastShowing) {
-            graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, TowerDimen.R_MSG.left, TowerDimen.R_MSG.top,
-                    TowerDimen.R_MSG.width(), TowerDimen.R_MSG.height());
+            graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mMsgBgd, TowerDimen.R_MSG, null);
             graphics.drawRect(canvas, TowerDimen.R_MSG);
             graphics.drawTextInCenter(canvas, mMsg, TowerDimen.R_MSG, graphics.bigTextPaint);
         }

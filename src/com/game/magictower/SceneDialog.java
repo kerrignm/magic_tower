@@ -3,7 +3,9 @@ package com.game.magictower;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import com.game.magictower.Game.Status;
 import com.game.magictower.model.NpcInfo;
@@ -11,7 +13,6 @@ import com.game.magictower.model.TalkInfo;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.GlobalSoundPool;
-import com.game.magictower.res.LiveBitmap;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
 
@@ -27,11 +28,13 @@ public class SceneDialog extends BaseScene {
     private int mSectionCount;
     private int mLineCount;
     
-    private LiveBitmap mPlayerIcon = Assets.getInstance().playerMap.get(-2);
-    private LiveBitmap mNpcIcn;
+    private Bitmap mPlayerIcon = Assets.getInstance().playerMap.get(-2);
+    private Bitmap mNpcIcn;
+    private Rect mBgd;
     
     public SceneDialog(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
+        mBgd = new Rect(0, 0, TowerDimen.R_DLG_BG.width(), TowerDimen.R_DLG_BG.height());
     }
     
     public void show(int dialogId, int npcId) {
@@ -48,7 +51,7 @@ public class SceneDialog extends BaseScene {
     @Override
     public void onDrawFrame(Canvas canvas) {
         super.onDrawFrame(canvas);
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_DLG_BG, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mBgd, TowerDimen.R_DLG_BG, null);
         graphics.drawRect(canvas, TowerDimen.R_DLG_BG);
         graphics.drawText(canvas, mTkName, TowerDimen.R_DLG_NAME.left, 
                         TowerDimen.R_DLG_NAME.top + TowerDimen.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - TowerDimen.TEXT_SIZE) / 2);

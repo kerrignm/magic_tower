@@ -19,8 +19,10 @@ public class SceneJump extends BaseScene {
     private Rect[][] mEdgeRect;
     private String[][] mFloorName;
     private int mSelected;
-    private Rect mTouchRect = new Rect(TowerDimen.R_JUMP.left + TowerDimen.TOWER_GRID_SIZE / 2, TowerDimen.R_JUMP.top + TowerDimen.TOWER_GRID_SIZE / 2,
-                                    TowerDimen.R_JUMP.right - TowerDimen.TOWER_GRID_SIZE / 2, TowerDimen.R_JUMP.bottom - TowerDimen.TOWER_GRID_SIZE / 2);
+    private Rect mTouchRect = new Rect(TowerDimen.R_JUMP.left + TowerDimen.GRID_SIZE / 2, TowerDimen.R_JUMP.top + TowerDimen.GRID_SIZE / 2,
+                                    TowerDimen.R_JUMP.right - TowerDimen.GRID_SIZE / 2, TowerDimen.R_JUMP.bottom - TowerDimen.GRID_SIZE / 2);
+    
+    private Rect mBgd;
     
     public SceneJump(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
@@ -38,6 +40,7 @@ public class SceneJump extends BaseScene {
                 mFloorName[i][j] = String.format(mContext.getResources().getString(R.string.jump_ordinal_floor), (j * 5 + i + 1));
             }
         }
+        mBgd = new Rect(0, 0, TowerDimen.R_JUMP.width(), TowerDimen.R_JUMP.height());
     }
     
     public void show() {
@@ -93,7 +96,7 @@ public class SceneJump extends BaseScene {
     @Override
     public void onDrawFrame(Canvas canvas) {
         super.onDrawFrame(canvas);
-        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, null, TowerDimen.R_JUMP, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mBgd, TowerDimen.R_JUMP, null);
         graphics.drawRect(canvas, TowerDimen.R_JUMP);
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 4; j++) {

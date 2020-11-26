@@ -33,6 +33,8 @@ public class SceneMessage extends BaseScene {
     private int mMaxScroll;
     private int mCurScroll;
     private Rect mClip;
+    private Rect mAlertBgd;
+    private Rect mScrollBgd;
     
     private Paint shaderPaint = new Paint();
     private LinearGradient fadeOutShader;
@@ -46,8 +48,10 @@ public class SceneMessage extends BaseScene {
         shaderPaint.setStrokeWidth(5);
         shaderPaint.setStyle(Paint.Style.FILL);
         shaderPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        fadeOutShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.TOWER_GRID_SIZE, 0, TowerDimen.R_AUTO_SCROLL_INFO.top, Color.WHITE, 0, Shader.TileMode.CLAMP);
-        fadeInShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.bottom, 0, TowerDimen.R_AUTO_SCROLL_INFO.bottom - TowerDimen.TOWER_GRID_SIZE, 0, Color.WHITE, Shader.TileMode.CLAMP);
+        fadeOutShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.GRID_SIZE, 0, TowerDimen.R_AUTO_SCROLL_INFO.top, Color.WHITE, 0, Shader.TileMode.CLAMP);
+        fadeInShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.bottom, 0, TowerDimen.R_AUTO_SCROLL_INFO.bottom - TowerDimen.GRID_SIZE, 0, Color.WHITE, Shader.TileMode.CLAMP);
+        mAlertBgd = new Rect(0, 0, TowerDimen.R_ALERT.width(), TowerDimen.R_ALERT.height());
+        mScrollBgd = new Rect(0, 0, TowerDimen.R_AUTO_SCROLL.width(), TowerDimen.R_AUTO_SCROLL.height());
     }
     
     public void show(int titleId, int msgId, int mode) {
@@ -70,14 +74,14 @@ public class SceneMessage extends BaseScene {
             mInfo = GameGraphics.getInstance().splitToLines(mMsg, TowerDimen.R_ALERT_INFO.width(), GameGraphics.getInstance().bigTextPaint);
         }
         if (mMode == MODE_AUTO_SCROLL) {
-            mMaxScroll = mInfo.size() * TowerDimen.TOWER_GRID_SIZE - (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE);
-            mCurScroll = TowerDimen.TOWER_GRID_SIZE * 2 - TowerDimen.R_AUTO_SCROLL_INFO.height();
-            mMinY = TowerDimen.R_AUTO_SCROLL_INFO.top + (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2;
-            mMaxY = TowerDimen.R_AUTO_SCROLL_INFO.bottom - (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 + TowerDimen.TOWER_GRID_SIZE;
-            mClip = new Rect(TowerDimen.R_AUTO_SCROLL_INFO.left, mMinY, TowerDimen.R_AUTO_SCROLL_INFO.right, mMaxY - TowerDimen.TOWER_GRID_SIZE);
+            mMaxScroll = mInfo.size() * TowerDimen.GRID_SIZE - (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE);
+            mCurScroll = TowerDimen.GRID_SIZE * 2 - TowerDimen.R_AUTO_SCROLL_INFO.height();
+            mMinY = TowerDimen.R_AUTO_SCROLL_INFO.top + (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2;
+            mMaxY = TowerDimen.R_AUTO_SCROLL_INFO.bottom - (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 + TowerDimen.GRID_SIZE;
+            mClip = new Rect(TowerDimen.R_AUTO_SCROLL_INFO.left, mMinY, TowerDimen.R_AUTO_SCROLL_INFO.right, mMaxY - TowerDimen.GRID_SIZE);
         } else if (mMode == MODE_ALERT) {
-            TowerDimen.R_ALERT_INFO.bottom = TowerDimen.R_ALERT_INFO.top + TowerDimen.TOWER_GRID_SIZE * mInfo.size();
-            TowerDimen.R_ALERT.bottom = TowerDimen.R_ALERT_INFO.bottom + TowerDimen.TOWER_GRID_SIZE / 2;
+            TowerDimen.R_ALERT_INFO.bottom = TowerDimen.R_ALERT_INFO.top + TowerDimen.GRID_SIZE * mInfo.size();
+            TowerDimen.R_ALERT.bottom = TowerDimen.R_ALERT_INFO.bottom + TowerDimen.GRID_SIZE / 2;
         }
         parent.requestRender();
     }
@@ -87,35 +91,33 @@ public class SceneMessage extends BaseScene {
         super.onDrawFrame(canvas);
         switch (mMode) {
         case MODE_ALERT:
-            graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, TowerDimen.R_ALERT.left, TowerDimen.R_ALERT.top,
-                    TowerDimen.R_ALERT.width(), TowerDimen.R_ALERT.height());
+            graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mAlertBgd, TowerDimen.R_ALERT, null);
             graphics.drawRect(canvas, TowerDimen.R_ALERT);
             graphics.drawTextInCenter(canvas, mTitle, TowerDimen.R_ALERT_TITLE, graphics.bigTextPaint);
             for (int i = 0; i < mInfo.size(); i++) {
                 graphics.drawText(canvas, mInfo.get(i), TowerDimen.R_ALERT_INFO.left,
-                        TowerDimen.R_ALERT_INFO.top + TowerDimen.TOWER_GRID_SIZE * i + TowerDimen.BIG_TEXT_SIZE + (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2, graphics.bigTextPaint);
+                        TowerDimen.R_ALERT_INFO.top + TowerDimen.GRID_SIZE * i + TowerDimen.BIG_TEXT_SIZE + (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2, graphics.bigTextPaint);
             }
             break;
         case MODE_AUTO_SCROLL:
-            graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, TowerDimen.R_AUTO_SCROLL.left, TowerDimen.R_AUTO_SCROLL.top,
-                    TowerDimen.R_AUTO_SCROLL.width(), TowerDimen.R_AUTO_SCROLL.height());
+            graphics.drawBitmap(canvas, Assets.getInstance().bkgBlank, mScrollBgd, TowerDimen.R_AUTO_SCROLL, null);
             graphics.drawRect(canvas, TowerDimen.R_AUTO_SCROLL);
             int x = TowerDimen.R_AUTO_SCROLL_INFO.left;
             int y = TowerDimen.R_AUTO_SCROLL_INFO.top;
             canvas.save();
             canvas.clipRect(mClip);
             for (int i = 0; i < mInfo.size(); i++) {
-                y = TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.BIG_TEXT_SIZE + TowerDimen.TOWER_GRID_SIZE * i + (TowerDimen.TOWER_GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 - mCurScroll;
+                y = TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.BIG_TEXT_SIZE + TowerDimen.GRID_SIZE * i + (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 - mCurScroll;
                 if ((y >= mMinY) &&(y <= mMaxY)) {
                     if (i == 0) {
                         x = TowerDimen.R_AUTO_SCROLL_INFO.left + (TowerDimen.R_AUTO_SCROLL_INFO.width() - (int)graphics.bigTextPaint.measureText(mInfo.get(i))) / 2;
                     } else {
                         x = TowerDimen.R_AUTO_SCROLL_INFO.left;
                     }
-                    if (y <= TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.TOWER_GRID_SIZE * 2) {
+                    if (y <= TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.GRID_SIZE * 2) {
                         shaderPaint.setShader(fadeOutShader);
                         graphics.drawText(canvas, mInfo.get(i), x, y, shaderPaint);
-                    } else if (y >= TowerDimen.R_AUTO_SCROLL_INFO.bottom - TowerDimen.TOWER_GRID_SIZE * 2) {
+                    } else if (y >= TowerDimen.R_AUTO_SCROLL_INFO.bottom - TowerDimen.GRID_SIZE * 2) {
                         shaderPaint.setShader(fadeInShader);
                         graphics.drawText(canvas, mInfo.get(i), x, y, shaderPaint);
                     } else {
