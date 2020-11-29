@@ -1,4 +1,4 @@
-package com.game.magictower;
+package com.game.magictower.secne;
 
 import java.util.HashSet;
 
@@ -6,7 +6,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import com.game.magictower.Game;
 import com.game.magictower.Game.Status;
+import com.game.magictower.GameView;
+import com.game.magictower.R;
 import com.game.magictower.model.Monster;
 import com.game.magictower.model.Player;
 import com.game.magictower.res.Assets;

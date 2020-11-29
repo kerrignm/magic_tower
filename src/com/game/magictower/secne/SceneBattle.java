@@ -1,4 +1,4 @@
-package com.game.magictower;
+package com.game.magictower.secne;
 
 import java.lang.ref.WeakReference;
 
@@ -8,7 +8,10 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Message;
 
+import com.game.magictower.Game;
 import com.game.magictower.Game.Status;
+import com.game.magictower.GameView;
+import com.game.magictower.R;
 import com.game.magictower.model.Monster;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;

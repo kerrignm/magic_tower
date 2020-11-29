@@ -1,4 +1,4 @@
-package com.game.magictower;
+package com.game.magictower.secne;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -15,7 +15,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.MotionEvent;
 
+import com.game.magictower.Game;
 import com.game.magictower.Game.Status;
+import com.game.magictower.GameView;
+import com.game.magictower.R;
 import com.game.magictower.astar.AStarPath;
 import com.game.magictower.astar.AStarPoint;
 import com.game.magictower.astar.ObstacleFilter;

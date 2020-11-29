@@ -1,4 +1,4 @@
-package com.game.magictower;
+package com.game.magictower.secne;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,7 +7,10 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.game.magictower.Game;
 import com.game.magictower.Game.Status;
+import com.game.magictower.GameView;
+import com.game.magictower.R;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.TowerDimen;

@@ -1,4 +1,4 @@
-package com.game.magictower;
+package com.game.magictower.secne;
 
 import java.util.HashMap;
 
@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
+import com.game.magictower.Game;
+import com.game.magictower.GameView;
+import com.game.magictower.R;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.LogUtil;

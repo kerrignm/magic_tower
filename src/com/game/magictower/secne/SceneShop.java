@@ -1,4 +1,4 @@
-package com.game.magictower;
+package com.game.magictower.secne;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,8 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.game.magictower.Game;
+import com.game.magictower.GameView;
 import com.game.magictower.Game.Status;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
