@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
-import com.game.magictower.secne.SceneMessage;
+import com.game.magictower.scene.SceneMessage;
 import com.game.magictower.util.FileUtil;
 import com.game.magictower.util.LogUtil;
 

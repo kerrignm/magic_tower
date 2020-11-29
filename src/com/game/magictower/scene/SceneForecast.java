@@ -1,4 +1,4 @@
-package com.game.magictower.secne;
+package com.game.magictower.scene;
 
 import java.util.HashSet;
 
