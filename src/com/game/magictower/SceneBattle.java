@@ -21,21 +21,35 @@ public class SceneBattle extends BaseScene {
     private boolean mPlayerRound;
     private int mX;
     private int mY;
-    private int mHp;
     private Bitmap mMstIcon;
+    private int mHp;
     private int mAttack;
     private int mDefend;
-    private String mMstHp;
-    private String mMstAttack;
-    private String mMstDefend;
+    
     private String mPlrHp;
     private String mPlrAttack;
     private String mPlrDefend;
+    private String mMstHp;
+    private String mMstAttack;
+    private String mMstDefend;
+    
+    private String mPlrHpLabel;
+    private String mPlrAttackLabel;
+    private String mPlrDefendLabel;
+    private String mMstHpLabel;
+    private String mMstAttackLabel;
+    private String mMstDefendLabel;
     
     private boolean mMagicAttack;
     
     public SceneBattle(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
+        mPlrHpLabel = context.getResources().getString(R.string.txt_hp) + context.getResources().getString(R.string.txt_colon);
+        mPlrAttackLabel = context.getResources().getString(R.string.txt_attack) + context.getResources().getString(R.string.txt_colon);
+        mPlrDefendLabel = context.getResources().getString(R.string.txt_defend) + context.getResources().getString(R.string.txt_colon);
+        mMstHpLabel = context.getResources().getString(R.string.txt_colon) + context.getResources().getString(R.string.txt_hp) ;
+        mMstAttackLabel = context.getResources().getString(R.string.txt_colon) + context.getResources().getString(R.string.txt_attack);
+        mMstDefendLabel = context.getResources().getString(R.string.txt_colon) + context.getResources().getString(R.string.txt_defend);
     }
 
     public void show(int id, int x, int y) {
@@ -62,13 +76,24 @@ public class SceneBattle extends BaseScene {
     public void onDrawFrame(Canvas canvas) {
         super.onDrawFrame(canvas);
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBattle, null, TowerDimen.R_BATTLE, null);
+        graphics.drawRect(canvas, TowerDimen.R_BATTLE);
+        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(-2), null, TowerDimen.R_BTL_PLR_ICON, null);
         graphics.drawBitmap(canvas, mMstIcon, null, TowerDimen.R_BTL_MST_ICON, null);
-        graphics.drawTextInCenter(canvas, mMstHp, TowerDimen.R_BTL_MST_HP);
-        graphics.drawTextInCenter(canvas, mMstAttack, TowerDimen.R_BTL_MST_ATTACK);
-        graphics.drawTextInCenter(canvas, mMstDefend, TowerDimen.R_BTL_MST_DEFEND);
-        graphics.drawTextInCenter(canvas, mPlrHp, TowerDimen.R_BTL_PLR_HP);
-        graphics.drawTextInCenter(canvas, mPlrAttack, TowerDimen.R_BTL_PLR_ATTACK);
-        graphics.drawTextInCenter(canvas, mPlrDefend, TowerDimen.R_BTL_PLR_DEFEND);
+        
+        
+        graphics.drawTextInCenter(canvas, mPlrHpLabel, TowerDimen.R_BTL_PLR_HP_L);
+        graphics.drawTextInCenter(canvas, mPlrHp, TowerDimen.R_BTL_PLR_HP_V);
+        graphics.drawTextInCenter(canvas, mPlrAttackLabel, TowerDimen.R_BTL_PLR_ATTACK_L);
+        graphics.drawTextInCenter(canvas, mPlrAttack, TowerDimen.R_BTL_PLR_ATTACK_V);
+        graphics.drawTextInCenter(canvas, mPlrDefendLabel, TowerDimen.R_BTL_PLR_DEFEND_L);
+        graphics.drawTextInCenter(canvas, mPlrDefend, TowerDimen.R_BTL_PLR_DEFEND_V);
+        
+        graphics.drawTextInCenter(canvas, mMstHpLabel, TowerDimen.R_BTL_MST_HP_L);
+        graphics.drawTextInCenter(canvas, mMstHp, TowerDimen.R_BTL_MST_HP_V);
+        graphics.drawTextInCenter(canvas, mMstAttackLabel, TowerDimen.R_BTL_MST_ATTACK_L);
+        graphics.drawTextInCenter(canvas, mMstAttack, TowerDimen.R_BTL_MST_ATTACK_V);
+        graphics.drawTextInCenter(canvas, mMstDefendLabel, TowerDimen.R_BTL_MST_DEFEND_L);
+        graphics.drawTextInCenter(canvas, mMstDefend, TowerDimen.R_BTL_MST_DEFEND_V);
     }
     
     @Override

@@ -25,7 +25,7 @@
     <string name="panel_number">个</string>
     <string name="panel_serial">第</string>
     <string name="panel_layer">层</string>
-    <string name="panel_prologue">序\u3000章</string>
+    <string name="panel_prologue">序\u3000\u3000章</string>
     
     <string name="msg_upstairs">上楼······</string>
     <string name="msg_downstairs">下楼······</string>
@@ -42,6 +42,7 @@
     <string name="txt_exp">经验 </string>
     <string name="txt_money_exp">金 · 经 </string>
     <string name="txt_lose">损失 </string>
+    <string name="txt_colon">\u0020:\u0020</string>
     
     <string name="jump_ordinal_floor">第<xliff:g id="1">%d</xliff:g>层</string>
     

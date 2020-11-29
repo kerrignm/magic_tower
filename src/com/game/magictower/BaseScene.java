@@ -82,43 +82,43 @@ public abstract class BaseScene extends BaseView {
     
     private void drawInfoPanel(Canvas canvas) {
         graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(-2), null, TowerDimen.R_PLR_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getLevel() + "", TowerDimen.R_PLR_LV_N);
-        graphics.drawTextInCenter(canvas, mLevel, TowerDimen.R_PLR_LV_Z);
+        graphics.drawTextInCenter(canvas, game.player.getLevel() + "", TowerDimen.R_PLR_LV_V);
+        graphics.drawTextInCenter(canvas, mLevel, TowerDimen.R_PLR_LV_L);
 
         graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(6), null, TowerDimen.R_YKEY_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getYkey() + "", TowerDimen.R_YKEY_N);
-        graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_YKEY_Z);
+        graphics.drawTextInCenter(canvas, game.player.getYkey() + "", TowerDimen.R_YKEY_V);
+        graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_YKEY_L);
         
         graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(7), null, TowerDimen.R_BKEY_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getBkey() + "", TowerDimen.R_BKEY_N);
-        graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_BKEY_Z);
+        graphics.drawTextInCenter(canvas, game.player.getBkey() + "", TowerDimen.R_BKEY_V);
+        graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_BKEY_L);
         
         graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(8), null, TowerDimen.R_RKEY_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getRkey() + "", TowerDimen.R_RKEY_N);
-        graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_RKEY_Z);
+        graphics.drawTextInCenter(canvas, game.player.getRkey() + "", TowerDimen.R_RKEY_V);
+        graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_RKEY_L);
         
         if (game.npcInfo.curFloor > 0) {
-            graphics.drawTextInCenter(canvas, mSerial, TowerDimen.R_FLOOR_D);
-            graphics.drawTextInCenter(canvas, game.npcInfo.curFloor + "", TowerDimen.R_FLOOR_N);
-            graphics.drawTextInCenter(canvas, mLayer, TowerDimen.R_FLOOR_Z);
+            graphics.drawTextInCenter(canvas, mSerial, TowerDimen.R_FLOOR_S);
+            graphics.drawTextInCenter(canvas, game.npcInfo.curFloor + "", TowerDimen.R_FLOOR_V);
+            graphics.drawTextInCenter(canvas, mLayer, TowerDimen.R_FLOOR_L);
         } else {
-            graphics.drawTextInCenter(canvas, mPrologue, TowerDimen.R_FLOOR_N);
+            graphics.drawTextInCenter(canvas, mPrologue, TowerDimen.R_FLOOR_V);
         }
         
-        graphics.drawTextInCenter(canvas, mHp, TowerDimen.R_PLR_HP_Z);
-        graphics.drawTextInCenter(canvas, game.player.getHp() + "", TowerDimen.R_PLR_HP_N);
+        graphics.drawTextInCenter(canvas, mHp, TowerDimen.R_PLR_HP_L);
+        graphics.drawTextInCenter(canvas, game.player.getHp() + "", TowerDimen.R_PLR_HP_V);
         
-        graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_PLR_ATTACK_Z);
-        graphics.drawTextInCenter(canvas, game.player.getAttack() + "", TowerDimen.R_PLR_ATTACK_N);
+        graphics.drawTextInCenter(canvas, mAttack, TowerDimen.R_PLR_ATTACK_L);
+        graphics.drawTextInCenter(canvas, game.player.getAttack() + "", TowerDimen.R_PLR_ATTACK_V);
         
-        graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_PLR_DEFEND_Z);
-        graphics.drawTextInCenter(canvas, game.player.getDefend() + "", TowerDimen.R_PLR_DEFEND_N);
+        graphics.drawTextInCenter(canvas, mDefend, TowerDimen.R_PLR_DEFEND_L);
+        graphics.drawTextInCenter(canvas, game.player.getDefend() + "", TowerDimen.R_PLR_DEFEND_V);
         
-        graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_PLR_MONEY_Z);
-        graphics.drawTextInCenter(canvas, game.player.getMoney() + "", TowerDimen.R_PLR_MONEY_N);
+        graphics.drawTextInCenter(canvas, mMoney, TowerDimen.R_PLR_MONEY_L);
+        graphics.drawTextInCenter(canvas, game.player.getMoney() + "", TowerDimen.R_PLR_MONEY_V);
         
-        graphics.drawTextInCenter(canvas, mExp, TowerDimen.R_PLR_EXP_Z);
-        graphics.drawTextInCenter(canvas, game.player.getExp() + "", TowerDimen.R_PLR_EXP_N);
+        graphics.drawTextInCenter(canvas, mExp, TowerDimen.R_PLR_EXP_L);
+        graphics.drawTextInCenter(canvas, game.player.getExp() + "", TowerDimen.R_PLR_EXP_V);
     }
     
     private void drawTower(Canvas canvas) {

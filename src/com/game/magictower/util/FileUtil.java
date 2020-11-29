@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 
 import android.content.Context;
 
@@ -47,7 +48,7 @@ public class FileUtil {
         return null;
     }
     
-    public static boolean writeInternal(Context context, String fileName, String content){
+    public static boolean writeInternal(Context context, String fileName, String content) {
         if(content == null) return false;
         try {
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -60,13 +61,24 @@ public class FileUtil {
         return false;
     }
     
-    public static boolean writeExternal(Context context, String fileName, String content){
+    public static boolean writeExternal(Context context, String fileName, String content) {
+        return writeExternal(context, fileName, content, false);
+    }
+    
+    public static boolean writeExternal(Context context, String fileName, String content, boolean append) {
         if(content == null) return false;
-        fileName = context.getExternalFilesDir(null).getPath() + File.separator + fileName;
+        File file = new File(context.getExternalFilesDir(null).getPath() + File.separator + fileName);
         try {
-            FileOutputStream fos = new FileOutputStream(fileName);
-            fos.write(content.getBytes());
-            fos.close();
+            if (append) {
+                RandomAccessFile raf = new RandomAccessFile(file, "rw");
+                raf.seek(file.length());
+                raf.write(content.getBytes());
+                raf.close();
+            } else {
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(content.getBytes());
+                fos.close();
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
