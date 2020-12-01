@@ -22,11 +22,11 @@ import com.game.magictower.res.TowerDimen;
 public final class BitmapUtil {
     
     @TargetApi(19)
-    public static final int getBitmapSize(Bitmap bitmap){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){       //API 19
+    public static final int getBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {       //API 19
             return bitmap.getAllocationByteCount();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1){//API 12
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {//API 12
             return bitmap.getByteCount();
         }
         return bitmap.getRowBytes() * bitmap.getHeight();               //earlier version
@@ -79,7 +79,7 @@ public final class BitmapUtil {
     }
     
     public static final Bitmap scaleBitmap(Bitmap bitmap, int width, int height) {
-        if (width <=0 || height <=0 ){
+        if (width <= 0 || height <= 0 ) {
             throw new IllegalArgumentException("target size must be positive!");
         }
         int w = bitmap.getWidth();
@@ -95,7 +95,7 @@ public final class BitmapUtil {
     
     public static final Bitmap scaleBitmap(Bitmap bitmap, float scalew,
             float scaleh) {
-        if (scalew <=0 || scaleh <=0 ){
+        if (scalew <=0 || scaleh <= 0 ) {
             throw new IllegalArgumentException("scale rate must be positive!");
         }
         if (MathUtil.equals(scalew, 1.0f) && MathUtil.equals(scaleh, 1.0f)) {
@@ -149,7 +149,7 @@ public final class BitmapUtil {
             e.printStackTrace();
         } finally {
             try {
-                if (fos!=null){
+                if (fos != null) {
                     fos.close();
                 }
             } catch (IOException e) {

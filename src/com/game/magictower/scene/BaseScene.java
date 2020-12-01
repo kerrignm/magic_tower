@@ -84,7 +84,7 @@ public abstract class BaseScene extends BaseView {
     }
     
     private void drawInfoPanel(Canvas canvas) {
-        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(-2), null, TowerDimen.R_PLR_ICON, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(1), null, TowerDimen.R_PLR_ICON, null);
         graphics.drawTextInCenter(canvas, game.player.getLevel() + "", TowerDimen.R_PLR_LV_V);
         graphics.drawTextInCenter(canvas, mLevel, TowerDimen.R_PLR_LV_L);
 

@@ -49,15 +49,7 @@ public class Player {
     }
 
     public Bitmap getImage() {
-        if (toward == 0)
-            return Assets.getInstance().playerMap.get(-1);
-        if (toward == 1)
-            return Assets.getInstance().playerMap.get(-2);
-        if (toward == 2)
-            return Assets.getInstance().playerMap.get(-3);
-        if (toward == 3)
-            return Assets.getInstance().playerMap.get(-4);
-        return null;
+        return Assets.getInstance().playerMap.get(toward);
     }
 
     public int getLevel() {

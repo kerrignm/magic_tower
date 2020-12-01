@@ -31,8 +31,8 @@ public class SceneDialog extends BaseScene {
     private int mSectionCount;
     private int mLineCount;
     
-    private Bitmap mPlayerIcon = Assets.getInstance().playerMap.get(-2);
-    private Bitmap mNpcIcn;
+    private Bitmap mPlayerIcon = Assets.getInstance().playerMap.get(1);
+    private Bitmap mNpcIcon;
     private Rect mBgd;
     
     public SceneDialog(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
@@ -44,7 +44,7 @@ public class SceneDialog extends BaseScene {
         mDialogId = dialogId;
         mSectionCount = 0;
         mLineCount = 0;
-        mNpcIcn = Assets.getInstance().animMap0.get(npcId);
+        mNpcIcon = Assets.getInstance().animMap0.get(npcId);
         prepareTalkInfo(dialogId);
         getTalkInfo();
         game.status = Status.Dialoging;
@@ -64,11 +64,7 @@ public class SceneDialog extends BaseScene {
                             TowerDimen.R_DLG_TEXT.top + i * TowerDimen.R_DLG_NAME.height() + TowerDimen.TEXT_SIZE + (TowerDimen.R_DLG_NAME.height() - TowerDimen.TEXT_SIZE) / 2);
             }
         }
-        if (mTalker == TK_PLAYER) {
-            graphics.drawBitmap(canvas, mPlayerIcon, null, TowerDimen.R_DLG_ICON, null);
-        } else {
-            graphics.drawBitmap(canvas, mNpcIcn, null, TowerDimen.R_DLG_ICON, null);
-        }
+        graphics.drawBitmap(canvas, mTalker == TK_PLAYER ? mPlayerIcon : mNpcIcon, null, TowerDimen.R_DLG_ICON, null);
     }
     
     @Override
@@ -198,7 +194,7 @@ public class SceneDialog extends BaseScene {
         case 13:
             break;
         case 14:
-            parent.showMessage(2, null, null, SceneMessage.MODE_AUTO_SCROLL);
+            parent.showMessage(2);
             changeStatus = false;
             break;
         }

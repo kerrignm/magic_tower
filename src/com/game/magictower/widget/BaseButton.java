@@ -38,6 +38,7 @@ public class BaseButton extends BaseView {
         TowerDimen.R_BTN_J,
         TowerDimen.R_BTN_OK
     };
+    
     protected boolean isPressed;
     protected boolean repeat;
     protected Bitmap bkgNormal;

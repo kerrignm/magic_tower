@@ -56,8 +56,12 @@ public class SceneMessage extends BaseScene {
         mScrollBgd = new Rect(0, 0, TowerDimen.R_AUTO_SCROLL.width(), TowerDimen.R_AUTO_SCROLL.height());
     }
     
-    public void show(int titleId, int msgId, int mode) {
-        show(-1, mContext.getResources().getString(titleId), mContext.getResources().getString(msgId), mode);
+    public void show(int titleId, int msgId) {
+        show(-1, mContext.getResources().getString(titleId), mContext.getResources().getString(msgId), MODE_ALERT);
+    }
+    
+    public void show(int id) {
+        show(id, null, null, MODE_AUTO_SCROLL);
     }
     
     public void show(int id, String title, String msg, int mode) {
@@ -66,24 +70,21 @@ public class SceneMessage extends BaseScene {
         mMsg = msg;
         mMode = mode;
         game.status = Status.Messaging;
-        if (mId > 0) {
+        if (mMode == MODE_ALERT) {
+            mInfo = GameGraphics.getInstance().splitToLines(mMsg, TowerDimen.R_ALERT_INFO.width(), GameGraphics.getInstance().bigTextPaint);
+            TowerDimen.R_ALERT_INFO.bottom = TowerDimen.R_ALERT_INFO.top + TowerDimen.GRID_SIZE * mInfo.size();
+            TowerDimen.R_ALERT.bottom = TowerDimen.R_ALERT_INFO.bottom + TowerDimen.GRID_SIZE / 2;
+        } else {
             ArrayList<String> msgs = game.storys.get(mId);
             mInfo = new ArrayList<String>();
             for (int i = 0; i < msgs.size(); i++) {
                 mInfo.addAll(GameGraphics.getInstance().splitToLines(msgs.get(i), TowerDimen.R_ALERT_INFO.width(), GameGraphics.getInstance().bigTextPaint));
             }
-        } else {
-            mInfo = GameGraphics.getInstance().splitToLines(mMsg, TowerDimen.R_ALERT_INFO.width(), GameGraphics.getInstance().bigTextPaint);
-        }
-        if (mMode == MODE_AUTO_SCROLL) {
             mMaxScroll = mInfo.size() * TowerDimen.GRID_SIZE - (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE);
             mCurScroll = TowerDimen.GRID_SIZE * 2 - TowerDimen.R_AUTO_SCROLL_INFO.height();
             mMinY = TowerDimen.R_AUTO_SCROLL_INFO.top + (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2;
             mMaxY = TowerDimen.R_AUTO_SCROLL_INFO.bottom - (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 + TowerDimen.GRID_SIZE;
             mClip = new Rect(TowerDimen.R_AUTO_SCROLL_INFO.left, mMinY, TowerDimen.R_AUTO_SCROLL_INFO.right, mMaxY - TowerDimen.GRID_SIZE);
-        } else if (mMode == MODE_ALERT) {
-            TowerDimen.R_ALERT_INFO.bottom = TowerDimen.R_ALERT_INFO.top + TowerDimen.GRID_SIZE * mInfo.size();
-            TowerDimen.R_ALERT.bottom = TowerDimen.R_ALERT_INFO.bottom + TowerDimen.GRID_SIZE / 2;
         }
         parent.requestRender();
     }
@@ -110,7 +111,7 @@ public class SceneMessage extends BaseScene {
             canvas.clipRect(mClip);
             for (int i = 0; i < mInfo.size(); i++) {
                 y = TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.BIG_TEXT_SIZE + TowerDimen.GRID_SIZE * i + (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 - mCurScroll;
-                if ((y >= mMinY) &&(y <= mMaxY)) {
+                if ((y >= mMinY) && (y <= mMaxY)) {
                     if (i == 0) {
                         x = TowerDimen.R_AUTO_SCROLL_INFO.left + (TowerDimen.R_AUTO_SCROLL_INFO.width() - (int)graphics.bigTextPaint.measureText(mInfo.get(i))) / 2;
                     } else {
@@ -151,7 +152,7 @@ public class SceneMessage extends BaseScene {
     }
     
     private void messageOver() {
-        switch(mId) {
+        switch (mId) {
         case 1:
             game.status = Status.Playing;
             break;

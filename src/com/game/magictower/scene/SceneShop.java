@@ -83,8 +83,7 @@ public class SceneShop extends BaseScene {
     
     @Override
     protected boolean inBounds(MotionEvent event){
-        boolean result = mTouchRect.contains((int)event.getX(), (int)event.getY());
-        return result;
+        return mTouchRect.contains((int)event.getX(), (int)event.getY());
     }
     
     @Override

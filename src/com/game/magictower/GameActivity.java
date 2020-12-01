@@ -10,7 +10,6 @@ import android.view.WindowManager;
 
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
-import com.game.magictower.scene.SceneMessage;
 import com.game.magictower.util.FileUtil;
 import com.game.magictower.util.LogUtil;
 
@@ -46,7 +45,7 @@ public class GameActivity extends Activity implements GameControler {
             currentGame.loadGame();
             playBackgroundMusic(getMuisicId(currentGame.npcInfo.curFloor));
         } else {
-            gameView.showMessage(1, null, null, SceneMessage.MODE_AUTO_SCROLL);
+            gameView.showMessage(1);
             playBackgroundMusic(getMuisicId(-1));
         }
     }

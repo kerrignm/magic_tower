@@ -126,7 +126,7 @@ public class Game {
         }
     }
     
-    public void monsterStronest() {
+    public void monsterStrongest() {
         if (npcInfo.isMonsterStrongest) {
             for(int key : monsters.keySet()) {
                 monsters.get(key).setStrongest();
@@ -149,7 +149,7 @@ public class Game {
     private void resetMonster() {
         monsters = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "monster.json"), new TypeToken<HashMap<Integer, Monster>>(){}.getType());
         monsterStronger();
-        monsterStronest();
+        monsterStrongest();
     }
     
     public void checkTest(int id) {

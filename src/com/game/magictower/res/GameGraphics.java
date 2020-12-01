@@ -24,7 +24,7 @@ public final class GameGraphics {
     
     private static GameGraphics sInstance;
 
-    public static GameGraphics getInstance(){
+    public static GameGraphics getInstance() {
         if (sInstance == null) {
             sInstance = new GameGraphics();
         }
@@ -44,7 +44,7 @@ public final class GameGraphics {
         
     }
     
-    private void initTextPaintEffect(Paint paint){
+    private void initTextPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
         paint.setARGB(255, 255, 255, 255);
         paint.setTextSize(TowerDimen.TEXT_SIZE);
@@ -52,7 +52,7 @@ public final class GameGraphics {
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
-    private void initDisableTextPaintEffect(Paint paint){
+    private void initDisableTextPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
         paint.setARGB(255, 160, 160, 160);
         paint.setTextSize(TowerDimen.TEXT_SIZE);
@@ -60,7 +60,7 @@ public final class GameGraphics {
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
-    private void initBigTextPaintEffect(Paint paint){
+    private void initBigTextPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
         paint.setARGB(255, 255, 255, 255);
         paint.setTextSize(TowerDimen.BIG_TEXT_SIZE);
@@ -68,7 +68,7 @@ public final class GameGraphics {
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
-    private void initRectPaintEffect(Paint paint){
+    private void initRectPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
         paint.setARGB(255, 0xcc, 0x66, 0x00);
         paint.setStyle(Style.STROKE);
@@ -95,7 +95,7 @@ public final class GameGraphics {
         canvas.drawBitmap(bitmap, src, dst, paint);
     }
 
-    public final void setAlpha(int alpha){
+    public final void setAlpha(int alpha) {
         //getCorrespondingPaint(player).setCurrentAlpha(alpha);
     }
     
@@ -103,7 +103,7 @@ public final class GameGraphics {
         return 0;//getCorrespondingPaint(player).getCurrentAlpha();
     }
     
-    private final AutoDecendAlphaPaint getCorrespondingPaint(){
+    private final AutoDecendAlphaPaint getCorrespondingPaint() {
         return alphaPaint;
     }
 
@@ -127,9 +127,7 @@ public final class GameGraphics {
     }
 
     public void drawBitmapInParentCenter(Canvas canvas, Bitmap bitmap, Point center) {
-        int x = center.x - (int) (bitmap.getWidth() / 2 + 0.5f);
-        int y = center.y - (int) (bitmap.getHeight() / 2 + 0.5f);
-        drawBitmap(canvas, bitmap, x, y);
+        drawBitmap(canvas, bitmap, center.x - (int) (bitmap.getWidth() / 2 + 0.5f), center.y - (int) (bitmap.getHeight() / 2 + 0.5f));
     }
 
     public void drawRect(Canvas canvas, Rect rect) {
@@ -170,9 +168,7 @@ public final class GameGraphics {
         if (canvas == null || msg == null) {
             return;
         }
-        x = x + (w - (int)paint.measureText(msg)) / 2;
-        y = y + (h - (int)paint.getTextSize()) / 2 + (int)paint.getTextSize();
-        canvas.drawText(msg, x, y, paint);
+        canvas.drawText(msg, x + (w - (int)paint.measureText(msg)) / 2, y + (h - (int)paint.getTextSize()) / 2 + (int)paint.getTextSize(), paint);
     }
     
     public void drawTextUsingAlpha(Canvas canvas, String msg,
@@ -183,13 +179,6 @@ public final class GameGraphics {
         canvas.drawText(msg, x, y,
         getCorrespondingPaint());
     }
-
-    public Point getCenter(Bitmap pixmap, float x, float y)
-    {
-        int centerX = (int) (x + pixmap.getWidth() / 2 + 0.5f);
-        int centerY = (int) (y + pixmap.getHeight() / 2 + 0.5f);
-        return new Point(centerX, centerY);
-    }
     
     public ArrayList<String> splitToLines(String str, int width) {
         return splitToLines(str, width, textPaint);
@@ -199,7 +188,7 @@ public final class GameGraphics {
         ArrayList<String> result = new ArrayList<String>();
         float[] widths = new float[str.length()];
         paint.getTextWidths(str, widths);
-        String subStr;
+        String subStr = null;
         int index = 0;
         float lineLen = 0f;
         for (int i = 0; i < widths.length; ) {
@@ -258,7 +247,7 @@ public final class GameGraphics {
         return result;
     }
     
-    protected static final class AutoDecendAlphaPaint extends Paint{
+    protected static final class AutoDecendAlphaPaint extends Paint {
         private int currentAlpha;
         private CountDownTimer alphaDecendTimer;    //subduction Alpha
         
@@ -293,27 +282,27 @@ public final class GameGraphics {
          * Set current alpha value.
          * @param alpha The alpha value to set.
          */
-        public void setCurrentAlpha(int alpha){
-            if (alpha<0 || alpha > 255){
+        public void setCurrentAlpha(int alpha) {
+            if (alpha < 0 || alpha > 255) {
                 throw new IllegalArgumentException("wrong alpha value " + alpha);
             }
             currentAlpha = alpha;
             setAlpha(currentAlpha);
-            if (alphaDecendTimer!=null){
+            if (alphaDecendTimer != null) {
                 alphaDecendTimer.cancel();
             }
-            if (currentAlpha==0){
+            if (currentAlpha == 0) {
                 return;
             }
            
-            alphaDecendTimer = new CountDownTimer( 16*alpha/4,16) {
+            alphaDecendTimer = new CountDownTimer( 16 * alpha / 4, 16) {
                 
                 @Override
                 public void onTick(long millisUntilFinished) {
                     //from 255 to 0 need 64 times��about 1s
                     currentAlpha -= 4;
-                    if (currentAlpha<=0){
-                        currentAlpha=0;
+                    if (currentAlpha <= 0) {
+                        currentAlpha = 0;
                     }
                     setAlpha(currentAlpha);
                     cancel();

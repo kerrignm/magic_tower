@@ -170,7 +170,6 @@ public class TowerDimen {
         R_FLOOR_V = RectUtil.createRect(R_FLOOR_S.right, R_FLOOR_S.top, GRID_SIZE * 2, txt_height);
         R_FLOOR_L = RectUtil.createRect(R_FLOOR_V.right, R_FLOOR_V.top, txt_height, txt_height);
         
-        
         int txt_left = R_TOWER.right - txt_height * 2 - GRID_SIZE * 2;
         
         R_PLR_HP_L = RectUtil.createRect(txt_left, TOWER_TOP - GRID_SIZE / 2 - (txt_height + txt_margin) * 5, txt_height * 2, txt_height);

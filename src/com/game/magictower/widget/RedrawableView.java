@@ -88,7 +88,7 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
         }
     }
     
-    private final class RenderThread extends Thread{
+    private final class RenderThread extends Thread {
     
         private boolean hasStopped;
         
@@ -97,7 +97,7 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
             hasStopped = false;
         }
         
-        protected synchronized final void stopThread(){
+        protected synchronized final void stopThread() {
             hasStopped = true;
         }
         
@@ -116,6 +116,6 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
                     }
                 }
             }
-        };
+        }
     }
 }

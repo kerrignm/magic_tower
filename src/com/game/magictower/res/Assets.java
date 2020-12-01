@@ -18,10 +18,10 @@ public final class Assets {
     
     private static final String TAG = "MagicTower:Assets";
 
-    private static final int PLAYER_LEFT = -1;
-    private static final int PLAYER_DOWN = -2;
-    private static final int PLAYER_RIGHT = -3;
-    private static final int PLAYER_UP = -4;
+    private static final int PLAYER_LEFT = 0;
+    private static final int PLAYER_DOWN = 1;
+    private static final int PLAYER_RIGHT = 2;
+    private static final int PLAYER_UP = 3;
     
     private static final int[] IMAGE_ID = {
         0,
@@ -197,11 +197,11 @@ public final class Assets {
     
     private int[] soundIds = new int [soundstrs.length];
     
-    public static final Assets getInstance(){
+    public static final Assets getInstance() {
         return sInstance;
     }
     
-    public static synchronized void loadAssets(Context context, LoadingProgressListener listener){
+    public static synchronized void loadAssets(Context context, LoadingProgressListener listener) {
         sInstance = new Assets();
         sInstance.load(context, listener);
     }
@@ -218,7 +218,7 @@ public final class Assets {
         int loadedRes = loadSound(loadedBitmap, total, context, listener);
         
         if (loadedRes != total) {
-            throw new RuntimeException("Resource loaded "+loadedRes+", but it was declared to be "+total);
+            throw new RuntimeException("Resource loaded " + loadedRes + ", but it was declared to be " + total);
         }
         //listener.onLoadCompleted();
     }
@@ -317,7 +317,7 @@ public final class Assets {
 
     private final void notifyProgressChanged(int completed, int total,
             LoadingProgressListener listener) {
-        int progress = (int) (completed/(double)total*100);
+        int progress = (int) (completed / (double)total * 100);
         listener.onProgressChanged(progress);
     }
     

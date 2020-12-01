@@ -13,12 +13,17 @@ public class AStarPath {
     
     private final static int[][] DIR = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
     
+    private int width;
+    private int height;
+    
     private AStarPoint[][] points;
     
     private ObstacleFilter filter;
     
     public AStarPath(int width, int height) {
-        points = initePoints(width, height);
+        this.width = width;
+        this.height = height;
+        points = initePoints();
     }
 
     public AStarPoint getPath(int startX, int startY, int goalX, int goalY, int[][]map) {
@@ -46,7 +51,7 @@ public class AStarPath {
                 int y_t = current.getY() + DIR[i][0];
                 int x_t = current.getX() + DIR[i][1];
 
-                if (y_t < 0 || y_t >= map.length || x_t < 0 || x_t >= map.length) {
+                if (y_t < 0 || y_t >= height || x_t < 0 || x_t >= width) {
                     continue;
                 }
 
@@ -87,7 +92,7 @@ public class AStarPath {
         this.filter = filter;
     }
 
-    private AStarPoint[][] initePoints(int width, int height) {
+    private AStarPoint[][] initePoints() {
         AStarPoint[][] points = new AStarPoint[height][width];
         for (int y = 0; y < points.length; y++) {
             for (int x = 0; x < points[y].length; x++) {

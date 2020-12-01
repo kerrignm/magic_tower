@@ -243,7 +243,6 @@ public class GameView extends RedrawableView {
             return sceneJump;
         default:
             return null;
-                
         }
     }
     
@@ -271,12 +270,12 @@ public class GameView extends RedrawableView {
         sceneShop.show(shopId, npcId);
     }
     
-    public void showMessage(int titleId, int msgId, int mode) {
-        sceneMessage.show(titleId, msgId, mode);
+    public void showMessage(int titleId, int msgId) {
+        sceneMessage.show(titleId, msgId);
     }
     
-    public void showMessage(int id, String title, String msg, int mode) {
-        sceneMessage.show(id, title, msg, mode);
+    public void showMessage(int id) {
+        sceneMessage.show(id);
     }
     
     public void showDialog(int dialogId, int npcId) {

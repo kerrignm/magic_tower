@@ -49,8 +49,7 @@ public abstract class BaseView {
     }
     
     protected boolean inBounds(MotionEvent event){
-        boolean result = rect.contains((int)event.getX(), (int)event.getY());
-        return result;
+        return rect.contains((int)event.getX(), (int)event.getY());
     }
     
     public int getId() {

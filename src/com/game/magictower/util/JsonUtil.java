@@ -9,8 +9,8 @@ public class JsonUtil {
     
     private static Gson sGson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
     
-    public static <T> T fromJson(String value,Class<T> cls) {
-        return sGson.fromJson(value,cls);
+    public static <T> T fromJson(String value, Class<T> cls) {
+        return sGson.fromJson(value, cls);
     }
     
     public static <T> T fromJson(String value, Type typeOfT) {

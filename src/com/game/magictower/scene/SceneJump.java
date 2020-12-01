@@ -22,6 +22,7 @@ public class SceneJump extends BaseScene {
     private Rect[][] mEdgeRect;
     private String[][] mFloorName;
     private int mSelected;
+    private Point mTouchPoint = new Point();
     private Rect mTouchRect = new Rect(TowerDimen.R_JUMP.left + TowerDimen.GRID_SIZE / 2, TowerDimen.R_JUMP.top + TowerDimen.GRID_SIZE / 2,
                                     TowerDimen.R_JUMP.right - TowerDimen.GRID_SIZE / 2, TowerDimen.R_JUMP.bottom - TowerDimen.GRID_SIZE / 2);
     
@@ -59,8 +60,8 @@ public class SceneJump extends BaseScene {
         case MotionEvent.ACTION_DOWN:
             if (inBounds(event)) {
                 result = true;
-                Point point = getTouchGrid((int)event.getX(), (int)event.getY());
-                int selected = point.x * 5 + point.y;
+                getTouchGrid((int)event.getX(), (int)event.getY());
+                int selected = mTouchPoint.x * 5 + mTouchPoint.y;
                 if (selected != mSelected) {
                     mSelected = selected;
                 } else {
@@ -85,15 +86,12 @@ public class SceneJump extends BaseScene {
     
     @Override
     protected boolean inBounds(MotionEvent event){
-        boolean result = mTouchRect.contains((int)event.getX(), (int)event.getY());
-        return result;
+        return mTouchRect.contains((int)event.getX(), (int)event.getY());
     }
     
-    private Point getTouchGrid(int x, int y) {
-        Point point = new Point();
-        point.x = (x - TowerDimen.R_JUMP_GRID.left) / TowerDimen.R_JUMP_GRID.width();
-        point.y = (y - TowerDimen.R_JUMP_GRID.top) / TowerDimen.R_JUMP_GRID.height();
-        return point;
+    private void getTouchGrid(int x, int y) {
+        mTouchPoint.x = (x - TowerDimen.R_JUMP_GRID.left) / TowerDimen.R_JUMP_GRID.width();
+        mTouchPoint.y = (y - TowerDimen.R_JUMP_GRID.top) / TowerDimen.R_JUMP_GRID.height();
     }
     
     @Override

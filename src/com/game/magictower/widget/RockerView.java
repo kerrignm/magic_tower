@@ -98,7 +98,7 @@ public class RockerView extends BaseView {
     }
     
     @Override
-    protected boolean inBounds(MotionEvent event){
+    protected boolean inBounds(MotionEvent event) {
         return MathUtil.distance(centerX, centerY, (int)event.getX(), (int)event.getY()) < outerRadius;
     }
 

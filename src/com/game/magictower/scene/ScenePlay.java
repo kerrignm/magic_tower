@@ -36,12 +36,12 @@ public class ScenePlay extends BaseScene {
     
     private Rect[][] mPathRects;
     
-    private Point touchPoint;
-    
     private AStarPath astarPath;
     
     private GridFilter gridFilter = new GridFilter();
     
+    private Point curPoint = new Point();
+    private Point touchPoint = new Point();
     private ArrayList<AStarPoint> stepList = new ArrayList<AStarPoint>();
     private boolean canReach = false;
     private boolean startQutoStep = false;
@@ -87,11 +87,11 @@ public class ScenePlay extends BaseScene {
         case MotionEvent.ACTION_DOWN:
             if (inBounds(event)) {
                 result = true;
-                Point point = getTouchGrid((int)event.getX(), (int)event.getY());
-                if (touchPoint == null || (!touchPoint.equals(point))) {
-                    if (canInteraction(point.x, point.y)) {
-                        gridFilter.setTarget(point.x, point.y);
-                        AStarPoint astarPoint = astarPath.getPath(game.player.getPosX(), game.player.getPosY(), point.x, point.y, game.lvMap[game.npcInfo.curFloor]);
+                getTouchGrid((int)event.getX(), (int)event.getY());
+                if (!canReach || (!curPoint.equals(touchPoint))) {
+                    if (canInteraction(touchPoint.x, touchPoint.y)) {
+                        gridFilter.setTarget(touchPoint.x, touchPoint.y);
+                        AStarPoint astarPoint = astarPath.getPath(game.player.getPosX(), game.player.getPosY(), touchPoint.x, touchPoint.y, game.lvMap[game.npcInfo.curFloor]);
                         if (astarPoint == null) {
                             clearTouchStep();
                         } else {
@@ -102,8 +102,11 @@ public class ScenePlay extends BaseScene {
                                 current = current.getFather();
                             }
                             canReach = true;
-                            touchPoint = point;
+                            curPoint.x = touchPoint.x;
+                            curPoint.y = touchPoint.y;
                         }
+                    } else {
+                        clearTouchStep();
                     }
                 } else {
                     startQutoStep = true;
@@ -158,15 +161,13 @@ public class ScenePlay extends BaseScene {
     private void clearTouchStep() {
         canReach = false;
         startQutoStep = false;
-        touchPoint = null;
+        curPoint.x = curPoint.y = -1;
         stepList.clear();
     }
     
-    private Point getTouchGrid(int x, int y) {
-        Point point = new Point();
-        point.x = (x - rect.left) / TowerDimen.GRID_SIZE;
-        point.y = (y - rect.top) / TowerDimen.GRID_SIZE;
-        return point;
+    private void getTouchGrid(int x, int y) {
+        touchPoint.x = (x - rect.left) / TowerDimen.GRID_SIZE;
+        touchPoint.y = (y - rect.top) / TowerDimen.GRID_SIZE;
     }
     
     private void autoStep() {
@@ -189,16 +190,16 @@ public class ScenePlay extends BaseScene {
                 }
                 interaction(current.getX(), current.getY());
             } else {
-                if (touchPoint.y < game.player.getPosY()) {
+                if (curPoint.y < game.player.getPosY()) {
                     game.player.setToward(3);
-                } else if (touchPoint.y > game.player.getPosY()) {
+                } else if (curPoint.y > game.player.getPosY()) {
                     game.player.setToward(1);
-                } else if (touchPoint.x > game.player.getPosX()) {
+                } else if (curPoint.x > game.player.getPosX()) {
                     game.player.setToward(2);
                 } else {
                     game.player.setToward(0);
                 }
-                interaction(touchPoint.x, touchPoint.y);
+                interaction(curPoint.x, curPoint.y);
                 clearTouchStep();
             }
             parent.requestRender();
@@ -207,9 +208,9 @@ public class ScenePlay extends BaseScene {
     
     private void drawGrid(Canvas canvas) {
         if (canReach) {
-            if (touchPoint != null) {
-                Rect r = RectUtil.createRect(rect.left + touchPoint.x * TowerDimen.GRID_SIZE,
-                            rect.top + touchPoint.y * TowerDimen.GRID_SIZE,
+            if (curPoint != null) {
+                Rect r = RectUtil.createRect(rect.left + curPoint.x * TowerDimen.GRID_SIZE,
+                            rect.top + curPoint.y * TowerDimen.GRID_SIZE,
                             TowerDimen.GRID_SIZE, TowerDimen.GRID_SIZE);
                 graphics.drawRect(canvas, r, mTouchPaint);
             }
@@ -498,25 +499,25 @@ public class ScenePlay extends BaseScene {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
                 game.npcInfo.isHasCross = true;
-                parent.showMessage(R.string.treasure_cross, R.string.treasure_cross_info, SceneMessage.MODE_ALERT);
+                parent.showMessage(R.string.treasure_cross, R.string.treasure_cross_info);
                 break;
             case 33:    // holy water bottle
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                parent.showMessage(R.string.treasure_holy_water, R.string.treasure_holy_water_info, SceneMessage.MODE_ALERT);
+                parent.showMessage(R.string.treasure_holy_water, R.string.treasure_holy_water_info);
                 game.player.setHp(game.player.getHp() * 2);
                 break;
             case 34:    // emblem of light
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
                 game.npcInfo.isHasForecast = true;
-                parent.showMessage(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info, SceneMessage.MODE_ALERT);
+                parent.showMessage(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info);
                 break;
             case 35:    // compass of wind
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
                 game.npcInfo.isHasJump = true;
-                parent.showMessage(R.string.treasure_compass, R.string.treasure_compass_info, SceneMessage.MODE_ALERT);
+                parent.showMessage(R.string.treasure_compass, R.string.treasure_compass_info);
                 break;
             case 36:    // key box
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
@@ -530,7 +531,7 @@ public class ScenePlay extends BaseScene {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
                 game.npcInfo.isHasHammer = true;
-                parent.showMessage(R.string.treasure_hammer, R.string.treasure_hammer_info, SceneMessage.MODE_ALERT);
+                parent.showMessage(R.string.treasure_hammer, R.string.treasure_hammer_info);
                 break;
             case 39:    // gold nugget
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));

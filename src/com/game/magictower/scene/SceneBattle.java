@@ -80,7 +80,7 @@ public class SceneBattle extends BaseScene {
         super.onDrawFrame(canvas);
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBattle, null, TowerDimen.R_BATTLE, null);
         graphics.drawRect(canvas, TowerDimen.R_BATTLE);
-        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(-2), null, TowerDimen.R_BTL_PLR_ICON, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(1), null, TowerDimen.R_BTL_PLR_ICON, null);
         graphics.drawBitmap(canvas, mMstIcon, null, TowerDimen.R_BTL_MST_ICON, null);
         
         
@@ -168,7 +168,7 @@ public class SceneBattle extends BaseScene {
             game.monsterStronger();
         } else if ((game.npcInfo.curFloor == 19) && (mMonster.getId() == 59)) {
             game.npcInfo.isMonsterStrongest = true;
-            game.monsterStronest();
+            game.monsterStrongest();
         }
         parent.requestRender();
     }

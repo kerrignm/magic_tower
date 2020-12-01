@@ -16,7 +16,7 @@ public final class GlobalSoundPool {
     private static GlobalSoundPool sInstance;
     private SoundPool soundPool;
     
-    private GlobalSoundPool(){
+    private GlobalSoundPool() {
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
     }
     
