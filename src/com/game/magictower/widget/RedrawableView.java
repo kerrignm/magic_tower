@@ -80,7 +80,7 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
             }
             onDrawFrame(canvas);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "redraw() Exception e = " + e.getMessage());
         } finally {
             if (canvas != null) {
                 holder.unlockCanvasAndPost(canvas);
@@ -107,7 +107,7 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
                     try {
                         redraw();
                     } catch (Exception e) {
-                        LogUtil.w(TAG, "exception while rendering:" + e.getMessage());
+                        LogUtil.e(TAG, "exception while rendering : " + e.getMessage());
                     }
                     try {
                         sLock.wait();

@@ -183,11 +183,11 @@ public class TowerDimen {
         R_PLR_EXP_L = RectUtil.createRect(txt_left, R_PLR_MONEY_L.bottom + txt_margin, txt_height * 2, txt_height);
         R_PLR_EXP_V = RectUtil.createRect(R_PLR_EXP_L.right, R_PLR_EXP_L.top, GRID_SIZE * 2, txt_height);
         
-        R_MSG = RectUtil.createRect(R_TOWER.left, R_TOWER.top + GRID_SIZE * 3, GRID_SIZE * 11, GRID_SIZE * 2);
-        R_ALERT = RectUtil.createRect(R_TOWER.left, R_TOWER.top + GRID_SIZE * 3, GRID_SIZE * 11, GRID_SIZE * 4);
+        R_MSG = RectUtil.createRect(R_TOWER.left, R_TOWER.top + GRID_SIZE * 3, GRID_SIZE * GRID_NUMS, GRID_SIZE * 2);
+        R_ALERT = RectUtil.createRect(R_TOWER.left, R_TOWER.top + GRID_SIZE * 3, GRID_SIZE * GRID_NUMS, GRID_SIZE * 4);
         R_ALERT_TITLE = new Rect(R_ALERT.left + GRID_SIZE / 2, R_ALERT.top + GRID_SIZE / 2, R_ALERT.right - GRID_SIZE / 2, R_ALERT.top + GRID_SIZE * 3 / 2);
         R_ALERT_INFO = new Rect(R_ALERT_TITLE.left, R_ALERT_TITLE.bottom, R_ALERT_TITLE.right, R_ALERT_TITLE.bottom + GRID_SIZE * 2);
-        R_AUTO_SCROLL = RectUtil.createRect(R_TOWER.left, R_TOWER.top + GRID_SIZE, GRID_SIZE * 11, GRID_SIZE * 9);
+        R_AUTO_SCROLL = RectUtil.createRect(R_TOWER.left, R_TOWER.top + GRID_SIZE, GRID_SIZE * GRID_NUMS, GRID_SIZE * 9);
         R_AUTO_SCROLL_INFO = new Rect(R_AUTO_SCROLL.left + GRID_SIZE / 2, R_AUTO_SCROLL.top + GRID_SIZE / 2, R_AUTO_SCROLL.right - GRID_SIZE / 2, R_AUTO_SCROLL.bottom - GRID_SIZE / 2);
         
         R_SHOP = RectUtil.createRect(R_TOWER.left + GRID_SIZE / 2, R_TOWER.top + GRID_SIZE * 2, GRID_SIZE * 10, GRID_SIZE * 5);
@@ -199,7 +199,7 @@ public class TowerDimen {
         R_DLG_NAME = new Rect(R_DLG_ICON.right, R_DLG_ICON.top, R_DLG_BG.right - GRID_SIZE / 2, R_DLG_ICON.bottom);
         R_DLG_TEXT = new Rect(R_DLG_ICON.right, R_DLG_NAME.bottom, R_DLG_NAME.right, R_DLG_BG.bottom - GRID_SIZE / 2);
         
-        R_FORECAST = RectUtil.createRect(TOWER_LEFT, TOWER_TOP, GRID_SIZE * 11, GRID_SIZE * 11);
+        R_FORECAST = RectUtil.createRect(TOWER_LEFT, TOWER_TOP, GRID_SIZE * GRID_NUMS, GRID_SIZE * GRID_NUMS);
         R_FC_ICON = RectUtil.createRect(R_FORECAST.left, R_FORECAST.top, GRID_SIZE, GRID_SIZE);
         R_FC_NAME = RectUtil.createRect(R_FC_ICON.right, R_FC_ICON.top, GRID_SIZE * 2, GRID_SIZE);
         R_FC_HP = RectUtil.createRect(R_FC_NAME.right, R_FC_NAME.top, GRID_SIZE * 3 / 2, GRID_SIZE);

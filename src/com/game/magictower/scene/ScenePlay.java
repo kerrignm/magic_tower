@@ -40,7 +40,7 @@ public class ScenePlay extends BaseScene {
     
     private GridFilter gridFilter = new GridFilter();
     
-    private Point curPoint = new Point();
+    private Point targetPoint = new Point();
     private Point touchPoint = new Point();
     private ArrayList<AStarPoint> stepList = new ArrayList<AStarPoint>();
     private boolean canReach = false;
@@ -51,13 +51,13 @@ public class ScenePlay extends BaseScene {
     
     public ScenePlay(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
-        mPathRects = new Rect[11][11];
+        mPathRects = new Rect[TowerDimen.GRID_NUMS][TowerDimen.GRID_NUMS];
         for(int i = 0; i < mPathRects.length; i++) {
             for (int j = 0; j < mPathRects[i].length; j++) {
                 mPathRects[i][j] = RectUtil.createRect(TowerDimen.R_TOUCH_GRID, j * TowerDimen.GRID_SIZE, i * TowerDimen.GRID_SIZE);
             }
         }
-        astarPath = new AStarPath(11, 11);
+        astarPath = new AStarPath(TowerDimen.GRID_NUMS, TowerDimen.GRID_NUMS);
         astarPath.setFilter(gridFilter);
         
         mTouchPaint = new Paint();
@@ -88,7 +88,7 @@ public class ScenePlay extends BaseScene {
             if (inBounds(event)) {
                 result = true;
                 getTouchGrid((int)event.getX(), (int)event.getY());
-                if (!canReach || (!curPoint.equals(touchPoint))) {
+                if (!canReach || (!targetPoint.equals(touchPoint))) {
                     if (canInteraction(touchPoint.x, touchPoint.y)) {
                         gridFilter.setTarget(touchPoint.x, touchPoint.y);
                         AStarPoint astarPoint = astarPath.getPath(game.player.getPosX(), game.player.getPosY(), touchPoint.x, touchPoint.y, game.lvMap[game.npcInfo.curFloor]);
@@ -102,8 +102,8 @@ public class ScenePlay extends BaseScene {
                                 current = current.getFather();
                             }
                             canReach = true;
-                            curPoint.x = touchPoint.x;
-                            curPoint.y = touchPoint.y;
+                            targetPoint.x = touchPoint.x;
+                            targetPoint.y = touchPoint.y;
                         }
                     } else {
                         clearTouchStep();
@@ -161,7 +161,7 @@ public class ScenePlay extends BaseScene {
     private void clearTouchStep() {
         canReach = false;
         startQutoStep = false;
-        curPoint.x = curPoint.y = -1;
+        targetPoint.x = targetPoint.y = -1;
         stepList.clear();
     }
     
@@ -190,16 +190,16 @@ public class ScenePlay extends BaseScene {
                 }
                 interaction(current.getX(), current.getY());
             } else {
-                if (curPoint.y < game.player.getPosY()) {
+                if (targetPoint.y < game.player.getPosY()) {
                     game.player.setToward(3);
-                } else if (curPoint.y > game.player.getPosY()) {
+                } else if (targetPoint.y > game.player.getPosY()) {
                     game.player.setToward(1);
-                } else if (curPoint.x > game.player.getPosX()) {
+                } else if (targetPoint.x > game.player.getPosX()) {
                     game.player.setToward(2);
                 } else {
                     game.player.setToward(0);
                 }
-                interaction(curPoint.x, curPoint.y);
+                interaction(targetPoint.x, targetPoint.y);
                 clearTouchStep();
             }
             parent.requestRender();
@@ -208,9 +208,9 @@ public class ScenePlay extends BaseScene {
     
     private void drawGrid(Canvas canvas) {
         if (canReach) {
-            if (curPoint != null) {
-                Rect r = RectUtil.createRect(rect.left + curPoint.x * TowerDimen.GRID_SIZE,
-                            rect.top + curPoint.y * TowerDimen.GRID_SIZE,
+            if (targetPoint != null) {
+                Rect r = RectUtil.createRect(rect.left + targetPoint.x * TowerDimen.GRID_SIZE,
+                            rect.top + targetPoint.y * TowerDimen.GRID_SIZE,
                             TowerDimen.GRID_SIZE, TowerDimen.GRID_SIZE);
                 graphics.drawRect(canvas, r, mTouchPaint);
             }
@@ -239,7 +239,7 @@ public class ScenePlay extends BaseScene {
         case BaseButton.ID_UP:
             if (game.status == Status.Playing) {
                 game.checkTest(id);
-                if (game.player.getPosY() - 1 < 11 && game.player.getPosY() - 1 >= 0) {
+                if (game.player.getPosY() - 1 < TowerDimen.GRID_NUMS && game.player.getPosY() - 1 >= 0) {
                     game.player.setToward(3);
                     interaction(game.player.getPosX(), game.player.getPosY() - 1);
                 }
@@ -248,7 +248,7 @@ public class ScenePlay extends BaseScene {
         case BaseButton.ID_LEFT:
             if (game.status == Status.Playing) {
                 game.checkTest(id);
-                if (game.player.getPosX() - 1 < 11 && game.player.getPosX() - 1 >= 0) {
+                if (game.player.getPosX() - 1 < TowerDimen.GRID_NUMS && game.player.getPosX() - 1 >= 0) {
                     game.player.setToward(0);
                     interaction(game.player.getPosX() - 1, game.player.getPosY());
                 }
@@ -257,7 +257,7 @@ public class ScenePlay extends BaseScene {
         case BaseButton.ID_RIGHT:
             if (game.status == Status.Playing) {
                 game.checkTest(id);
-                if (game.player.getPosX() + 1 < 11 && game.player.getPosX() + 1 >= 0) {
+                if (game.player.getPosX() + 1 < TowerDimen.GRID_NUMS && game.player.getPosX() + 1 >= 0) {
                     game.player.setToward(2);
                     interaction(game.player.getPosX() + 1, game.player.getPosY());
                 }
@@ -266,7 +266,7 @@ public class ScenePlay extends BaseScene {
         case BaseButton.ID_DOWN:
             if (game.status == Status.Playing) {
                 game.checkTest(id);
-                if (game.player.getPosY() + 1 < 11 && game.player.getPosY() + 1 >= 0) {
+                if (game.player.getPosY() + 1 < TowerDimen.GRID_NUMS && game.player.getPosY() + 1 >= 0) {
                     game.player.setToward(1);
                     interaction(game.player.getPosX(), game.player.getPosY() + 1);
                 }

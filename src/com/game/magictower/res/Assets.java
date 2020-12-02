@@ -18,10 +18,10 @@ public final class Assets {
     
     private static final String TAG = "MagicTower:Assets";
 
-    private static final int PLAYER_LEFT = 0;
-    private static final int PLAYER_DOWN = 1;
-    private static final int PLAYER_RIGHT = 2;
-    private static final int PLAYER_UP = 3;
+    public static final int PLAYER_LEFT = 0;
+    public static final int PLAYER_DOWN = 1;
+    public static final int PLAYER_RIGHT = 2;
+    public static final int PLAYER_UP = 3;
     
     private static final int[] IMAGE_ID = {
         0,

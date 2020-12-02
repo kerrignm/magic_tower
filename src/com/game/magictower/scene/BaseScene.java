@@ -84,7 +84,7 @@ public abstract class BaseScene extends BaseView {
     }
     
     private void drawInfoPanel(Canvas canvas) {
-        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(1), null, TowerDimen.R_PLR_ICON, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(Assets.PLAYER_DOWN), null, TowerDimen.R_PLR_ICON, null);
         graphics.drawTextInCenter(canvas, game.player.getLevel() + "", TowerDimen.R_PLR_LV_V);
         graphics.drawTextInCenter(canvas, mLevel, TowerDimen.R_PLR_LV_L);
 
@@ -126,8 +126,8 @@ public abstract class BaseScene extends BaseView {
     
     private void drawTower(Canvas canvas) {
         if (DBG_DRAW) LogUtil.d(TAG, "drawTower()");
-        for (int x = 0; x < 11; x++) {
-            for (int y = 0; y < 11; y++) {
+        for (int x = 0; x < TowerDimen.GRID_NUMS; x++) {
+            for (int y = 0; y < TowerDimen.GRID_NUMS; y++) {
                 int id = game.lvMap[game.npcInfo.curFloor][x][y];
                 if (id >= 100) {
                     id = 0;   //monitor items invisible, draw ground

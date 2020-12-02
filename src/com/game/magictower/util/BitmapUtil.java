@@ -21,6 +21,8 @@ import com.game.magictower.res.TowerDimen;
 
 public final class BitmapUtil {
     
+    private static final String TAG = "MagicTower:BitmapUtil";
+    
     @TargetApi(19)
     public static final int getBitmapSize(Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {       //API 19
@@ -39,7 +41,7 @@ public final class BitmapUtil {
             Bitmap bitmap = BitmapFactory.decodeStream(am.open("image/" + assets));
             instance = scaleBitmap(bitmap, TowerDimen.TOWER_SCALE, TowerDimen.TOWER_SCALE);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "loadBitmap() IO error assets = " + assets);
         }
         return instance;
     }
@@ -54,7 +56,7 @@ public final class BitmapUtil {
                 instance = scaleBitmap(bitmap, width, height);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "loadBitmap() 2 IO error assets = " + assets);
         }
         return instance;
     }
@@ -143,17 +145,17 @@ public final class BitmapUtil {
             }
         } catch (FileNotFoundException e) {
             photoFile.delete();
-            e.printStackTrace();
+            LogUtil.e(TAG, "saveBitmapToFile() FileNotFoundException path = " + path);
         } catch (IOException e) {
             photoFile.delete();
-            e.printStackTrace();
+            LogUtil.e(TAG, "saveBitmapToFile() IOException path = " + path);
         } finally {
             try {
                 if (fos != null) {
                     fos.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtil.e(TAG, "saveBitmapToFile() finally IOException path = " + path);
             }
         }
     }

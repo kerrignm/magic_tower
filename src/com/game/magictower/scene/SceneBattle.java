@@ -80,7 +80,7 @@ public class SceneBattle extends BaseScene {
         super.onDrawFrame(canvas);
         graphics.drawBitmap(canvas, Assets.getInstance().bkgBattle, null, TowerDimen.R_BATTLE, null);
         graphics.drawRect(canvas, TowerDimen.R_BATTLE);
-        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(1), null, TowerDimen.R_BTL_PLR_ICON, null);
+        graphics.drawBitmap(canvas, Assets.getInstance().playerMap.get(Assets.PLAYER_DOWN), null, TowerDimen.R_BTL_PLR_ICON, null);
         graphics.drawBitmap(canvas, mMstIcon, null, TowerDimen.R_BTL_MST_ICON, null);
         
         

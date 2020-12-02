@@ -10,8 +10,11 @@ import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 
 import com.game.magictower.Settings;
+import com.game.magictower.util.LogUtil;
 
 public final class GlobalSoundPool {
+    
+    private static final String TAG = "MagicTower:GlobalSoundPool";
     
     private static GlobalSoundPool sInstance;
     private SoundPool soundPool;
@@ -39,7 +42,7 @@ public final class GlobalSoundPool {
             AssetFileDescriptor afd = am.openFd("sound/" + assets);
             return soundPool.load(afd, 1);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "loadSound() IO error assets = " + assets);
         }
         return -1;
     }

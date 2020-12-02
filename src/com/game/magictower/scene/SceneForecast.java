@@ -46,13 +46,13 @@ public class SceneForecast extends BaseScene {
         mLose = mContext.getResources().getString(R.string.txt_lose);
         mBgd = new Rect(0, 0, TowerDimen.R_FORECAST.width(), TowerDimen.R_FORECAST.height());
         
-        mRects = new Rect[10][];
-        mHPs = new String[10];
-        mAttacks = new String[10];
-        mDefends = new String[10];
-        mMoneys = new String[10];
-        mLoses = new String[10];
-        for (int i = 0; i < 10; i++) {
+        mRects = new Rect[TowerDimen.GRID_NUMS - 1][];
+        mHPs = new String[TowerDimen.GRID_NUMS - 1];
+        mAttacks = new String[TowerDimen.GRID_NUMS - 1];
+        mDefends = new String[TowerDimen.GRID_NUMS - 1];
+        mMoneys = new String[TowerDimen.GRID_NUMS - 1];
+        mLoses = new String[TowerDimen.GRID_NUMS - 1];
+        for (int i = 0; i < TowerDimen.GRID_NUMS - 1; i++) {
             mRects[i] = new Rect[7];
             mRects[i][0] = new Rect(TowerDimen.R_FC_ICON);
             mRects[i][0].offset(0, (i + 1) * TowerDimen.GRID_SIZE);

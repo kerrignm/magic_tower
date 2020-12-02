@@ -31,7 +31,7 @@ public class SceneDialog extends BaseScene {
     private int mSectionCount;
     private int mLineCount;
     
-    private Bitmap mPlayerIcon = Assets.getInstance().playerMap.get(1);
+    private Bitmap mPlayerIcon = Assets.getInstance().playerMap.get(Assets.PLAYER_DOWN);
     private Bitmap mNpcIcon;
     private Rect mBgd;
     

@@ -11,6 +11,8 @@ import android.content.Context;
 
 public class FileUtil {
     
+    private static final String TAG = "MagicTower:FileUtil";
+    
     private static final int BUF_SIZE = 8 * 1024;
     
     private static byte[] buffer = new byte[BUF_SIZE];
@@ -26,7 +28,7 @@ public class FileUtil {
             fis.close();
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "readInternal() Exception fileName = " + fileName);
         } 
         return null;
     }
@@ -43,7 +45,7 @@ public class FileUtil {
             fis.close();
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "readExternal() Exception fileName = " + fileName);
         } 
         return null;
     }
@@ -56,7 +58,7 @@ public class FileUtil {
             fos.close();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "writeInternal() Exception fileName = " + fileName);
         }
         return false;
     }
@@ -81,7 +83,7 @@ public class FileUtil {
             }
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "writeExternal() Exception fileName = " + fileName);
         }
         return false;
     }
@@ -97,13 +99,13 @@ public class FileUtil {
                 sb.append(new String(buffer, 0, byteCount));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.e(TAG, "loadAssets() IOException name = " + name);
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LogUtil.e(TAG, "loadAssets() finally IOException name = " + name);
                 }
             }
         }
