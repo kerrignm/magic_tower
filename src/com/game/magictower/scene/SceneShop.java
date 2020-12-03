@@ -36,7 +36,7 @@ public class SceneShop extends BaseScene {
         mTextRect[2] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 2);
         mTextRect[3] = RectUtil.createRect(TowerDimen.R_SHOP_TEXT, 0, TowerDimen.R_SHOP_TEXT.height() * 3);
         for (int i = 0; i < 4; i++) {
-            mEdgeRect[i] = new Rect(mTextRect[i].left, mTextRect[i].top + 5, mTextRect[i].right, mTextRect[i].bottom - 5);
+            mEdgeRect[i] = new Rect(mTextRect[i].left, mTextRect[i].top + TowerDimen.LINE_WIDTH, mTextRect[i].right, mTextRect[i].bottom - TowerDimen.LINE_WIDTH);
         }
         mTouchRect = new Rect(TowerDimen.R_SHOP_TEXT.left, TowerDimen.R_SHOP_TEXT.top, TowerDimen.R_SHOP_TEXT.right, TowerDimen.R_SHOP_TEXT.top + TowerDimen.R_SHOP_TEXT.height() * 4);
         mBgd = new Rect(0, 0, TowerDimen.R_SHOP.width(), TowerDimen.R_SHOP.height());
@@ -97,12 +97,14 @@ public class SceneShop extends BaseScene {
                 graphics.textPaint.setStyle(Style.STROKE);
                 graphics.drawRect(canvas, mEdgeRect[i], graphics.textPaint);
                 graphics.textPaint.setStyle(Style.FILL);
-                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + 10, mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2);
+                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + TowerDimen.LINE_WIDTH * 2,
+                        mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2);
             } else {
                 graphics.disableTextPaint.setStyle(Style.STROKE);
                 graphics.drawRect(canvas, mEdgeRect[i], graphics.disableTextPaint);
                 graphics.disableTextPaint.setStyle(Style.FILL);
-                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + 10, mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2, graphics.disableTextPaint);
+                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + TowerDimen.LINE_WIDTH * 2,
+                        mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2, graphics.disableTextPaint);
             }
         }
     }

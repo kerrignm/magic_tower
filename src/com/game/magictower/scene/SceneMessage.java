@@ -45,9 +45,9 @@ public class SceneMessage extends BaseScene {
     public SceneMessage(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
         shaderPaint.setAntiAlias(true);
-        shaderPaint.setARGB(255, 255, 255, 255);
+        shaderPaint.setColor(TowerDimen.TEXT_COLOR);
         shaderPaint.setTextSize(TowerDimen.BIG_TEXT_SIZE);
-        shaderPaint.setStrokeWidth(5);
+        shaderPaint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         shaderPaint.setStyle(Paint.Style.FILL);
         shaderPaint.setTypeface(Typeface.DEFAULT_BOLD);
         fadeOutShader = new LinearGradient(0, TowerDimen.R_AUTO_SCROLL_INFO.top + TowerDimen.GRID_SIZE, 0, TowerDimen.R_AUTO_SCROLL_INFO.top, Color.WHITE, 0, Shader.TileMode.CLAMP);

@@ -15,7 +15,6 @@
     <string name="btn_jump">Jump</string>
     <string name="btn_ok">OK</string>
     
-    <string name="msg_restart">重新开始</string>
     <string name="save_succeed">数据保存成功！</string>
     <string name="save_failed">数据保存失败！</string>
     <string name="read_succeed">数据读取成功！</string>
@@ -35,32 +34,32 @@
     <string name="exclamatory_colon">： </string>
     
     <string name="txt_name">名称</string>
-    <string name="txt_hp">生命 </string>
-    <string name="txt_attack">攻击 </string>
-    <string name="txt_defend">防御 </string>
-    <string name="txt_money">金币 </string>
-    <string name="txt_exp">经验 </string>
+    <string name="txt_hp">生命</string>
+    <string name="txt_attack">攻击</string>
+    <string name="txt_defend">防御</string>
+    <string name="txt_money">金币</string>
+    <string name="txt_exp">经验</string>
     <string name="txt_money_exp">金 · 经 </string>
-    <string name="txt_lose">损失 </string>
+    <string name="txt_lose">损失</string>
     <string name="txt_colon">\u0020:\u0020</string>
     
     <string name="jump_ordinal_floor">第<xliff:g id="1">%d</xliff:g>层</string>
     
-    	<string name="get_yellow_key">得到一把 黄钥匙 ！</string>
-	<string name="get_bule_key">得到一把 蓝钥匙 ！</string>
-	<string name="get_red_key">得到一把 红钥匙 ！</string>
-	<string name="get_sapphire">得到一个蓝宝石 防御力加 3 ！</string>
-	<string name="get_ruby">得到一个红宝石 攻击力加 3 ！</string>
-	<string name="get_red_potion">得到一个小血瓶 生命加 200 ！</string>
-	<string name="get_blue_potion">得到一个大血瓶 生命加 500 ！</string>
-	<string name="get_little_fly">得到 小飞羽 等级提升一级 ！</string>
-	<string name="get_big_fly">得到 大飞羽 等级提升三级 ！</string>
-	<string name="get_key_box">得到 钥匙盒 各种钥匙数加 1 ！</string>
-	<string name="get_gold_block">得到 金块 金币数加 300 ！</string>
-	<string name="get_iron_sword">得到 铁剑 攻击加 10 ！</string>
-	<string name="get_steel_sword">得到 钢剑 攻击加 70 ！</string>
-	<string name="get_light_sword">得到 星光神剑 攻击加 150 ！</string>
-	<string name="get_iron_shield">得到 铁盾 防御加 10 ！</string>
+    <string name="get_yellow_key">得到一把 黄钥匙 ！</string>
+    <string name="get_bule_key">得到一把 蓝钥匙 ！</string>
+    <string name="get_red_key">得到一把 红钥匙 ！</string>
+    <string name="get_sapphire">得到一个蓝宝石 防御力加 3 ！</string>
+    <string name="get_ruby">得到一个红宝石 攻击力加 3 ！</string>
+    <string name="get_red_potion">得到一个小血瓶 生命加 200 ！</string>
+    <string name="get_blue_potion">得到一个大血瓶 生命加 500 ！</string>
+    <string name="get_little_fly">得到 小飞羽 等级提升一级 ！</string>
+    <string name="get_big_fly">得到 大飞羽 等级提升三级 ！</string>
+    <string name="get_key_box">得到 钥匙盒 各种钥匙数加 1 ！</string>
+    <string name="get_gold_block">得到 金块 金币数加 300 ！</string>
+    <string name="get_iron_sword">得到 铁剑 攻击加 10 ！</string>
+    <string name="get_steel_sword">得到 钢剑 攻击加 70 ！</string>
+    <string name="get_light_sword">得到 星光神剑 攻击加 150 ！</string>
+    <string name="get_iron_shield">得到 铁盾 防御加 10 ！</string>
     <string name="get_steel_shield">得到 钢盾 防御加 30 ！</string>
     <string name="get_gold_shield">得到 黄金盾 防御加 85 ！</string>
     <string name="get_light_shield">得到 星光神盾 防御加 190 ！</string>

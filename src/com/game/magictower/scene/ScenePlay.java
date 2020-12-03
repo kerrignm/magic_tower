@@ -62,17 +62,17 @@ public class ScenePlay extends BaseScene {
         
         mTouchPaint = new Paint();
         mTouchPaint.setAntiAlias(true);
-        mTouchPaint.setARGB(255, 0xcc, 0x66, 0x00);
+        mTouchPaint.setColor(TowerDimen.EDGE_LINE_COLOR);
         mTouchPaint.setStyle(Style.STROKE);
-        mTouchPaint.setStrokeWidth(5);
+        mTouchPaint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         mTouchPaint.setTypeface(Typeface.DEFAULT_BOLD);
         mPathPaint = new Paint();
         mPathPaint.setAntiAlias(true);
-        mPathPaint.setARGB(255, 0xcc, 0x66, 0x00);
+        mPathPaint.setColor(TowerDimen.EDGE_LINE_COLOR);
         mPathPaint.setStyle(Style.STROKE);
-        mPathPaint.setStrokeWidth(5);
+        mPathPaint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         mPathPaint.setTypeface(Typeface.DEFAULT_BOLD);
-        mPathPaint.setPathEffect(new DashPathEffect(new float[] {10, 5}, 0));
+        mPathPaint.setPathEffect(new DashPathEffect(TowerDimen.DASH_LINE_EFFECT, 0));
     }
 
     public void show() {
@@ -175,13 +175,13 @@ public class ScenePlay extends BaseScene {
             if (stepList.size() > 0) {
                 AStarPoint current = stepList.remove(stepList.size() - 1);
                 if (current.getY() < game.player.getPosY()) {
-                    game.player.setToward(3);
+                    game.player.setToward(Assets.PLAYER_UP);
                 } else if (current.getY() > game.player.getPosY()) {
-                    game.player.setToward(1);
+                    game.player.setToward(Assets.PLAYER_DOWN);
                 } else if (current.getX() > game.player.getPosX()) {
-                    game.player.setToward(2);
+                    game.player.setToward(Assets.PLAYER_RIGHT);
                 } else {
-                    game.player.setToward(0);
+                    game.player.setToward(Assets.PLAYER_LEFT);
                 }
                 if (game.lvMap[game.npcInfo.curFloor][current.getY()][current.getX()] == 0) {
                     handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
@@ -191,13 +191,13 @@ public class ScenePlay extends BaseScene {
                 interaction(current.getX(), current.getY());
             } else {
                 if (targetPoint.y < game.player.getPosY()) {
-                    game.player.setToward(3);
+                    game.player.setToward(Assets.PLAYER_UP);
                 } else if (targetPoint.y > game.player.getPosY()) {
-                    game.player.setToward(1);
+                    game.player.setToward(Assets.PLAYER_DOWN);
                 } else if (targetPoint.x > game.player.getPosX()) {
-                    game.player.setToward(2);
+                    game.player.setToward(Assets.PLAYER_RIGHT);
                 } else {
-                    game.player.setToward(0);
+                    game.player.setToward(Assets.PLAYER_LEFT);
                 }
                 interaction(targetPoint.x, targetPoint.y);
                 clearTouchStep();
@@ -240,7 +240,7 @@ public class ScenePlay extends BaseScene {
             if (game.status == Status.Playing) {
                 game.checkTest(id);
                 if (game.player.getPosY() - 1 < TowerDimen.GRID_NUMS && game.player.getPosY() - 1 >= 0) {
-                    game.player.setToward(3);
+                    game.player.setToward(Assets.PLAYER_UP);
                     interaction(game.player.getPosX(), game.player.getPosY() - 1);
                 }
             }
@@ -249,7 +249,7 @@ public class ScenePlay extends BaseScene {
             if (game.status == Status.Playing) {
                 game.checkTest(id);
                 if (game.player.getPosX() - 1 < TowerDimen.GRID_NUMS && game.player.getPosX() - 1 >= 0) {
-                    game.player.setToward(0);
+                    game.player.setToward(Assets.PLAYER_LEFT);
                     interaction(game.player.getPosX() - 1, game.player.getPosY());
                 }
             }
@@ -258,7 +258,7 @@ public class ScenePlay extends BaseScene {
             if (game.status == Status.Playing) {
                 game.checkTest(id);
                 if (game.player.getPosX() + 1 < TowerDimen.GRID_NUMS && game.player.getPosX() + 1 >= 0) {
-                    game.player.setToward(2);
+                    game.player.setToward(Assets.PLAYER_RIGHT);
                     interaction(game.player.getPosX() + 1, game.player.getPosY());
                 }
             }
@@ -267,7 +267,7 @@ public class ScenePlay extends BaseScene {
             if (game.status == Status.Playing) {
                 game.checkTest(id);
                 if (game.player.getPosY() + 1 < TowerDimen.GRID_NUMS && game.player.getPosY() + 1 >= 0) {
-                    game.player.setToward(1);
+                    game.player.setToward(Assets.PLAYER_DOWN);
                     interaction(game.player.getPosX(), game.player.getPosY() + 1);
                 }
             }

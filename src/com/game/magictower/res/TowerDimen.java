@@ -7,6 +7,14 @@ import android.graphics.Rect;
 
 public class TowerDimen {
     
+    public static final int EDGE_LINE_COLOR = 0xFFCC6600;
+    public static final int TEXT_COLOR = 0xFFFFFFFF;
+    public static final int DISABLE_TEXT_COLOR = 0xFFA0A0A0;
+    
+    public static final int LINE_WIDTH = 5;
+    
+    public static final float[] DASH_LINE_EFFECT = {10, 5};
+    
     public static final int BASE_PIX_SIZE = 72;
     public static final int GRID_NUMS = 11;
 

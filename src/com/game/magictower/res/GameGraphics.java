@@ -46,33 +46,33 @@ public final class GameGraphics {
     
     private void initTextPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
-        paint.setARGB(255, 255, 255, 255);
+        paint.setColor(TowerDimen.TEXT_COLOR);
         paint.setTextSize(TowerDimen.TEXT_SIZE);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
     private void initDisableTextPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
-        paint.setARGB(255, 160, 160, 160);
+        paint.setColor(TowerDimen.DISABLE_TEXT_COLOR);
         paint.setTextSize(TowerDimen.TEXT_SIZE);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
     private void initBigTextPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
-        paint.setARGB(255, 255, 255, 255);
+        paint.setColor(TowerDimen.TEXT_COLOR);
         paint.setTextSize(TowerDimen.BIG_TEXT_SIZE);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
     private void initRectPaintEffect(Paint paint) {
         paint.setAntiAlias(true);
-        paint.setARGB(255, 0xcc, 0x66, 0x00);
+        paint.setColor(TowerDimen.EDGE_LINE_COLOR);
         paint.setStyle(Style.STROKE);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(TowerDimen.LINE_WIDTH);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
     }
     
