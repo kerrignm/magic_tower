@@ -10,8 +10,9 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 import com.game.magictower.Game;
-import com.game.magictower.GameView;
 import com.game.magictower.Game.Status;
+import com.game.magictower.GameView;
+import com.game.magictower.model.ShopInfo;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.TowerDimen;
@@ -19,10 +20,13 @@ import com.game.magictower.util.RectUtil;
 import com.game.magictower.widget.BaseButton;
 
 public class SceneShop extends BaseScene {
+    
+    private static final int SHOP_DONE = 1;
+    private static final int SHOP_FAIL = 2;
+    private static final int SHOP_NONE = 3;
 
-    ArrayList<String> choices;
+    ArrayList<ShopInfo> choices;
     private Bitmap imgIcon;
-    private int id = 0;
     private int mSelected = 0;
     private Rect[] mTextRect = new Rect[4];
     private Rect[] mEdgeRect = new Rect[4];
@@ -45,7 +49,6 @@ public class SceneShop extends BaseScene {
     public void show(int shopId, int npcId) {
         choices = game.shops.get(shopId);
         imgIcon = Assets.getInstance().animMap0.get(npcId);
-        this.id = shopId;
         mSelected = 0;
         game.status = Status.Shopping;
         parent.requestRender();
@@ -97,13 +100,13 @@ public class SceneShop extends BaseScene {
                 graphics.textPaint.setStyle(Style.STROKE);
                 graphics.drawRect(canvas, mEdgeRect[i], graphics.textPaint);
                 graphics.textPaint.setStyle(Style.FILL);
-                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + TowerDimen.LINE_WIDTH * 2,
+                graphics.drawText(canvas, choices.get(i).getDescribe(), mTextRect[i].left + TowerDimen.LINE_WIDTH * 2,
                         mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2);
             } else {
                 graphics.disableTextPaint.setStyle(Style.STROKE);
                 graphics.drawRect(canvas, mEdgeRect[i], graphics.disableTextPaint);
                 graphics.disableTextPaint.setStyle(Style.FILL);
-                graphics.drawText(canvas, choices.get(i), mTextRect[i].left + TowerDimen.LINE_WIDTH * 2,
+                graphics.drawText(canvas, choices.get(i).getDescribe(), mTextRect[i].left + TowerDimen.LINE_WIDTH * 2,
                         mTextRect[i].top + TowerDimen.TEXT_SIZE + (mTextRect[i].height() - TowerDimen.TEXT_SIZE) / 2, graphics.disableTextPaint);
             }
         }
@@ -131,223 +134,74 @@ public class SceneShop extends BaseScene {
     }
     
     private void selected() {
-        switch (id) {
-        case 0:     //  3 floor
-            switch (mSelected) {
-                case 0:
-                    if (game.player.getMoney() >= 25) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 25);
-                        game.player.setHp(game.player.getHp() + 800);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 1:
-                    if (game.player.getMoney() >= 25) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 25);
-                        game.player.setAttack(game.player.getAttack() + 4);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 2:
-                    if (game.player.getMoney() >= 25) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 25);
-                        game.player.setDefend(game.player.getDefend() + 4);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 3:
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    game.status = Status.Playing;
-                    break;
+        ShopInfo shopInfo = choices.get(mSelected);
+        int result = SHOP_FAIL;
+        switch (shopInfo.getType()) {
+        case ShopInfo.COST_TYPE_MONEY:
+            if (game.player.getMoney() >= shopInfo.getValue()) {
+                game.player.setMoney(game.player.getMoney() - shopInfo.getValue());
+                result = SHOP_DONE;
             }
             break;
-        case 1:     // 5 floor
-            switch (mSelected) {
-                case 0:
-                    if (game.player.getExp() >= 100) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setLevel(game.player.getLevel() + 1);
-                        game.player.setExp(game.player.getExp() - 100);
-                        game.player.setHp(game.player.getHp() + 1000);
-                        game.player.setAttack(game.player.getAttack() + 7);
-                        game.player.setDefend(game.player.getDefend() + 7);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 1:
-                    if (game.player.getExp() >= 30) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setExp(game.player.getExp() - 30);
-                        game.player.setAttack(game.player.getAttack() + 5);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 2:
-                    if (game.player.getExp() >= 30) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setExp(game.player.getExp() - 30);
-                        game.player.setDefend(game.player.getDefend() + 5);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 3:
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    game.status = Status.Playing;
-                    break;
+        case ShopInfo.COST_TYPE_EXP:
+            if (game.player.getExp() >= shopInfo.getValue()) {
+                game.player.setExp(game.player.getExp() - shopInfo.getValue());
+                result = SHOP_DONE;
             }
             break;
-        case 2:     // 5 floor
-            switch (mSelected) {
-                case 0:
-                    if (game.player.getMoney() >= 10) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 10);
-                        game.player.setYkey(game.player.getYkey() + 1);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 1:
-                    if (game.player.getMoney() >= 50) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 50);
-                        game.player.setBkey(game.player.getBkey() + 1);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 2:
-                    if (game.player.getMoney() >= 100) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 100);
-                        game.player.setRkey(game.player.getRkey() + 1);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 3:
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    game.status = Status.Playing;
-                    break;
+        case ShopInfo.COST_TYPE_YKEY:
+            if (game.player.getYkey() >= shopInfo.getValue()) {
+                game.player.setYkey(game.player.getYkey() - shopInfo.getValue());
+                result = SHOP_DONE;
             }
             break;
-        case 3:     // 11 floor
-            switch (mSelected) {
-                case 0:
-                    if (game.player.getMoney() >= 100) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 100);
-                        game.player.setHp(game.player.getHp() + 4000);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 1:
-                    if (game.player.getMoney() >= 100) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 100);
-                        game.player.setAttack(game.player.getAttack() + 20);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 2:
-                    if (game.player.getMoney() >= 100) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setMoney(game.player.getMoney() - 100);
-                        game.player.setDefend(game.player.getDefend() + 20);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 3:
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    game.status = Status.Playing;
-                    break;
+        case ShopInfo.COST_TYPE_BKEY:
+            if (game.player.getBkey() >= shopInfo.getValue()) {
+                game.player.setBkey(game.player.getBkey() - shopInfo.getValue());
+                result = SHOP_DONE;
             }
             break;
-        case 4:     // 12 floor
-            switch (mSelected) {
-                case 0:
-                    if (game.player.getYkey() > 0) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setYkey(game.player.getYkey() - 1);
-                        game.player.setMoney(game.player.getMoney() + 7);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 1:
-                    if (game.player.getBkey() > 0) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setBkey(game.player.getBkey() - 1);
-                        game.player.setMoney(game.player.getMoney() + 35);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 2:
-                    if (game.player.getRkey() > 0) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                            game.player.setRkey(game.player.getRkey() - 1);
-                        game.player.setMoney(game.player.getMoney() + 70);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 3:
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    game.status = Status.Playing;
-                    break;
+        case ShopInfo.COST_TYPE_RKEY:
+            if (game.player.getRkey() >= shopInfo.getValue()) {
+                game.player.setRkey(game.player.getRkey() - shopInfo.getValue());
+                result = SHOP_DONE;
             }
             break;
-        case 5:     // 13 floor
-            switch (mSelected) {
-                case 0:
-                    if (game.player.getExp() >= 270) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setLevel(game.player.getLevel() + 3);
-                        game.player.setExp(game.player.getExp() - 270);
-                        game.player.setHp(game.player.getHp() + 3000);
-                        game.player.setAttack(game.player.getAttack() + 20);
-                        game.player.setDefend(game.player.getDefend() + 20);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 1:
-                    if (game.player.getExp() >= 95) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setExp(game.player.getExp() - 95);
-                        game.player.setAttack(game.player.getAttack() + 17);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 2:
-                    if (game.player.getExp() >= 95) {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-                        game.player.setExp(game.player.getExp() - 95);
-                        game.player.setDefend(game.player.getDefend() + 17);
-                    } else {
-                        GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
-                    }
-                    break;
-                case 3:
-                    GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
-                    game.status = Status.Playing;
-                    break;
-            }
+        case ShopInfo.COST_TYPE_NONE:
+            result = SHOP_NONE;
             break;
+        }
+        if (result == SHOP_DONE) {
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
+            if (shopInfo.getLevel() > 0) {
+                game.player.setLevel(game.player.getLevel() + shopInfo.getLevel());
+            }
+            if (shopInfo.getHp() > 0) {
+                game.player.setHp(game.player.getHp() + shopInfo.getHp());
+            }
+            if (shopInfo.getMoney() > 0) {
+                game.player.setMoney(game.player.getMoney() + shopInfo.getMoney());
+            }
+            if (shopInfo.getAttack() > 0) {
+                game.player.setAttack(game.player.getAttack() + shopInfo.getAttack());
+            }
+            if (shopInfo.getDefend() > 0) {
+                game.player.setDefend(game.player.getDefend() + shopInfo.getDefend());
+            }
+            if (shopInfo.getYKey() > 0) {
+                game.player.setYkey(game.player.getYkey() + shopInfo.getYKey());
+            }
+            if (shopInfo.getBKey() > 0) {
+                game.player.setBkey(game.player.getBkey() + shopInfo.getBKey());
+            }
+            if (shopInfo.getRKey() > 0) {
+                game.player.setRkey(game.player.getRkey() + shopInfo.getRKey());
+            }
+        } else if (result == SHOP_FAIL) {
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
+        } else {
+            GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
+            game.status = Status.Playing;
         }
     }
 

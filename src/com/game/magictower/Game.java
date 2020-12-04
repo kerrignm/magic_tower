@@ -8,6 +8,7 @@ import android.content.Context;
 import com.game.magictower.model.Monster;
 import com.game.magictower.model.NpcInfo;
 import com.game.magictower.model.Player;
+import com.game.magictower.model.ShopInfo;
 import com.game.magictower.model.TalkInfo;
 import com.game.magictower.model.Tower;
 import com.game.magictower.util.ArrayUtil;
@@ -39,7 +40,7 @@ public class Game {
     public Tower tower;
     public int[][][] lvMap;
     public HashMap<Integer, ArrayList<String>> storys;
-    public HashMap<Integer, ArrayList<String>> shops;
+    public HashMap<Integer, ArrayList<ShopInfo>> shops;
     public HashMap<Integer, ArrayList<TalkInfo>> dialogs;
     public HashMap<Integer, Monster> monsters;
     
@@ -62,7 +63,7 @@ public class Game {
         npcInfo = new NpcInfo();
         tower = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "tower.json"), Tower.class);
         storys = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "story.json"), new TypeToken<HashMap<Integer, ArrayList<String>>>(){}.getType());
-        shops = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "shop.json"), new TypeToken<HashMap<Integer, ArrayList<String>>>(){}.getType());
+        shops = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "shop.json"), new TypeToken<HashMap<Integer, ArrayList<ShopInfo>>>(){}.getType());
         dialogs = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "dialog.json"), new TypeToken<HashMap<Integer, ArrayList<TalkInfo>>>(){}.getType());
     }
     
@@ -171,6 +172,8 @@ public class Game {
                     player.setAttack(3000);
                     player.setDefend(3000);
                     player.setHp(80000);
+                    player.setMoney(3000);
+                    player.setExp(3000);
                 }
                 testFlag = false;
             }

@@ -1,38 +1,152 @@
 {
   "0": [
-    "增加 800 点生命（25 金币）",
-    "增加 4 点攻击（25 金币）",
-    "增加 4 点防御（25 金币）",
-    "离开商店"
+    {
+        "costType": 1,
+        "costValue": 25,
+        "hp": 800,
+        "describe": "增加 800 点生命（25 金币）"
+    },
+    {
+        "costType": 1,
+        "costValue": 25,
+        "attack": 4,
+        "describe": "增加 4 点攻击（25 金币）"
+    },
+    {
+        "costType": 1,
+        "costValue": 25,
+        "defend": 4,
+        "describe": "增加 4 点防御（25 金币）"
+    },
+    {
+        "costType": 0,
+        "describe": "离开商店"
+    }
   ],
   "1": [
-    "提升一级（需要 100 点）",
-    "增加攻击5（需要 30 点）",
-    "增加防御5（需要 30 点）",
-    "离开商店"
+    {
+        "costType": 2,
+        "costValue": 100,
+        "level": 1,
+        "hp": 1000,
+        "attack": 7,
+        "defend": 7,
+        "describe": "提升一级（需要 100 点）"
+    },
+    {
+        "costType": 2,
+        "costValue": 30,
+        "attack": 5,
+        "describe": "增加攻击5（需要 30 点）"
+    },
+    {
+        "costType": 2,
+        "costValue": 30,
+        "defend": 5,
+        "describe": "增加防御5（需要 30 点）"
+    },
+    {
+        "costType": 0,
+        "describe": "离开商店"
+    }
   ],
   "2": [
-    "购买 1 把黄钥匙（10 金币）",
-    "购买 1 把蓝钥匙（50 金币）",
-    "购买 1 把红钥匙（100 金币）",
-    "离开商店"
+    {
+        "costType": 1,
+        "costValue": 10,
+        "ykey": 1,
+        "describe": "购买 1 把黄钥匙（10 金币）"
+    },
+    {
+        "costType": 1,
+        "costValue": 50,
+        "bkey": 1,
+        "describe": "购买 1 把蓝钥匙（50 金币）"
+    },
+    {
+        "costType": 1,
+        "costValue": 100,
+        "rkey": 1,
+        "describe": "购买 1 把红钥匙（100 金币）"
+    },
+    {
+        "costType": 0,
+        "describe": "离开商店"
+    }
   ],
   "3": [
-    "增加 4000 点生命（100 金币）",
-    "增加 20 点攻击（100 金币）",
-    "增加 20 点防御（100 金币）",
-    "离开商店"
+    {
+        "costType": 1,
+        "costValue": 100,
+        "hp": 4000,
+        "describe": "增加 4000 点生命（100 金币）"
+    },
+    {
+        "costType": 1,
+        "costValue": 100,
+        "attack": 20,
+        "describe": "增加 20 点攻击（100 金币）"
+    },
+    {
+        "costType": 1,
+        "costValue": 100,
+        "defend": 20,
+        "describe": "增加 20 点防御（100 金币）"
+    },
+    {
+        "costType": 0,
+        "describe": "离开商店"
+    }
   ],
   "4": [
-    "卖出 1 把黄钥匙（7 金币）",
-    "卖出 1 把蓝钥匙（35 金币）",
-    "卖出 1 把红钥匙（70 金币）",
-    "离开商店"
+    {
+        "costType": 3,
+        "costValue": 1,
+        "money": 7,
+        "describe": "卖出 1 把黄钥匙（7 金币）"
+    },
+    {
+        "costType": 4,
+        "costValue": 1,
+        "money": 35,
+        "describe": "卖出 1 把蓝钥匙（35 金币）"
+    },
+    {
+        "costType": 5,
+        "costValue": 1,
+        "money": 70,
+        "describe": "卖出 1 把红钥匙（70 金币）"
+    },
+    {
+        "costType": 0,
+        "describe": "离开商店"
+    }
   ],
   "5": [
-    "提升三级（需要 270 点）",
-    "增加攻击 17（需要 95 点）",
-    "增加防御 17（需要 95 点）",
-    "离开商店"
+    {
+        "costType": 2,
+        "costValue": 270,
+        "level": 3,
+        "hp": 3000,
+        "attack": 20,
+        "defend": 20,
+        "describe": "提升三级（需要 270 点）"
+    },
+    {
+        "costType": 2,
+        "costValue": 95,
+        "attack": 17,
+        "describe": "增加攻击 17（需要 95 点）"
+    },
+    {
+        "costType": 2,
+        "costValue": 95,
+        "defend": 17,
+        "describe": "增加防御 17（需要 95 点）"
+    },
+    {
+        "costType": 0,
+        "describe": "离开商店"
+    }
   ]
 }

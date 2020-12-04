@@ -53,7 +53,13 @@ public final class GlobalSoundPool {
     
     public int playSound(int soundId, int loop) {
         if (Settings.isVoiceEnabled()) {
-            return soundPool.play(soundId, 0.5F, 0.5F, 0, loop, 1.0F);
+            int priority = 0;
+            if (loop < 0) {
+                priority = 100;
+            } else if (loop > 0) {
+                priority = 50;
+            }
+            return soundPool.play(soundId, 0.5F, 0.5F, priority, loop, 1.0F);
         }
         return -1;
     }

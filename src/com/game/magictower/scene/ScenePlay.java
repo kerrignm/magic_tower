@@ -44,7 +44,7 @@ public class ScenePlay extends BaseScene {
     private Point touchPoint = new Point();
     private ArrayList<AStarPoint> stepList = new ArrayList<AStarPoint>();
     private boolean canReach = false;
-    private boolean startQutoStep = false;
+    private boolean startAutoStep = false;
     
     private Paint mTouchPaint;
     private Paint mPathPaint;
@@ -108,8 +108,8 @@ public class ScenePlay extends BaseScene {
                     } else {
                         clearTouchStep();
                     }
-                } else {
-                    startQutoStep = true;
+                } else if (!startAutoStep) {
+                    startAutoStep = true;
                     handler.sendEmptyMessageDelayed(MSG_ID_AUTO_STEP, MSG_DELAY_AUTO_STEP);
                 }
                 parent.requestRender();
@@ -160,7 +160,7 @@ public class ScenePlay extends BaseScene {
     
     private void clearTouchStep() {
         canReach = false;
-        startQutoStep = false;
+        startAutoStep = false;
         targetPoint.x = targetPoint.y = -1;
         stepList.clear();
     }
@@ -232,7 +232,7 @@ public class ScenePlay extends BaseScene {
     
     @Override
     public void onAction(int id) {
-        if (id != BaseButton.ID_OK) {
+        if (canReach && (id != BaseButton.ID_OK)) {
             clearTouchStep();
         }
         switch (id) {
@@ -303,7 +303,7 @@ public class ScenePlay extends BaseScene {
             }
             break;
         case BaseButton.ID_OK:
-                if (canReach && !startQutoStep) {
+                if (canReach && !startAutoStep) {
                     autoStep();
                 }
             break;

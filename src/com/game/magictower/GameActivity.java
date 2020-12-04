@@ -21,8 +21,8 @@ public class GameActivity extends Activity implements GameControler {
     
     private GameView gameView;
     
-    private int musicId = -1;
-    private int streamId = -1;
+    private int musicId = 0;
+    private int streamId = 0;
     
     protected static Intent getIntent(Context context, boolean load){
         Intent intent = new Intent(context, GameActivity.class);
@@ -106,6 +106,8 @@ public class GameActivity extends Activity implements GameControler {
         if (streamId > 0) {
             GlobalSoundPool.getInstance().stopSound(streamId);
         }
+        musicId = 0;
+        streamId = 0;
     }
     
     private void changeBackgroundMusic(int floor) {
