@@ -56,8 +56,8 @@ public class SceneMessage extends BaseScene {
         mScrollBgd = new Rect(0, 0, TowerDimen.R_AUTO_SCROLL.width(), TowerDimen.R_AUTO_SCROLL.height());
     }
     
-    public void show(int titleId, int msgId) {
-        show(-1, mContext.getResources().getString(titleId), mContext.getResources().getString(msgId), MODE_ALERT);
+    public void show(String title, String msg) {
+        show(-1, title, msg, MODE_ALERT);
     }
     
     public void show(int id) {

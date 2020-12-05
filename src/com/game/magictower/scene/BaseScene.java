@@ -129,8 +129,8 @@ public abstract class BaseScene extends BaseView {
         for (int x = 0; x < TowerDimen.GRID_NUMS; x++) {
             for (int y = 0; y < TowerDimen.GRID_NUMS; y++) {
                 int id = game.lvMap[game.npcInfo.curFloor][x][y];
-                if (id >= 100) {
-                    id = 0;   //monitor items invisible, draw ground
+                if ((id == 0) || (id >= 100)) {
+                    continue;
                 }
                 graphics.drawBitmap(canvas, animMap.get(id), TowerDimen.TOWER_LEFT + y * TowerDimen.GRID_SIZE, TowerDimen.TOWER_TOP + x * TowerDimen.GRID_SIZE);
             }

@@ -155,14 +155,14 @@ public class SceneDialog extends BaseScene {
             break;
         case 4:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
-            parent.showToast(R.string.get_steel_sword);
-            game.player.setAttack(game.player.getAttack() + 70);
+            parent.showToast(game.items.get(73).getDescribe());
+            game.player.setAttack(game.player.getAttack() + game.items.get(73).getAttack());
             game.lvMap[2][10][7] = 0;
             break;
         case 5:
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
-            parent.showToast(R.string.get_steel_shield);
-            game.player.setDefend(game.player.getDefend() + 30);
+            parent.showToast(game.items.get(77).getDescribe());
+            game.player.setDefend(game.player.getDefend() + game.items.get(77).getDefend());
             game.lvMap[2][10][9] = 0;
             break;
         case 6:

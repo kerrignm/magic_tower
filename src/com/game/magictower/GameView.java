@@ -270,8 +270,8 @@ public class GameView extends RedrawableView {
         sceneShop.show(shopId, npcId);
     }
     
-    public void showMessage(int titleId, int msgId) {
-        sceneMessage.show(titleId, msgId);
+    public void showMessage(String title, String msg) {
+        sceneMessage.show(title, msg);
     }
     
     public void showMessage(int id) {

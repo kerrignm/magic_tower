@@ -5,12 +5,14 @@ import java.util.HashMap;
 
 import android.content.Context;
 
+import com.game.magictower.model.ItemInfo;
 import com.game.magictower.model.Monster;
 import com.game.magictower.model.NpcInfo;
 import com.game.magictower.model.Player;
 import com.game.magictower.model.ShopInfo;
 import com.game.magictower.model.TalkInfo;
 import com.game.magictower.model.Tower;
+import com.game.magictower.model.Treasure;
 import com.game.magictower.util.ArrayUtil;
 import com.game.magictower.util.FileUtil;
 import com.game.magictower.util.JsonUtil;
@@ -43,6 +45,8 @@ public class Game {
     public HashMap<Integer, ArrayList<ShopInfo>> shops;
     public HashMap<Integer, ArrayList<TalkInfo>> dialogs;
     public HashMap<Integer, Monster> monsters;
+    public HashMap<Integer, ItemInfo> items;
+    public HashMap<Integer, Treasure> treasures;
     
     private static Game sInstance;
     
@@ -65,6 +69,8 @@ public class Game {
         storys = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "story.json"), new TypeToken<HashMap<Integer, ArrayList<String>>>(){}.getType());
         shops = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "shop.json"), new TypeToken<HashMap<Integer, ArrayList<ShopInfo>>>(){}.getType());
         dialogs = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "dialog.json"), new TypeToken<HashMap<Integer, ArrayList<TalkInfo>>>(){}.getType());
+        items = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "item.json"), new TypeToken<HashMap<Integer, ItemInfo>>(){}.getType());
+        treasures = JsonUtil.fromJson(FileUtil.loadAssets(mContext, "treasure.json"), new TypeToken<HashMap<Integer, Treasure>>(){}.getType());
     }
     
     public static final void init(Context context, GameControler controler) {

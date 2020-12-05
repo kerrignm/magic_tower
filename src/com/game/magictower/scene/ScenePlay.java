@@ -319,6 +319,10 @@ public class ScenePlay extends BaseScene {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_STEP));
                 break;
             case 1:     // brick wall
+            case 5:     // stone
+            case 15:    // barrier not accessible
+            case 19:    // sea of fire
+            case 20:    // starry sky
                 break;
             case 2:     // yellow door
                 if (game.player.getYkey() > 0) {
@@ -341,49 +345,50 @@ public class ScenePlay extends BaseScene {
                     game.player.setRkey(game.player.getRkey() - 1);
                 }
                 break;
-            case 5:     // stone
-                break;
             case 6:     // yellow hey
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setYkey(game.player.getYkey() + 1);
-                parent.showToast(R.string.get_yellow_key);
-                break;
             case 7:     // blue key
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setBkey(game.player.getBkey() + 1);
-                parent.showToast(R.string.get_bule_key);
-                break;
             case 8:     // red key
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setRkey(game.player.getRkey() + 1);
-                parent.showToast(R.string.get_red_key);
-                break;
             case 9:     // sapphire
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setDefend(game.player.getDefend() + 3);
-                parent.showToast(R.string.get_sapphire);
-                break;
             case 10:    // ruby
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setAttack(game.player.getAttack() + 3);
-                parent.showToast(R.string.get_ruby);
-                break;
             case 11:    // red potion
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setHp(game.player.getHp() + 200);
-                parent.showToast(R.string.get_red_potion);
-                break;
             case 12:    // blue potion
+            case 30:    // little flying feather
+            case 31:    // big flying feather
+            case 36:    // key box
+            case 39:    // gold nugget
+            case 71:    // iron sword
+            case 73:    // steel sword
+            case 75:    // sword of light
+            case 76:    // iron shield
+            case 78:    // gold shield
+            case 80:    // light shield
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setHp(game.player.getHp() + 500);
-                parent.showToast(R.string.get_blue_potion);
+                parent.showToast(game.items.get(id).getDescribe());
+                if (game.items.get(id).getLevel() > 0) {
+                    game.player.setLevel(game.player.getLevel() + game.items.get(id).getLevel());
+                }
+                if (game.items.get(id).getHp() > 0) {
+                    game.player.setHp(game.player.getHp() + game.items.get(id).getHp());
+                }
+                if (game.items.get(id).getMoney() > 0) {
+                    game.player.setMoney(game.player.getMoney() + game.items.get(id).getMoney());
+                }
+                if (game.items.get(id).getAttack() > 0) {
+                    game.player.setAttack(game.player.getAttack() + game.items.get(id).getAttack());
+                }
+                if (game.items.get(id).getDefend() > 0) {
+                    game.player.setDefend(game.player.getDefend() + game.items.get(id).getDefend());
+                }
+                if (game.items.get(id).getYKey() > 0) {
+                    game.player.setYkey(game.player.getYkey() + game.items.get(id).getYKey());
+                }
+                if (game.items.get(id).getBKey() > 0) {
+                    game.player.setBkey(game.player.getBkey() + game.items.get(id).getBKey());
+                }
+                if (game.items.get(id).getRKey() > 0) {
+                    game.player.setRkey(game.player.getRkey() + game.items.get(id).getRKey());
+                }
                 break;
             case 13:    // upstairs
                 parent.showToast(R.string.msg_upstairs);
@@ -403,15 +408,9 @@ public class ScenePlay extends BaseScene {
                 game.changeMusic();
                 game.player.move(game.tower.finPos[game.npcInfo.curFloor][0], game.tower.finPos[game.npcInfo.curFloor][1]);
                 break;
-            case 15:    // barrier not accessible
-                break;
             case 16:   // accessible guardrail
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                break;
-            case 19:    // sea of fire
-                break;
-            case 20:    // starry sky
                 break;
             case 22:    // shop
                 if (game.npcInfo.curFloor == 3) {
@@ -477,67 +476,25 @@ public class ScenePlay extends BaseScene {
                     parent.showDialog(9, id);
                 }
                 break;
-            case 30:    // little flying feather
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setLevel(game.player.getLevel() + 1);
-                game.player.setHp(game.player.getHp() + 1000);
-                game.player.setAttack(game.player.getAttack() + 10);
-                game.player.setDefend(game.player.getDefend() + 10);
-                parent.showToast(R.string.get_little_fly);
-                break;
-            case 31:    // big flying feather
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setLevel(game.player.getLevel() + 3);
-                game.player.setHp(game.player.getHp() + 3000);
-                game.player.setAttack(game.player.getAttack() + 30);
-                game.player.setDefend(game.player.getDefend() + 30);
-                parent.showToast(R.string.get_big_fly);
-                break;
             case 32:    // cross
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.npcInfo.isHasCross = true;
-                parent.showMessage(R.string.treasure_cross, R.string.treasure_cross_info);
-                break;
             case 33:    // holy water bottle
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                parent.showMessage(R.string.treasure_holy_water, R.string.treasure_holy_water_info);
-                game.player.setHp(game.player.getHp() * 2);
-                break;
             case 34:    // emblem of light
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.npcInfo.isHasForecast = true;
-                parent.showMessage(R.string.treasure_emblem_light, R.string.treasure_emblem_light_info);
-                break;
             case 35:    // compass of wind
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.npcInfo.isHasJump = true;
-                parent.showMessage(R.string.treasure_compass, R.string.treasure_compass_info);
-                break;
-            case 36:    // key box
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setYkey(game.player.getYkey() + 1);
-                game.player.setBkey(game.player.getBkey() + 1);
-                game.player.setRkey(game.player.getRkey() + 1);
-                parent.showToast(R.string.get_key_box);
-                break;
             case 38:    // hammer
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_WONDER));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.npcInfo.isHasHammer = true;
-                parent.showMessage(R.string.treasure_hammer, R.string.treasure_hammer_info);
-                break;
-            case 39:    // gold nugget
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setMoney(game.player.getMoney() + 300);
-                parent.showToast(R.string.get_gold_block);
+                parent.showMessage(game.treasures.get(id).getTitle(), game.treasures.get(id).getDescribe());
+                if (id == 32) {
+                    game.npcInfo.isHasCross = true;
+                } else if (id == 33) {
+                    game.player.setHp(game.player.getHp() * 2);
+                } else if (id == 34) {
+                    game.npcInfo.isHasForecast = true;
+                } else if (id == 35) {
+                    game.npcInfo.isHasJump = true;
+                } else if (id == 38) {
+                    game.npcInfo.isHasHammer = true;
+                }
                 break;
             case 40:    // monster
             case 41:    // monster
@@ -577,42 +534,6 @@ public class ScenePlay extends BaseScene {
                     parent.showBattle(id, x, y);
                 }
                 break;
-            case 71:    // iron sword
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setAttack(game.player.getAttack() + 10);
-                parent.showToast(R.string.get_iron_shield);
-                break;
-            case 73:    // steel sword
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setAttack(game.player.getAttack() + 70);
-                parent.showToast(R.string.get_steel_sword);
-                break;
-            case 75:    // sword of light
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setAttack(game.player.getAttack() + 150);
-                parent.showToast(R.string.get_light_sword);
-                break;
-            case 76:    // iron shield
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setDefend(game.player.getDefend() + 10);
-                parent.showToast(R.string.get_iron_shield);
-                break;
-            case 78:    // gold shield
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setDefend(game.player.getDefend() + 85);
-                parent.showToast(R.string.get_gold_shield);
-                break;
-            case 80:    // light shield
-                GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
-                game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                game.player.setDefend(game.player.getDefend() + 190);
-                parent.showToast(R.string.get_light_shield);
-                break;
             case 101:
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
                 parent.showDialog(10, 53);
@@ -631,6 +552,7 @@ public class ScenePlay extends BaseScene {
             case 1:     // brick wall
             case 5:     // stone
             case 15:    // barrier not accessible
+            case 19:    // sea of fire
             case 20:    // starry sky
                 result = false;
                 break;
