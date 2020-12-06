@@ -40,8 +40,8 @@ public class ScenePlay extends BaseScene {
     
     private GridFilter gridFilter = new GridFilter();
     
-    private Point targetPoint = new Point();
     private Point touchPoint = new Point();
+    private Point targetPoint = new Point();
     private ArrayList<AStarPoint> stepList = new ArrayList<AStarPoint>();
     private boolean canReach = false;
     private boolean startAutoStep = false;
@@ -237,39 +237,31 @@ public class ScenePlay extends BaseScene {
         }
         switch (id) {
         case BaseButton.ID_UP:
-            if (game.status == Status.Playing) {
-                game.checkTest(id);
-                if (game.player.getPosY() - 1 < TowerDimen.GRID_NUMS && game.player.getPosY() - 1 >= 0) {
-                    game.player.setToward(Assets.PLAYER_UP);
-                    interaction(game.player.getPosX(), game.player.getPosY() - 1);
-                }
+            game.checkTest(id);
+            game.player.setToward(Assets.PLAYER_UP);
+            if (game.player.getPosY() - 1 < TowerDimen.GRID_NUMS && game.player.getPosY() - 1 >= 0) {
+                interaction(game.player.getPosX(), game.player.getPosY() - 1);
             }
             break;
         case BaseButton.ID_LEFT:
-            if (game.status == Status.Playing) {
-                game.checkTest(id);
-                if (game.player.getPosX() - 1 < TowerDimen.GRID_NUMS && game.player.getPosX() - 1 >= 0) {
-                    game.player.setToward(Assets.PLAYER_LEFT);
-                    interaction(game.player.getPosX() - 1, game.player.getPosY());
-                }
+            game.checkTest(id);
+            game.player.setToward(Assets.PLAYER_LEFT);
+            if (game.player.getPosX() - 1 < TowerDimen.GRID_NUMS && game.player.getPosX() - 1 >= 0) {
+                interaction(game.player.getPosX() - 1, game.player.getPosY());
             }
             break;
         case BaseButton.ID_RIGHT:
-            if (game.status == Status.Playing) {
-                game.checkTest(id);
-                if (game.player.getPosX() + 1 < TowerDimen.GRID_NUMS && game.player.getPosX() + 1 >= 0) {
-                    game.player.setToward(Assets.PLAYER_RIGHT);
-                    interaction(game.player.getPosX() + 1, game.player.getPosY());
-                }
+            game.checkTest(id);
+            game.player.setToward(Assets.PLAYER_RIGHT);
+            if (game.player.getPosX() + 1 < TowerDimen.GRID_NUMS && game.player.getPosX() + 1 >= 0) {
+                interaction(game.player.getPosX() + 1, game.player.getPosY());
             }
             break;
         case BaseButton.ID_DOWN:
-            if (game.status == Status.Playing) {
-                game.checkTest(id);
-                if (game.player.getPosY() + 1 < TowerDimen.GRID_NUMS && game.player.getPosY() + 1 >= 0) {
-                    game.player.setToward(Assets.PLAYER_DOWN);
-                    interaction(game.player.getPosX(), game.player.getPosY() + 1);
-                }
+            game.checkTest(id);
+            game.player.setToward(Assets.PLAYER_DOWN);
+            if (game.player.getPosY() + 1 < TowerDimen.GRID_NUMS && game.player.getPosY() + 1 >= 0) {
+                interaction(game.player.getPosX(), game.player.getPosY() + 1);
             }
             break;
         case BaseButton.ID_QUIT:
@@ -303,9 +295,9 @@ public class ScenePlay extends BaseScene {
             }
             break;
         case BaseButton.ID_OK:
-                if (canReach && !startAutoStep) {
-                    autoStep();
-                }
+            if (canReach && !startAutoStep) {
+                autoStep();
+            }
             break;
         }
     }
