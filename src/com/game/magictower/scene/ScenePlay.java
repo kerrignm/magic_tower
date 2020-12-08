@@ -317,24 +317,24 @@ public class ScenePlay extends BaseScene {
             case 20:    // starry sky
                 break;
             case 2:     // yellow door
-                if (game.player.getYkey() > 0) {
+                if (game.player.getYKey() > 0) {
                     GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                    game.player.setYkey(game.player.getYkey() - 1);
+                    game.player.setYKey(game.player.getYKey() - 1);
                 }
                 break;
             case 3:     // blue door
-                if (game.player.getBkey() > 0) {
+                if (game.player.getBKey() > 0) {
                     GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                    game.player.setBkey(game.player.getBkey() - 1);
+                    game.player.setBKey(game.player.getBKey() - 1);
                 }
                 break;
             case 4:     // red door
-                if (game.player.getRkey() > 0) {
+                if (game.player.getRKey() > 0) {
                     GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ZONE));
                     game.lvMap[game.npcInfo.curFloor][y][x] = 0;
-                    game.player.setRkey(game.player.getRkey() - 1);
+                    game.player.setRKey(game.player.getRKey() - 1);
                 }
                 break;
             case 6:     // yellow hey
@@ -357,30 +357,7 @@ public class ScenePlay extends BaseScene {
                 GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_ITEM));
                 game.lvMap[game.npcInfo.curFloor][y][x] = 0;
                 parent.showToast(game.items.get(id).getDescribe());
-                if (game.items.get(id).getLevel() > 0) {
-                    game.player.setLevel(game.player.getLevel() + game.items.get(id).getLevel());
-                }
-                if (game.items.get(id).getHp() > 0) {
-                    game.player.setHp(game.player.getHp() + game.items.get(id).getHp());
-                }
-                if (game.items.get(id).getMoney() > 0) {
-                    game.player.setMoney(game.player.getMoney() + game.items.get(id).getMoney());
-                }
-                if (game.items.get(id).getAttack() > 0) {
-                    game.player.setAttack(game.player.getAttack() + game.items.get(id).getAttack());
-                }
-                if (game.items.get(id).getDefend() > 0) {
-                    game.player.setDefend(game.player.getDefend() + game.items.get(id).getDefend());
-                }
-                if (game.items.get(id).getYKey() > 0) {
-                    game.player.setYkey(game.player.getYkey() + game.items.get(id).getYKey());
-                }
-                if (game.items.get(id).getBKey() > 0) {
-                    game.player.setBkey(game.player.getBkey() + game.items.get(id).getBKey());
-                }
-                if (game.items.get(id).getRKey() > 0) {
-                    game.player.setRkey(game.player.getRkey() + game.items.get(id).getRKey());
-                }
+                game.player.update(game.items.get(id));
                 break;
             case 13:    // upstairs
                 parent.showToast(R.string.msg_upstairs);

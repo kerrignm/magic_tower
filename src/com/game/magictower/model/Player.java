@@ -4,20 +4,12 @@ import android.graphics.Bitmap;
 
 import com.game.magictower.res.Assets;
 
-public class Player {
+public class Player extends BaseInfo {
     
     private static final float CRIT_RATE = 5.0f;
     private static final float RISE_RATE = 0.005f;
 
-    private int level;
-    private int hp;
-    private int attack;
-    private int defend;
-    private int money;
     private int exp;
-    private int Ykey;
-    private int Bkey;
-    private int Rkey;
 
     private int toward;     //  0-left 1-down 2-right 3-up
     private int posX;
@@ -34,9 +26,9 @@ public class Player {
         this.defend = 10;
         this.money = 0;
         this.exp = 0;
-        this.Ykey = 0;
-        this.Bkey = 0;
-        this.Rkey = 0;
+        this.ykey = 0;
+        this.bkey = 0;
+        this.rkey = 0;
 
         this.toward = 1;
         this.posX = 5;
@@ -52,76 +44,12 @@ public class Player {
         return Assets.getInstance().playerMap.get(toward);
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-    public int getAttack() {
-        return attack;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
-    public int getDefend() {
-        return defend;
-    }
-
-    public void setDefend(int defend) {
-        this.defend = defend;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
     public int getExp() {
         return exp;
     }
 
     public void setExp(int exp) {
         this.exp = exp;
-    }
-
-    public int getYkey() {
-        return Ykey;
-    }
-
-    public void setYkey(int ykey) {
-        Ykey = ykey;
-    }
-
-    public int getBkey() {
-        return Bkey;
-    }
-
-    public void setBkey(int bkey) {
-        Bkey = bkey;
-    }
-
-    public int getRkey() {
-        return Rkey;
-    }
-
-    public void setRkey(int rkey) {
-        Rkey = rkey;
     }
 
     public int getToward() {

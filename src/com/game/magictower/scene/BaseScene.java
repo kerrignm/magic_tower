@@ -89,15 +89,15 @@ public abstract class BaseScene extends BaseView {
         graphics.drawTextInCenter(canvas, mLevel, TowerDimen.R_PLR_LV_L);
 
         graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(6), null, TowerDimen.R_YKEY_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getYkey() + "", TowerDimen.R_YKEY_V);
+        graphics.drawTextInCenter(canvas, game.player.getYKey() + "", TowerDimen.R_YKEY_V);
         graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_YKEY_L);
         
         graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(7), null, TowerDimen.R_BKEY_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getBkey() + "", TowerDimen.R_BKEY_V);
+        graphics.drawTextInCenter(canvas, game.player.getBKey() + "", TowerDimen.R_BKEY_V);
         graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_BKEY_L);
         
         graphics.drawBitmap(canvas, Assets.getInstance().animMap0.get(8), null, TowerDimen.R_RKEY_ICON, null);
-        graphics.drawTextInCenter(canvas, game.player.getRkey() + "", TowerDimen.R_RKEY_V);
+        graphics.drawTextInCenter(canvas, game.player.getRKey() + "", TowerDimen.R_RKEY_V);
         graphics.drawTextInCenter(canvas, mNumber, TowerDimen.R_RKEY_L);
         
         if (game.npcInfo.curFloor > 0) {

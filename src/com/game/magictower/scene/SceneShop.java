@@ -150,20 +150,20 @@ public class SceneShop extends BaseScene {
             }
             break;
         case ShopInfo.COST_TYPE_YKEY:
-            if (game.player.getYkey() >= shopInfo.getValue()) {
-                game.player.setYkey(game.player.getYkey() - shopInfo.getValue());
+            if (game.player.getYKey() >= shopInfo.getValue()) {
+                game.player.setYKey(game.player.getYKey() - shopInfo.getValue());
                 result = SHOP_DONE;
             }
             break;
         case ShopInfo.COST_TYPE_BKEY:
-            if (game.player.getBkey() >= shopInfo.getValue()) {
-                game.player.setBkey(game.player.getBkey() - shopInfo.getValue());
+            if (game.player.getBKey() >= shopInfo.getValue()) {
+                game.player.setBKey(game.player.getBKey() - shopInfo.getValue());
                 result = SHOP_DONE;
             }
             break;
         case ShopInfo.COST_TYPE_RKEY:
-            if (game.player.getRkey() >= shopInfo.getValue()) {
-                game.player.setRkey(game.player.getRkey() - shopInfo.getValue());
+            if (game.player.getRKey() >= shopInfo.getValue()) {
+                game.player.setRKey(game.player.getRKey() - shopInfo.getValue());
                 result = SHOP_DONE;
             }
             break;
@@ -173,30 +173,7 @@ public class SceneShop extends BaseScene {
         }
         if (result == SHOP_DONE) {
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_DONE));
-            if (shopInfo.getLevel() > 0) {
-                game.player.setLevel(game.player.getLevel() + shopInfo.getLevel());
-            }
-            if (shopInfo.getHp() > 0) {
-                game.player.setHp(game.player.getHp() + shopInfo.getHp());
-            }
-            if (shopInfo.getMoney() > 0) {
-                game.player.setMoney(game.player.getMoney() + shopInfo.getMoney());
-            }
-            if (shopInfo.getAttack() > 0) {
-                game.player.setAttack(game.player.getAttack() + shopInfo.getAttack());
-            }
-            if (shopInfo.getDefend() > 0) {
-                game.player.setDefend(game.player.getDefend() + shopInfo.getDefend());
-            }
-            if (shopInfo.getYKey() > 0) {
-                game.player.setYkey(game.player.getYkey() + shopInfo.getYKey());
-            }
-            if (shopInfo.getBKey() > 0) {
-                game.player.setBkey(game.player.getBkey() + shopInfo.getBKey());
-            }
-            if (shopInfo.getRKey() > 0) {
-                game.player.setRkey(game.player.getRkey() + shopInfo.getRKey());
-            }
+            game.player.update(shopInfo);
         } else if (result == SHOP_FAIL) {
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_COIN));
         } else {

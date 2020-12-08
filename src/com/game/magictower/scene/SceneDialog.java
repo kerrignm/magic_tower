@@ -132,9 +132,9 @@ public class SceneDialog extends BaseScene {
             GlobalSoundPool.getInstance().playSound(Assets.getInstance().getSoundId(Assets.SND_ID_POWER));
             game.lvMap[game.npcInfo.curFloor][8][5] = 0;
             game.lvMap[game.npcInfo.curFloor][8][4] = 24;
-            game.player.setYkey(game.player.getYkey() + 1);
-            game.player.setBkey(game.player.getBkey() + 1);
-            game.player.setRkey(game.player.getRkey() + 1);
+            game.player.setYKey(game.player.getYKey() + 1);
+            game.player.setBKey(game.player.getBKey() + 1);
+            game.player.setRKey(game.player.getRKey() + 1);
             game.npcInfo.mFairyStatus = NpcInfo.FAIRY_STATUS_WAIT_CROSS;
             break;
         case 1:

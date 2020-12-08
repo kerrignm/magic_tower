@@ -172,9 +172,9 @@ public class Game {
                     npcInfo.maxFloor = 20;
                     npcInfo.isHasJump = true;
                     npcInfo.isHasForecast = true;
-                    player.setYkey(20);
-                    player.setBkey(20);
-                    player.setRkey(20);
+                    player.setYKey(20);
+                    player.setBKey(20);
+                    player.setRKey(20);
                     player.setAttack(3000);
                     player.setDefend(3000);
                     player.setHp(80000);
