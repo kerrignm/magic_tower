@@ -1,7 +1,5 @@
 package com.game.magictower.scene;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,12 +10,14 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 
 import com.game.magictower.Game;
-import com.game.magictower.GameView;
 import com.game.magictower.Game.Status;
+import com.game.magictower.GameView;
 import com.game.magictower.res.Assets;
 import com.game.magictower.res.GameGraphics;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
+
+import java.util.ArrayList;
 
 public class SceneMessage extends BaseScene {
     
@@ -150,6 +150,7 @@ public class SceneMessage extends BaseScene {
     private void messageOver() {
         switch (mId) {
         case 1:
+            game.changeMusic();
             game.status = Status.Playing;
             break;
         case 2:
