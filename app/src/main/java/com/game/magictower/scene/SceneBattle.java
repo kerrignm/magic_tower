@@ -1,7 +1,5 @@
 package com.game.magictower.scene;
 
-import java.lang.ref.WeakReference;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,6 +15,8 @@ import com.game.magictower.res.Assets;
 import com.game.magictower.res.GlobalSoundPool;
 import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.MathUtil;
+
+import java.lang.ref.WeakReference;
 
 public class SceneBattle extends BaseScene {
     
@@ -153,7 +153,7 @@ public class SceneBattle extends BaseScene {
             game.player.setMoney(game.player.getMoney() + mMonster.getMoney());
             game.player.setExp(game.player.getExp() + mMonster.getExp());
             game.lvMap[game.npcInfo.curFloor][mY][mX] = 0;
-            handler.sendEmptyMessageDelayed(MSG_ID_FIGHT_OVER, MSG_DELAY_FIGHT_MSG);
+            handler.sendEmptyMessageDelayed(MSG_ID_FIGHT_OVER, MSG_DELAY_FIGHT_OVER);
         } else {
             handler.sendEmptyMessageDelayed(MSG_ID_FIGHT, MSG_DELAY_FIGHT_MSG);
         }
@@ -186,6 +186,7 @@ public class SceneBattle extends BaseScene {
     private static final int MSG_ID_FIGHT_OVER = 2;
     
     private static final int MSG_DELAY_FIGHT_MSG = 200;
+    private static final int MSG_DELAY_FIGHT_OVER = 500;
     
     private static final class FightHandler extends Handler {
         private final WeakReference<SceneBattle> wk;
