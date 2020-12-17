@@ -1,0 +1,316 @@
+{
+  "40": {
+    "attack": 20,
+    "defend": 1,
+    "exp": 1,
+    "hp": 50,
+    "id": 40,
+    "money": 1,
+    "name": "绿头怪",
+    "stronger": false
+  },
+  "41": {
+    "attack": 15,
+    "defend": 2,
+    "exp": 2,
+    "hp": 70,
+    "id": 41,
+    "money": 2,
+    "name": "红头怪",
+    "stronger": false
+  },
+  "42": {
+    "attack": 20,
+    "defend": 5,
+    "exp": 3,
+    "hp": 100,
+    "id": 42,
+    "money": 3,
+    "name": "小蝙蝠",
+    "stronger": false
+  },
+  "43": {
+    "attack": 35,
+    "defend": 10,
+    "exp": 5,
+    "hp": 200,
+    "id": 43,
+    "money": 5,
+    "name": "青头怪",
+    "stronger": false
+  },
+  "44": {
+    "attack": 25,
+    "defend": 5,
+    "exp": 4,
+    "hp": 110,
+    "id": 44,
+    "money": 5,
+    "name": "骷髅人",
+    "stronger": false
+  },
+  "45": {
+    "attack": 40,
+    "defend": 20,
+    "exp": 6,
+    "hp": 150,
+    "id": 45,
+    "money": 8,
+    "name": "骷髅士兵",
+    "stronger": false
+  },
+  "46": {
+    "attack": 75,
+    "defend": 45,
+    "exp": 10,
+    "hp": 300,
+    "id": 46,
+    "money": 13,
+    "name": "兽面人",
+    "stronger": false
+  },
+  "47": {
+    "attack": 150,
+    "defend": 90,
+    "exp": 19,
+    "hp": 450,
+    "id": 47,
+    "money": 22,
+    "name": "初级卫兵",
+    "stronger": false
+  },
+  "48": {
+    "attack": 65,
+    "defend": 30,
+    "exp": 8,
+    "hp": 150,
+    "id": 48,
+    "money": 10,
+    "name": "大蝙蝠",
+    "stronger": false
+  },
+  "49": {
+    "attack": 160,
+    "defend": 90,
+    "exp": 20,
+    "hp": 550,
+    "id": 49,
+    "money": 25,
+    "name": "红蝙蝠",
+    "stronger": false
+  },
+  "50": {
+    "attack": 300,
+    "defend": 150,
+    "exp": 35,
+    "hp": 1300,
+    "id": 50,
+    "money": 40,
+    "name": "白衣武士",
+    "stronger": false,
+    "magicDamage": 4
+  },
+  "51": {
+    "attack": 250,
+    "defend": 125,
+    "exp": 30,
+    "hp": 700,
+    "id": 51,
+    "money": 32,
+    "name": "怪王",
+    "stronger": false
+  },
+  "52": {
+    "attack": 400,
+    "defend": 260,
+    "exp": 45,
+    "hp": 500,
+    "id": 52,
+    "money": 47,
+    "name": "红衣法师",
+    "stronger": false,
+    "magicDamage": 300
+  },
+  "53": {
+    "attack": 1000,
+    "defend": 1000,
+    "exp": 100,
+    "hp": 15000,
+    "id": 53,
+    "money": 100,
+    "name": "红衣魔王",
+    "stronger": false
+  },
+  "54": {
+    "attack": 350,
+    "defend": 200,
+    "exp": 40,
+    "hp": 850,
+    "id": 54,
+    "money": 45,
+    "name": "金卫士",
+    "stronger": false
+  },
+  "55": {
+    "attack": 750,
+    "defend": 650,
+    "exp": 70,
+    "hp": 900,
+    "id": 55,
+    "money": 77,
+    "name": "金队长",
+    "stronger": false
+  },
+  "56": {
+    "attack": 90,
+    "defend": 50,
+    "exp": 12,
+    "hp": 400,
+    "id": 56,
+    "money": 15,
+    "name": "骷髅队长",
+    "stronger": false
+  },
+  "57": {
+    "attack": 830,
+    "defend": 730,
+    "exp": 70,
+    "hp": 1500,
+    "id": 57,
+    "money": 80,
+    "name": "灵法师",
+    "stronger": false,
+    "magicDamage": 3
+  },
+  "58": {
+    "attack": 980,
+    "defend": 900,
+    "exp": 75,
+    "hp": 1200,
+    "id": 58,
+    "money": 88,
+    "name": "灵武士",
+    "stronger": false
+  },
+  "59": {
+    "attack": 1700,
+    "defend": 1500,
+    "exp": 220,
+    "hp": 30000,
+    "id": 59,
+    "money": 250,
+    "name": "冥灵魔王",
+    "stronger": true
+  },
+  "60": {
+    "attack": 120,
+    "defend": 70,
+    "exp": 17,
+    "hp": 250,
+    "id": 60,
+    "money": 20,
+    "name": "麻衣法师",
+    "stronger": false,
+    "magicDamage": 100
+  },
+  "61": {
+    "attack": 680,
+    "defend": 590,
+    "exp": 65,
+    "hp": 2000,
+    "id": 61,
+    "money": 70,
+    "name": "冥战士",
+    "stronger": false
+  },
+  "62": {
+    "attack": 900,
+    "defend": 850,
+    "exp": 75,
+    "hp": 2500,
+    "id": 62,
+    "money": 84,
+    "name": "冥队长",
+    "stronger": false
+  },
+  "63": {
+    "attack": 50,
+    "defend": 25,
+    "exp": 7,
+    "hp": 125,
+    "id": 63,
+    "money": 10,
+    "name": "初级法师",
+    "stronger": false
+  },
+  "64": {
+    "attack": 200,
+    "defend": 110,
+    "exp": 25,
+    "hp": 100,
+    "id": 64,
+    "money": 30,
+    "name": "高级法师",
+    "stronger": false
+  },
+  "65": {
+    "attack": 115,
+    "defend": 65,
+    "exp": 15,
+    "hp": 500,
+    "id": 65,
+    "money": 15,
+    "name": "石头怪人",
+    "stronger": false
+  },
+  "66": {
+    "attack": 450,
+    "defend": 330,
+    "exp": 50,
+    "hp": 900,
+    "id": 66,
+    "money": 50,
+    "name": "兽面武士",
+    "stronger": false
+  },
+  "67": {
+    "attack": 620,
+    "defend": 520,
+    "exp": 75,
+    "hp": 1200,
+    "id": 67,
+    "money": 65,
+    "name": "双手剑士",
+    "stronger": false
+  },
+  "68": {
+    "attack": 500,
+    "defend": 400,
+    "exp": 55,
+    "hp": 1250,
+    "id": 68,
+    "money": 55,
+    "name": "冥卫兵",
+    "stronger": false
+  },
+  "69": {
+    "attack": 560,
+    "defend": 460,
+    "exp": 60,
+    "hp": 1500,
+    "id": 69,
+    "money": 60,
+    "name": "高级卫兵",
+    "stronger": false
+  },
+  "70": {
+    "attack": 1150,
+    "defend": 1050,
+    "exp": 80,
+    "hp": 3100,
+    "id": 70,
+    "money": 92,
+    "name": "影子战士",
+    "stronger": true
+  }
+}

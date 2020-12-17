@@ -1,63 +1,30 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            url "http://maven.aliyun.com/nexus/content/groups/public/"
-        }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.1'
+        classpath "com.android.tools.build:gradle:4.1.1"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
-apply plugin: 'android'
-
-dependencies {
-    // Add the support lib that is appropriate for SDK 4
-    //compile "com.android.support:support-v4:20.+"
-    compile files('libs/gson-2.2.4.jar')
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        google()
+        jcenter()
+    }
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-android {
-    compileSdkVersion 19
-    buildToolsVersion "21.1.2"
-    
-    signingConfigs {
-        release {
-            storeFile file("D:/workspace/android/keystore/android.keystore")
-            storePassword "android"
-            keyAlias "androidreleasekey"
-            keyPassword "android"
-        }
-    }
-    
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
-        }
-    }
-    
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-    
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']
-        }
-        androidTest.setRoot('tests')
-        androidTest.java.srcDirs = ['tests/src']
-    }
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
