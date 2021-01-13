@@ -2,6 +2,7 @@ package com.game.magictower.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -71,7 +72,11 @@ public abstract class RedrawableView extends SurfaceView implements SurfaceHolde
     private void redraw() {
         Canvas canvas = null;
         try {
-            canvas = holder.lockCanvas();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                canvas = holder.lockHardwareCanvas();
+            } else {
+                canvas = holder.lockCanvas();
+            }
             if (canvas == null) {
                 LogUtil.w(TAG, "cancel drawing on null canvas.");
                 return ;
