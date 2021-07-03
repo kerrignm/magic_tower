@@ -1,8 +1,5 @@
 package com.game.magictower.scene;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
@@ -16,7 +13,6 @@ import android.os.Message;
 import android.view.MotionEvent;
 
 import com.game.magictower.Game;
-import com.game.magictower.Game.Status;
 import com.game.magictower.GameView;
 import com.game.magictower.R;
 import com.game.magictower.astar.AStarPath;
@@ -29,6 +25,9 @@ import com.game.magictower.res.TowerDimen;
 import com.game.magictower.util.LogUtil;
 import com.game.magictower.util.RectUtil;
 import com.game.magictower.widget.BaseButton;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class ScenePlay extends BaseScene {
     
@@ -401,7 +400,9 @@ public class ScenePlay extends BaseScene {
                     parent.showDialog(8, id);
                     break;
                 case NpcInfo.THIEF_STATUS_WAIT_HAMMER:
-                    parent.showDialog(11, id);
+                    if (game.npcInfo.isHasHammer) {
+                        parent.showDialog(11, id);
+                    }
                     break;
                 }
                 break;
