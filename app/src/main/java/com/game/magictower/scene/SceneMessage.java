@@ -18,11 +18,14 @@ import com.game.magictower.res.TowerDimen;
 import com.game.magictower.widget.BaseButton;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SceneMessage extends BaseScene {
     
     public final static int MODE_ALERT = 1;
     public final static int MODE_AUTO_SCROLL = 2;
+
+    private final static int FRAME_OF_TIME = 16;
     
     private int mId;
     
@@ -40,6 +43,8 @@ public class SceneMessage extends BaseScene {
     private final Paint shaderPaint = new Paint();
     private final LinearGradient fadeOutShader;
     private final LinearGradient fadeInShader;
+
+    private long mLastFrameTime = 0;
     
     public SceneMessage(GameView parent, Context context, Game game, int id, int x, int y, int w, int h) {
         super(parent, context, game, id, x, y, w, h);
@@ -75,7 +80,7 @@ public class SceneMessage extends BaseScene {
         } else {
             ArrayList<String> msgs = game.storys.get(mId);
             mInfo = new ArrayList<>();
-            for (int i = 0; i < msgs.size(); i++) {
+            for (int i = 0; i < Objects.requireNonNull(msgs).size(); i++) {
                 mInfo.addAll(GameGraphics.getInstance().splitToLines(msgs.get(i), TowerDimen.R_ALERT_INFO.width(), GameGraphics.getInstance().bigTextPaint));
             }
             mMaxScroll = mInfo.size() * TowerDimen.GRID_SIZE - (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE);
@@ -83,6 +88,7 @@ public class SceneMessage extends BaseScene {
             mMinY = TowerDimen.R_AUTO_SCROLL_INFO.top + (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2;
             mMaxY = TowerDimen.R_AUTO_SCROLL_INFO.bottom - (TowerDimen.GRID_SIZE - TowerDimen.BIG_TEXT_SIZE) / 2 + TowerDimen.GRID_SIZE;
             mClip = new Rect(TowerDimen.R_AUTO_SCROLL_INFO.left, mMinY, TowerDimen.R_AUTO_SCROLL_INFO.right, mMaxY - TowerDimen.GRID_SIZE);
+            mLastFrameTime = System.currentTimeMillis();
         }
         parent.requestRender();
     }
@@ -127,7 +133,10 @@ public class SceneMessage extends BaseScene {
                 }
             }
             canvas.restore();
-            mCurScroll++;
+            if (System.currentTimeMillis() - mLastFrameTime >= FRAME_OF_TIME) {
+                mCurScroll++;
+                mLastFrameTime = System.currentTimeMillis();
+            }
             parent.requestRender();
             if (mCurScroll >= mMaxScroll) {
                 messageOver();
